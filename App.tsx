@@ -146,6 +146,13 @@ const RegisterForm = ({navigation}) => {
           <View
             style={{
               backgroundColor: isDarkMode ? Colors.black : Colors.white,
+              width: '100%',
+              height: '100%',
+              margin: 0,
+              padding: 0,
+              justifyContent: 'center',
+              // alignItems: 'center',
+              // bottom: 0,
             }}>
             <TextInput
               style={styles.input}
@@ -262,14 +269,30 @@ function App(): JSX.Element {
   // };
 
   return (
-      <NavigationContainer>
+      <NavigationContainer >
         <Stack.Navigator>
           <Stack.Screen
             name="Home"
             component={RegisterForm}
-            options={{title: 'Welcome'}}
+            options={{title: 'Welcome',
+                     headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter},
+                     headerTitleStyle: {
+                      fontSize: 18,
+                      color: isDarkMode ? Colors.lighter : Colors.darker ,
+                     },
+                    }}
           />
-          <Stack.Screen name="HomeProfile" component={HomeProfile} options={{title: 'Hello'}}/>
+          <Stack.Screen 
+            name="HomeProfile" 
+            component={HomeProfile} 
+            options={{title: 'Home',
+                      headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter},
+                      headerTitleStyle: {
+                        fontSize: 18,
+                        color: isDarkMode ? Colors.lighter : Colors.darker ,
+                      },
+                    }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
       // <SafeAreaView style={backgroundStyle}>
@@ -342,7 +365,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   submitButton: {
-    width: 50
+    width: 50,
+
   },
 });
 
