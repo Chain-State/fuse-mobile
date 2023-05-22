@@ -36,6 +36,7 @@ type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
+// Section Component
 function Section({children, title}: SectionProps): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   return (
@@ -62,6 +63,8 @@ function Section({children, title}: SectionProps): JSX.Element {
   );
 }
 
+
+// Navigation
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {
@@ -79,7 +82,39 @@ const MyStack = () => {
   )
 }
 
+type User = {
+  uid: string;
+  username: string;
+  registrationTime: string;
+};
+
+
 const RegisterForm = ({navigation}) => {
+
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState<User>();
+
+  const createUser = async (userData) => {
+    try {
+      const response = await fetch('https://mywebsite.com/endpoint/', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userData
+        }),
+      });
+      const json = await response.json();
+      setData(json.user);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const [formData, setFormData] = useState({
     fname: "",
@@ -104,9 +139,9 @@ const RegisterForm = ({navigation}) => {
           barStyle={isDarkMode ? 'light-content' : 'dark-content'}
           backgroundColor={backgroundStyle.backgroundColor}
         />
-        <ScrollView
+        {/* <ScrollView
           contentInsetAdjustmentBehavior="automatic"
-          style={backgroundStyle}>
+          style={backgroundStyle}> */}
           {/* {/* <Header /> */}
           <View
             style={{
@@ -152,6 +187,8 @@ const RegisterForm = ({navigation}) => {
             <Button
               onPress={() => {
                 if (password === passwordConfirm){
+                  // add dummy https call here
+                  createUser(formData)
                   navigation.navigate('HomeProfile', {submittedFormData: formData})
                 } else {
                   console.log("Passwords don't match!!")
@@ -161,7 +198,7 @@ const RegisterForm = ({navigation}) => {
               title="Next"
             />        
           </View>
-        </ScrollView>
+        {/* </ScrollView> */}
       </SafeAreaView>
   )
   };
@@ -193,7 +230,19 @@ const HomeScreen = ({navigation}) => {
 };
 
 const HomeProfile = ({navigation, route}) => {
-  return <Text>Welcome {route.params.submittedFormData.fname}'s profile</Text>;
+  const isDarkMode = useColorScheme() === 'dark';
+
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
+  return (
+    <View>
+        <Section title="Fuse">
+              <Text>The Ada payments platform</Text>
+              <Text style={styles.highlight}>Hello {route.params.submittedFormData.fname}</Text>
+      </Section>
+     </View>
+    );
 }
 
 const ProfileScreen = ({navigation, route}) => {
@@ -267,6 +316,7 @@ function App(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
@@ -284,10 +334,15 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   input: {
-    height: 40,
-    margin: 12,
+    height: 50,
+    margin: 20,
     borderWidth: 1,
+    borderColor: Colors.lighter,
+    borderRadius: 10,
     padding: 10,
+  },
+  submitButton: {
+    width: 50
   },
 });
 
