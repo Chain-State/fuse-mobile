@@ -1,6 +1,5 @@
 package com.fuse;
 
-
 import android.app.Application;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
@@ -49,7 +48,6 @@ public class MainApplication extends Application implements ReactApplication {
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;
   }
-
 
   @Override
   public void onCreate() {
