@@ -89,7 +89,7 @@ type User = {
 };
 
 
-const RegisterForm = ({navigation}) => {
+const RegisterFormBasic = ({navigation}) => {
 
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<User>();
@@ -157,24 +157,28 @@ const RegisterForm = ({navigation}) => {
             <TextInput
               style={styles.input}
               placeholder="First Name"
+              placeholderTextColor= {isDarkMode ? Colors.white : Colors.black}
               onChangeText={data => setFormData({...formData, fname: data })}
               value={fname}
             />
             <TextInput
               style={styles.input}
               placeholder="Second Name"
+              placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
               onChangeText={data => setFormData({...formData, sname: data })}
               value={sname}
             />
             <TextInput
               style={styles.input}
               placeholder="Email Address"
+              placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
               onChangeText={data => setFormData({...formData, email: data })}
               value={email}
             />
             <TextInput
               style={styles.input}
               placeholder="Phone Number"
+              placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
               onChangeText={data => setFormData({...formData, phone: data })}
               value={phone}
               keyboardType="numeric"
@@ -182,21 +186,23 @@ const RegisterForm = ({navigation}) => {
             <TextInput
               style={styles.input}
               placeholder="Password"
+              placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
               onChangeText={data => setFormData({...formData, password: data })}
               value={password}
             />
             <TextInput
               style={styles.input}
               placeholder="Repeat Password"
+              placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
               onChangeText={data => setFormData({...formData, passwordConfirm: data })}
               value={passwordConfirm}
             />
             <Button
               onPress={() => {
+                // TODO: Proper form validation
                 if (password === passwordConfirm){
-                  // add dummy https call here
-                  createUser(formData)
-                  navigation.navigate('HomeProfile', {submittedFormData: formData})
+                  
+                  navigation.navigate('KYCForm', {submittedFormData: formData})
                 } else {
                   console.log("Passwords don't match!!")
                 }
@@ -209,6 +215,113 @@ const RegisterForm = ({navigation}) => {
       </SafeAreaView>
   )
   };
+
+  const RegisterFormKYC = ({navigation, route}) => {
+
+    const [isLoading, setLoading] = useState(true);
+    const [data, setData] = useState<User>();
+  
+    const createUser = async (userData) => {
+      try {
+        const response = await fetch('https://mywebsite.com/endpoint/', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userData
+          }),
+        });
+        const json = await response.json();
+        setData(json.user);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+  
+    const [formKycData, setFormData] = useState({
+      idNumber: "",
+      passPortNumber: "",
+      dateOfBirth: "",
+      taxCredential: "",
+    });
+    
+    const { idNumber, passPortNumber, dateOfBirth, taxCredential } = formKycData;
+  
+    const isDarkMode = useColorScheme() === 'dark';
+  
+    const backgroundStyle = {
+      backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    };
+  
+    return(
+      <SafeAreaView style={backgroundStyle}>
+          <StatusBar
+            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+            backgroundColor={backgroundStyle.backgroundColor}
+          />
+          {/* <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            style={backgroundStyle}> */}
+            {/* {/* <Header /> */}
+            <View
+              style={{
+                backgroundColor: isDarkMode ? Colors.black : Colors.white,
+                width: '100%',
+                height: '100%',
+                margin: 0,
+                padding: 0,
+                justifyContent: 'center',
+                // alignItems: 'center',
+                // bottom: 0,
+              }}>
+              <TextInput
+                style={styles.input}
+                placeholder="Id Number"
+                placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
+                onChangeText={data => setFormData({...formKycData, idNumber: data })}
+                value={idNumber}
+                keyboardType="numeric"
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Passport Number (Optional)"
+                placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
+                onChangeText={data => setFormData({...formKycData, passPortNumber: data })}
+                value={passPortNumber}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Date Of birth (ddmmyy)"
+                placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
+                onChangeText={data => setFormData({...formKycData, dateOfBirth: data })}
+                value={dateOfBirth}
+              />
+              <Button
+                onPress={() => {
+                  // TODO: properly check legit id number
+                  if (idNumber != null){
+                    // TODO: Convert date string to timestamp
+                    // dummy POST request
+                    const userFormData = {...route.params.submittedFormData, ...formKycData}
+                    createUser(userFormData)
+                    navigation.navigate('HomeProfile', {submittedFormData: userFormData})
+                  } else {
+                    console.log("Invalid Id number")
+                  }
+                  }
+                }
+                title="Finish"
+              />        
+            </View>
+          {/* </ScrollView> */}
+        </SafeAreaView>
+    )
+    };
 
 const HomeScreen = ({navigation}) => {
   const [text, setText] = useState('');
@@ -264,17 +377,24 @@ function App(): JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  // const onPressButton = {
-  //   Alert.alert('You tapped the button!')
-  // };
-
   return (
       <NavigationContainer >
         <Stack.Navigator>
           <Stack.Screen
             name="Home"
-            component={RegisterForm}
+            component={RegisterFormBasic}
             options={{title: 'Welcome',
+                     headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter},
+                     headerTitleStyle: {
+                      fontSize: 18,
+                      color: isDarkMode ? Colors.lighter : Colors.darker ,
+                     },
+                    }}
+          />
+          <Stack.Screen
+            name="KYCForm"
+            component={RegisterFormKYC}
+            options={{title: 'KYC Details',
                      headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter},
                      headerTitleStyle: {
                       fontSize: 18,
@@ -295,46 +415,6 @@ function App(): JSX.Element {
           />
         </Stack.Navigator>
       </NavigationContainer>
-      // <SafeAreaView style={backgroundStyle}>
-      //   <StatusBar
-      //     barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-      //     backgroundColor={backgroundStyle.backgroundColor}
-      //   />
-      //   <ScrollView
-      //     contentInsetAdjustmentBehavior="automatic"
-      //     style={backgroundStyle}>
-      //     {/* {/* <Header /> */}
-      //     <View
-      //       style={{
-      //         backgroundColor: isDarkMode ? Colors.black : Colors.white,
-      //       }}>
-      //       {/* <Section title="Step One">
-      //         <Text style={styles.highlight}>Fuse</Text>
-      //         The Ada payments platform
-      //       </Section>
-      //       <Section title="See Your Changes">
-      //         <ReloadInstructions />
-      //       </Section>
-      //       <Section title="Debug">
-      //         <DebugInstructions />
-      //       </Section>
-      //       <Section title="Learn More">
-      //         Read the docs to discover what to do next:
-      //       </Section>
-      //       <LearnMoreLinks /> */}
-      //       <Text>Hello</Text>
-      //       <MyStack>
-      //       {/* {Home} */}
-      //       {/* <Button
-      //         onPress={() => {
-      //           console.log('You tapped the button!');
-      //         }}
-      //         title="Press Me"
-      //       />         */}
-      //     </View>
-          
-      //   </ScrollView>
-      // </SafeAreaView>
   );
 }
 
