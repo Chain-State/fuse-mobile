@@ -21,6 +21,7 @@ import {
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import {
   Colors,
@@ -90,31 +91,6 @@ type User = {
 
 
 const RegisterFormBasic = ({navigation}) => {
-
-  const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState<User>();
-
-  const createUser = async (userData) => {
-    try {
-      const response = await fetch('https://mywebsite.com/endpoint/', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userData
-        }),
-      });
-      const json = await response.json();
-      setData(json.user);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
 
   const [formData, setFormData] = useState({
     fname: "",
@@ -233,12 +209,17 @@ const RegisterFormBasic = ({navigation}) => {
             userData
           }),
         });
+        if (!response.ok) {
+          throw new Error(`HTTP error: ${response.status}`);
+        }
         const json = await response.json();
         setData(json.user);
+        return json;
       } catch (error) {
         console.error(error);
       } finally {
         setLoading(false);
+        console.log(data?.username)
       }
     };
   
@@ -303,14 +284,23 @@ const RegisterFormBasic = ({navigation}) => {
               />
               <Button
                 onPress={() => {
+                  // const userFormData = {...route.params.submittedFormData, ...formKycData}
+                  // navigation.navigate('HomeProfile', {submittedFormData: userFormData})
+                  // TODO: Show loading spinner
                   // TODO: properly check legit id number
                   if (idNumber != null){
                     // TODO: Convert date string to timestamp
                     // dummy POST request
                     const userFormData = {...route.params.submittedFormData, ...formKycData}
-                    createUser(userFormData)
-                    navigation.navigate('HomeProfile', {submittedFormData: userFormData})
+                    const userCreatePromise = createUser(userFormData)
+                    userCreatePromise.then((data) => {
+                      console.log(data)
+                      // TODO: Remove loading spinner
+                      navigation.navigate('HomeProfile', {submittedFormData: userFormData})
+                    });
+                    // navigation.navigate('HomeProfile', {submittedFormData: userFormData})
                   } else {
+                    //TODO: Prompt user for correction
                     console.log("Invalid Id number")
                   }
                   }
@@ -323,7 +313,7 @@ const RegisterFormBasic = ({navigation}) => {
     )
     };
 
-const HomeScreen = ({navigation}) => {
+const HomeTextDemo = ({navigation}) => {
   const [text, setText] = useState('');
   return (
     <View style={{padding: 10}}>
@@ -349,18 +339,77 @@ const HomeScreen = ({navigation}) => {
   );
 };
 
-const HomeProfile = ({navigation, route}) => {
+const BuyAdaScreen = ({navigation}) => {
+  const [amountAda, setAmountAda] = useState(0);
+  const [amountFiat, setAmountFiat] = useState(0);
+  const [exchangeRate, setExchangeRate] = useState(2);
+
+
+  const isDarkMode = useColorScheme() === 'dark';
+  
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
+
+  return (
+      <View
+        style={{
+          backgroundColor: isDarkMode ? Colors.black : Colors.white,
+          width: '100%',
+          height: '100%',
+          margin: 0,
+          padding: 0,
+          justifyContent: 'center',
+          // alignItems: 'center',
+          // bottom: 0,
+        }}>
+          <TextInput
+            style={styles.input}
+            placeholder="Amount of Ada to Purchase"
+            placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
+            onChangeText={data => {
+                                      setAmountAda(parseInt(data));
+                                      setAmountFiat(amountAda * exchangeRate)
+                                  }}
+            value={amountAda.toString()}
+            keyboardType="numeric"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Required Fiat Amount"
+            placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
+            editable= {false}
+            value={amountFiat.toString()}
+          />
+      </View>
+  )
+}
+
+const HomeScreen = ({navigation, route}) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+  const Tab = createBottomTabNavigator();
+
+  function AppNavigationTabs() {
+    return (
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Settings" component={BuyAdaScreen} />
+      </Tab.Navigator>
+    );
+  }
+
   return (
     <View>
         <Section title="Fuse">
               <Text>The Ada payments platform</Text>
               <Text style={styles.highlight}>Hello {route.params.submittedFormData.fname}</Text>
-      </Section>
+        </Section>
+        <AppNavigationTabs/>
      </View>
     );
 }
@@ -404,7 +453,7 @@ function App(): JSX.Element {
           />
           <Stack.Screen 
             name="HomeProfile" 
-            component={HomeProfile} 
+            component={HomeScreen} 
             options={{title: 'Home',
                       headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter},
                       headerTitleStyle: {
