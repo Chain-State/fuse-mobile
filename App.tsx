@@ -18,6 +18,7 @@ import {
   TextInput,
   useColorScheme,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -74,7 +75,7 @@ const MyStack = () => {
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
-          component={HomeScreen}
+          component={TransactionsScreen}
           options={{title: 'Welcome'}}
         />
         <Stack.Screen name="Profile" component={ProfileScreen} />
@@ -212,6 +213,8 @@ const RegisterFormBasic = ({navigation}) => {
         if (!response.ok) {
           throw new Error(`HTTP error: ${response.status}`);
         }
+        // Expect a body with user db details (including a uuid)
+        // TODO: save uuid to local async storage
         const json = await response.json();
         setData(json.user);
         return json;
@@ -228,10 +231,9 @@ const RegisterFormBasic = ({navigation}) => {
       idNumber: "",
       passPortNumber: "",
       dateOfBirth: "",
-      taxCredential: "",
     });
     
-    const { idNumber, passPortNumber, dateOfBirth, taxCredential } = formKycData;
+    const { idNumber, passPortNumber, dateOfBirth } = formKycData;
   
     const isDarkMode = useColorScheme() === 'dark';
   
@@ -282,27 +284,34 @@ const RegisterFormBasic = ({navigation}) => {
                 onChangeText={data => setFormData({...formKycData, dateOfBirth: data })}
                 value={dateOfBirth}
               />
+              {isLoading && <ActivityIndicator/>}
               <Button
                 onPress={() => {
+                  setLoading(true)
                   // const userFormData = {...route.params.submittedFormData, ...formKycData}
                   // navigation.navigate('HomeProfile', {submittedFormData: userFormData})
                   // TODO: Show loading spinner
                   // TODO: properly check legit id number
-                  if (idNumber != null){
-                    // TODO: Convert date string to timestamp
-                    // dummy POST request
-                    const userFormData = {...route.params.submittedFormData, ...formKycData}
-                    const userCreatePromise = createUser(userFormData)
-                    userCreatePromise.then((data) => {
-                      console.log(data)
-                      // TODO: Remove loading spinner
-                      navigation.navigate('HomeProfile', {submittedFormData: userFormData})
-                    });
-                    // navigation.navigate('HomeProfile', {submittedFormData: userFormData})
-                  } else {
-                    //TODO: Prompt user for correction
-                    console.log("Invalid Id number")
-                  }
+                  setTimeout(function() {
+                    if (idNumber != null){
+                      // TODO: Convert date string to timestamp
+                      // dummy POST request
+  
+                      const userFormData = {...route.params.submittedFormData, ...formKycData}
+                      const userCreatePromise = createUser(userFormData)
+                      userCreatePromise.then((data) => {
+                        console.log(data)
+                        setLoading(false)
+                        // TODO: Remove loading spinner
+                        // navigation.navigate('TransactionsScreen', {submittedFormData: userFormData})
+                      });
+                      // navigation.navigate('HomeProfile', {submittedFormData: userFormData})
+                    } else {
+                      //TODO: Prompt user for correction
+                      console.log("Invalid Id number")
+                    }
+                  }, 3000);
+                  setLoading(false)
                   }
                 }
                 title="Finish"
@@ -312,6 +321,113 @@ const RegisterFormBasic = ({navigation}) => {
         </SafeAreaView>
     )
     };
+
+
+    const LoginScreen = ({navigation, route}) => {
+
+      const [isLoading, setLoading] = useState(false);
+      const [data, setData] = useState<User>();
+    
+      const authorizeUser = async (userAuthCredentials) => {
+        try {
+          const response = await fetch('https://mywebsite.com/endpoint/', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userAuthCredentials
+            }),
+          });
+          if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+          }
+          // Expect a body with user db details (including a uuid)
+          // TODO: save uuid to local async storage
+          const json = await response.json();
+          setData(json.user);
+          return json;
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+          console.log(data?.username)
+        }
+      };
+    
+    
+      const [authorizationCredentials, setAuthorizationCredentials] = useState({
+        passCode: "",
+        authorizationToken: "",
+      });
+      
+      const { passCode, authorizationToken } = authorizationCredentials;
+    
+      const isDarkMode = useColorScheme() === 'dark';
+    
+      const backgroundStyle = {
+        backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+      };
+    
+      return(
+        <SafeAreaView style={backgroundStyle}>
+            <StatusBar
+              barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+              backgroundColor={backgroundStyle.backgroundColor}
+            />
+            {/* <ScrollView
+              contentInsetAdjustmentBehavior="automatic"
+              style={backgroundStyle}> */}
+              {/* {/* <Header /> */}
+              <View
+                style={{
+                  backgroundColor: isDarkMode ? Colors.black : Colors.white,
+                  width: '100%',
+                  height: '100%',
+                  margin: 0,
+                  padding: 0,
+                  justifyContent: 'center',
+                  // alignItems: 'center',
+                  // bottom: 0,
+                }}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Id Number"
+                  placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
+                  onChangeText={data => setAuthorizationCredentials({...authorizationCredentials, passCode: data })}
+                  value={passCode}
+                />
+                <Button
+                  onPress={() => {
+                    setLoading(true);
+                    // const userFormData = {...route.params.submittedFormData, ...formKycData}
+                    // navigation.navigate('HomeProfile', {submittedFormData: userFormData})
+                    // TODO: Show loading spinner
+                    // TODO: properly check legit id number
+                    if (passCode != null){
+                      // TODO: Convert date string to timestamp
+                      // dummy POST request
+                      const userCreatePromise = authorizeUser(authorizationCredentials)
+                      userCreatePromise.then((data) => {
+                        console.log(data)
+                        // TODO: Remove loading spinner
+                        setLoading(false);
+                      });
+                      // navigation.navigate('HomeProfile', {submittedFormData: userFormData})
+                    } else {
+                      //TODO: Prompt user for correction
+                      console.log("Invalid Id number")
+                    }
+                    }
+                  }
+                  title="Finish"
+                />        
+              </View>
+            {/* </ScrollView> */}
+          </SafeAreaView>
+      )
+      };
 
 const HomeTextDemo = ({navigation}) => {
   const [text, setText] = useState('');
@@ -339,10 +455,41 @@ const HomeTextDemo = ({navigation}) => {
   );
 };
 
+const HomeScreenHolder = ({navigation, route}) => {
+
+  const isDarkMode = useColorScheme() === 'dark';
+
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
+
+  const Tab = createBottomTabNavigator();
+
+  function AppNavigationTabs() {
+    return (
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={TransactionsScreen} />
+        <Tab.Screen name="Settings" component={BuyAdaScreen} />
+      </Tab.Navigator>
+    );
+  }
+  return (
+    <AppNavigationTabs/>
+  )
+}
+
 const BuyAdaScreen = ({navigation}) => {
+
   const [amountAda, setAmountAda] = useState(0);
   const [amountFiat, setAmountFiat] = useState(0);
   const [exchangeRate, setExchangeRate] = useState(2);
+
+  // TODO: Fetch the current price of ada.
+  // TODO: Calculate the trend based past portfolio total values (for the last x time)
+  // TODO: Make payment fetch request and return buy details 
+  // TODO: Store buy details locally and append to 
+  // TODO: Make sure the buy button is tapped in a duration of x time (1 minutes)
+  // TODO: If the duration is more then notify user to authorize another buy with new price
 
 
   const isDarkMode = useColorScheme() === 'dark';
@@ -378,30 +525,43 @@ const BuyAdaScreen = ({navigation}) => {
             style={styles.input}
             placeholder="Required Fiat Amount"
             placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
-            editable= {false}
+            editable= {true}
+            onChangeText={data => {
+                                      setAmountFiat(parseInt(data));
+                                      setAmountAda(amountAda / exchangeRate)
+                                  }}
             value={amountFiat.toString()}
           />
+          <Button
+                  onPress={() => {
+                    // const userFormData = {...route.params.submittedFormData, ...formKycData}
+                    // navigation.navigate('HomeProfile', {submittedFormData: userFormData})
+                    // TODO: Show loading spinner
+                    // TODO: Make request to buy ada in the backend
+                    // TODO: Notify user of transaction success or failure
+                    }
+                  }
+                  title="Buy"
+                />        
+
       </View>
   )
 }
 
-const HomeScreen = ({navigation, route}) => {
-  const isDarkMode = useColorScheme() === 'dark';
+// TODD: Move this to transactions screen file
+const TransactionsScreen = ({navigation, route}) => {
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const [tokenTimeout, setTokenTimeout] = useState(10000);
 
-  const Tab = createBottomTabNavigator();
+  const [currentAdaPrice, setCurrentAdaPrice] = useState(0.4);
 
-  function AppNavigationTabs() {
-    return (
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={BuyAdaScreen} />
-      </Tab.Navigator>
-    );
-  }
+  const [transactionHistory, setTransactionHistory] = useState([]);
+
+  // TODO :  Fetch transaction history data from db 
+  // TODO :  Fetch asset price for Ada (api)
+  // TODO :  Fetch currently owned asset list. (name, quantity)
+  // TODO ;  For each owned asset get 
+  // TODO :  Calculate the total portfolio value
 
   return (
     <View>
@@ -409,7 +569,6 @@ const HomeScreen = ({navigation, route}) => {
               <Text>The Ada payments platform</Text>
               <Text style={styles.highlight}>Hello {route.params.submittedFormData.fname}</Text>
         </Section>
-        <AppNavigationTabs/>
      </View>
     );
 }
@@ -452,8 +611,8 @@ function App(): JSX.Element {
                     }}
           />
           <Stack.Screen 
-            name="HomeProfile" 
-            component={HomeScreen} 
+            name="HomeScreen" 
+            component={HomeScreenHolder} 
             options={{title: 'Home',
                       headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter},
                       headerTitleStyle: {
