@@ -3,7 +3,7 @@ import {
   getItem as getToken,
   setItem as setToken,
   removeItem as removeToken,
-} from '/./home/amati/CodeProjects/Hackathons/Plutus/Emurgo/on_off_swap_ramp/code/fuse/data/storage/tokenStorage';
+} from '../../data/storage/tokenStorage';
 
 
 const AuthContext = React.createContext({
