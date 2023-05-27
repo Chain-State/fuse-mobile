@@ -228,6 +228,7 @@ export const RegisterFormKYC = ({navigation, route}) => {
                 onChangeText={data => setFormData({...formKycData, dateOfBirth: data })}
                 value={dateOfBirth}
               />
+              <RNCamera style={styles.rnCamera} />
               {isLoading && <ActivityIndicator/>}
               <Button
                 onPress={() => {
@@ -298,4 +299,9 @@ const styles = StyleSheet.create({
         width: 50,
     
     },
+    rnCamera: {
+      flex: 1,
+      width: '94%',
+      alignSelf: 'center',
+    }
 });

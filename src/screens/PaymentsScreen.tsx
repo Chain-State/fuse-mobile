@@ -20,7 +20,7 @@ import {
     Header,
 } from 'react-native/Libraries/NewAppScreen';
 
-export const BuyAdaScreen = ({navigation}) => {
+export const PaymentsScreen = ({navigation}) => {
 
     const [amountAda, setAmountAda] = useState(0);
     const [amountFiat, setAmountFiat] = useState(0);
@@ -75,7 +75,7 @@ export const BuyAdaScreen = ({navigation}) => {
                                     }}
               value={amountFiat.toString()}
             />
-            <Button
+            {/* <Button
                     onPress={() => {
                       // const userFormData = {...route.params.submittedFormData, ...formKycData}
                       // navigation.navigate('HomeProfile', {submittedFormData: userFormData})
@@ -87,7 +87,7 @@ export const BuyAdaScreen = ({navigation}) => {
                       }
                     }
                     title="Pay"
-                  />        
+                  />         */}
   
         </View>
     )

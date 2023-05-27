@@ -29,6 +29,7 @@ export const fetchListings = async () => {
 };
 
 
+// KES ID 3547
 
 export const fetchExchangeQuotes = async () => {
     try {

@@ -23,6 +23,7 @@ import {
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
   Colors,
@@ -38,6 +39,7 @@ import {RegisterFormBasic, RegisterFormKYC} from './src/screens/RegistrationScre
 import { LoginScreen } from './src/screens/LoginScreen';
 import {BuyAdaScreen} from './src/screens/BuyAdaScreen'
 import {TransactionsScreen} from './src/screens/TransactionsScreen'
+import {PaymentsScreen} from './src/screens/PaymentsScreen'
 
 import {Home} from './Home'
 
@@ -61,19 +63,34 @@ const HomeScreenHolder = ({navigation, route}) => {
 
   const Tab = createBottomTabNavigator();
 
-  function AppNavigationTabs() {
+  const AppNavigationTabs = ({navigation, routes}) => {
     return (
-      <Tab.Navigator>
-        <Tab.Screen 
-          name="Transactions" 
-          component={TransactionsScreen} />
-        <Tab.Screen name="BuyAda" component={BuyAdaScreen} />
-        {/* <Tab.Screen name="Make Payments" component={BuyAdaScreen} /> */}
-      </Tab.Navigator>
+      <NavigationContainer
+        independent={true}>
+        <Tab.Navigator
+          initialRouteName="Transactions"
+          screenOptions={{
+            tabBarActiveTintColor: '#e91e63',
+            headerShown: false
+          }}
+        >
+          <Tab.Screen 
+            name="Transactions" 
+            component={TransactionsScreen}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="home" color={color} size={size} />
+              ),
+            }} 
+            />
+          <Tab.Screen name="BuyAda" component={BuyAdaScreen} />
+          <Tab.Screen name="Make Payments" component={PaymentsScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
     );
   }
   return (
-    <AppNavigationTabs/>
+    <AppNavigationTabs navigation={navigation} routes={route}/>
   )
 }
 
@@ -146,7 +163,7 @@ function App(): JSX.Element {
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
-      let userToken;
+      let userToken = "def";
 
       try {
         // userToken = await SecureStore.getItemAsync('userToken');
@@ -238,7 +255,7 @@ function App(): JSX.Element {
                 <Stack.Screen 
                   name="HomeScreen" 
                   component={HomeScreenHolder} 
-                  options={{title: 'Home',
+                  options={{title: 'Fuse',
                             headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter},
                             headerTitleStyle: {
                               fontSize: 18,

@@ -53,6 +53,18 @@ import AssetPriceLineChart from '../components/LineChart'
 
 export const TransactionsScreen = ({navigation, route}) => {
 
+    const isDarkMode = useColorScheme() === 'dark';
+
+    const backgroundStyle = {
+        backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    };
+
+    const textColorStyle = {
+        color: isDarkMode ?  Colors.lighter : Colors.darker,
+    }
+
+    const [userDisplayName, setUserDisplayName] = useState("Admin")
+
     const [tokenTimeout, setTokenTimeout] = useState(10000);
   
     const [currentAdaPrice, setCurrentAdaPrice] = useState(0.4);
@@ -83,15 +95,23 @@ export const TransactionsScreen = ({navigation, route}) => {
     // TODO ;  For each owned asset get 
     // TODO :  Calculate the total portfolio value
 
-    setAssetPriceData(priceDummyData)
-    setTransactionHistory(transactionData)
+    // setAssetPriceData(priceDummyData)
+    // setTransactionHistory(transactionData)
+    // setUserDisplayName("Admin")
   
     return (
-      <View>
+      <View
+        style={{
+            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            width: '100%',
+            height: '100%',
+            margin: 0,
+            padding: 0,
+        }}>
             <Text>The Ada payments platform</Text>
-            <AssetPriceLineChart title={"Assets"} chartData={assetPriceData}/>
+            <Text style={textColorStyle}>Hello {userDisplayName} </Text>
+            <AssetPriceLineChart title={"Assets"} chartData={priceDummyData}/>
             {/* <Text style={styles.highlight}>Hello {route.params.userKyc}</Text> */}
-            <Text style={styles.highlight}>Hello User </Text>
             <FlatList
                 data={transactionData}
                 renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
@@ -112,6 +132,10 @@ export const TransactionsScreen = ({navigation, route}) => {
         borderColor: Colors.lighter,
         borderRadius: 10,
         padding: 10,
+    },
+    textStyle: {
+        marginBottom:20,
+        color: Colors.lighter,
     },
     submitButton: {
         width: 50,
