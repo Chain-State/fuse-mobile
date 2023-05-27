@@ -13,12 +13,15 @@ import {
   useColorScheme,
   View,
   ActivityIndicator,
+  FlatList,
 } from 'react-native';
 
 import {
     Colors,
     Header,
 } from 'react-native/Libraries/NewAppScreen';
+
+import AssetPriceLineChart from '../components/LineChart'
 
 
 // Section Component
@@ -54,19 +57,45 @@ export const TransactionsScreen = ({navigation, route}) => {
   
     const [currentAdaPrice, setCurrentAdaPrice] = useState(0.4);
   
-    const [transactionHistory, setTransactionHistory] = useState([]);
+    const [transactionHistory, setTransactionHistory] = useState([{}]);
+
+    const [assetPriceData, setAssetPriceData] = useState([{}])
+
+    const priceDummyData = [{value: 15}, {value: 30}, {value: 26}, {value: 40}];
+
+    const transactionData = [
+        {key: 'Devin'},
+        {key: 'Dan'},
+        {key: 'Dominic'},
+        {key: 'Jackson'},
+        {key: 'James'},
+        {key: 'Joel'},
+        {key: 'John'},
+        {key: 'Jillian'},
+        {key: 'Jimmy'},
+        {key: 'Julie'},
+        ]
+
   
     // TODO :  Fetch transaction history data from db 
     // TODO :  Fetch asset price for Ada (api)
     // TODO :  Fetch currently owned asset list. (name, quantity)
     // TODO ;  For each owned asset get 
     // TODO :  Calculate the total portfolio value
+
+    setAssetPriceData(priceDummyData)
+    setTransactionHistory(transactionData)
   
     return (
       <View>
             <Text>The Ada payments platform</Text>
+            <AssetPriceLineChart title={"Assets"} chartData={assetPriceData}/>
             {/* <Text style={styles.highlight}>Hello {route.params.userKyc}</Text> */}
             <Text style={styles.highlight}>Hello User </Text>
+            <FlatList
+                data={transactionData}
+                renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
+            />
        </View>
       );
   }
@@ -88,5 +117,10 @@ export const TransactionsScreen = ({navigation, route}) => {
         width: 50,
     
     },
+    item: {
+        padding: 10,
+        fontSize: 18,
+        height: 44,
+      },
 });  
   

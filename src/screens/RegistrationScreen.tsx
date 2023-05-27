@@ -13,12 +13,17 @@ import {
   useColorScheme,
   View,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 
 import {
     Colors,
     Header,
 } from 'react-native/Libraries/NewAppScreen';
+import { RNCamera } from 'react-native-camera'
+
+import {createUser} from '../services/user-accounts'
+
 
 
 type User = {
@@ -136,33 +141,33 @@ export const RegisterFormKYC = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(false);
     const [data, setData] = useState<User>();
   
-    const createUser = async (userData) => {
-      try {
-        const response = await fetch('https://mywebsite.com/endpoint/', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userData
-          }),
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error: ${response.status}`);
-        }
-        // Expect a body with user db details (including a uuid)
-        // TODO: save uuid to local async storage
-        const json = await response.json();
-        setData(json.user);
-        return json;
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-        console.log(data?.username)
-      }
-    };
+    // const createUser = async (userData) => {
+    //   try {
+    //     const response = await fetch('https://mywebsite.com/endpoint/', {
+    //       method: 'POST',
+    //       headers: {
+    //         Accept: 'application/json',
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify({
+    //         userData
+    //       }),
+    //     });
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error: ${response.status}`);
+    //     }
+    //     // Expect a body with user db details (including a uuid)
+    //     // TODO: save uuid to local async storage
+    //     const json = await response.json();
+    //     setData(json.user);
+    //     return json;
+    //   } catch (error) {
+    //     console.error(error);
+    //   } finally {
+    //     setLoading(false);
+    //     console.log(data?.username)
+    //   }
+    // };
   
   
     const [formKycData, setFormData] = useState({
@@ -236,7 +241,7 @@ export const RegisterFormKYC = ({navigation, route}) => {
                       // dummy POST request
                       setTimeout(function() {
                       const userFormData = {...route.params.submittedFormData, ...formKycData}
-                      setCollatedData(userFormData)
+                      // setCollatedData(userFormData)
                       // const userCreatePromise = createUser(userFormData)
                       // userCreatePromise.then((data) => {
                       //   console.log(data)
@@ -244,10 +249,9 @@ export const RegisterFormKYC = ({navigation, route}) => {
                       //   // TODO: Remove loading spinner
                       //   // navigation.navigate('TransactionsScreen', {submittedFormData: userFormData})
                       // });
-                      // navigation.navigate('HomeProfile', {submittedFormData: userFormData})
                       console.log(userFormData)
                       setLoading(false)
-                      navigation.navigate('HomeScreen', {submittedFormDataKyc: collatedData})
+                      navigation.navigate('HomeScreen', { screen: 'Transactions' })
                     }, 5000);
                     } else {
                       //TODO: Prompt user for correction

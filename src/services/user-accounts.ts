@@ -1,7 +1,7 @@
 
 
 
-const createUser = async (userData) => {
+export const createUser = async (userData) => {
     try {
       const response = await fetch('https://mywebsite.com/endpoint/', {
         method: 'POST',

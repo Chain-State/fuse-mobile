@@ -25,6 +25,8 @@ export const BuyAdaScreen = ({navigation}) => {
     const [amountAda, setAmountAda] = useState(0);
     const [amountFiat, setAmountFiat] = useState(0);
     const [exchangeRate, setExchangeRate] = useState(2);
+    const [timeSinceLastPriceCheck, setTimeSinceLastPriceCheck] = useState(0)
+    const [buyPriceDuration, setBuyPriceDuration] = useState(0)
   
     // TODO: Fetch the current price of ada.
     // TODO: Calculate the trend based past portfolio total values (for the last x time)
@@ -81,6 +83,11 @@ export const BuyAdaScreen = ({navigation}) => {
                       // TODO: Show loading spinner
                       // TODO: Make request to buy ada in the backend
                       // TODO: Notify user of transaction success or failure
+                      if (timeSinceLastPriceCheck > buyPriceDuration){
+                        // TODO: Refetch asset exchange price data
+                      } else {
+                        // TODO: Perform Buy
+                      }
                       }
                     }
                     title="Buy"

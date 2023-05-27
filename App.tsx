@@ -68,7 +68,7 @@ const HomeScreenHolder = ({navigation, route}) => {
           name="Transactions" 
           component={TransactionsScreen} />
         <Tab.Screen name="BuyAda" component={BuyAdaScreen} />
-        <Tab.Screen name="Make Payments" component={BuyAdaScreen} />
+        {/* <Tab.Screen name="Make Payments" component={BuyAdaScreen} /> */}
       </Tab.Navigator>
     );
   }
@@ -139,7 +139,7 @@ function App(): JSX.Element {
     {
       isLoading: true,
       isSignout: false,
-      userToken: null,
+      userToken: "def",
     }
   );
 

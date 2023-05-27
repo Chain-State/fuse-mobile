@@ -30,6 +30,8 @@ type User = {
 
 export const LoginScreen = ({navigation, route}) => {
 
+    // const { signIn } = React.useContext(AuthContext);
+
     const [isLoading, setLoading] = useState(false);
     const [data, setData] = useState<User>();
   
@@ -103,7 +105,7 @@ export const LoginScreen = ({navigation, route}) => {
                 style={styles.input}
                 placeholder="Username"
                 placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
-                onChangeText={data => setAuthorizationCredentials({...authorizationCredentials, passCode: data })}
+                onChangeText={data => setUsername( data)}
                 value={username}
               />
               <TextInput
@@ -112,6 +114,7 @@ export const LoginScreen = ({navigation, route}) => {
                 placeholderTextColor={isDarkMode ? Colors.white : Colors.black}
                 onChangeText={data => setAuthorizationCredentials({...authorizationCredentials, passCode: data })}
                 value={passCode}
+                secureTextEntry
               />
               <Button
                 onPress={() => {
@@ -123,13 +126,13 @@ export const LoginScreen = ({navigation, route}) => {
                   if (passCode != null){
                     // TODO: Convert date string to timestamp
                     // dummy POST request
-                    const userCreatePromise = authorizeUser(authorizationCredentials)
-                    userCreatePromise.then((data) => {
-                      console.log(data)
-                      // TODO: Remove loading spinner
-                      setLoading(false);
-                    });
-                    // navigation.navigate('HomeProfile', {submittedFormData: userFormData})
+                    // const userCreatePromise = authorizeUser(authorizationCredentials)
+                    // userCreatePromise.then((data) => {
+                    //   console.log(data)
+                    //   // TODO: Remove loading spinner
+                    //   setLoading(false);
+                    // });
+                    navigation.navigate('HomeScreen', {submittedFormData: passCode})
                   } else {
                     //TODO: Prompt user for correction
                     console.log("Invalid Id number")
