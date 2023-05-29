@@ -226,12 +226,15 @@ export const RegisterFormKYC = ({navigation, route}) => {
                         setLoading(false)
                         // TODO: Remove loading spinner
                         // navigation.navigate('TransactionsScreen', {submittedFormData: userFormData})
+                        const parsedCreateUserResponse = JSON.parse(data)
+                        setToken(parsedCreateUserResponse[0])
                       });
                       console.log(userFormData)
                       setLoading(false)
                       // You from user createPromise get the token from json object returned from d.b
                       //TODO: Save userToken to async storage
                       //TODO: Set flag for 'first time use' to false
+                      // Also this navigate is sort of redundant, ideally if the userToken is set, the 'homescreen' should ideally be shown.
                       navigation.navigate('HomeScreen', { screen: 'Transactions' })
                     }, 5000);
                     } else {

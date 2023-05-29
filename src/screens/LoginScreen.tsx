@@ -19,6 +19,12 @@ import {
     Header,
 } from 'react-native/Libraries/NewAppScreen';
 
+import {
+  getItem as getToken,
+  setItem as setToken,
+  removeItem as removeToken,
+} from '../data/storage/tokenStorage';
+
 
 type User = {
     uid: string;
@@ -131,6 +137,7 @@ export const LoginScreen = ({navigation, route}) => {
                     //   console.log(data)
                     //   // TODO: Remove loading spinner
                     //   setLoading(false);
+                    //   setToken(data)
                     // });
                     navigation.navigate('HomeScreen', {submittedFormData: passCode})
                   } else {
