@@ -17,7 +17,6 @@ export const createUser = async (userData) => {
         throw new Error(`HTTP error: ${response.status}`);
       }
       // Expect a body with user db details (including a uuid)
-      // TODO: save uuid to local async storage
       const json = await response.json();
       return json;
     } catch (error) {

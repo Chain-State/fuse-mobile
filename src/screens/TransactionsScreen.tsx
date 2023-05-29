@@ -4,6 +4,7 @@ import type {PropsWithChildren} from 'react';
 import {
   Alert,
   Button,
+  Dimensions,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -22,7 +23,10 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import AssetPriceLineChart from '../components/LineChart'
+import { DonutGraphWithLegend } from '../components/DonutChart'
 
+
+const screenHeight = Dimensions.get('window').height;
 
 // Section Component
 // function Section({children, title}: SectionProps): JSX.Element {
@@ -73,55 +77,73 @@ export const TransactionsScreen = ({navigation, route}) => {
 
     const [assetPriceData, setAssetPriceData] = useState([{}])
 
-    const priceDummyData = [{value: 15}, {value: 30}, {value: 26}, {value: 40}];
+    const priceDummyData = [{value: 15}, {value: 30}, {value: 26}, {value: 45}];
 
     const transactionData = [
-        {key: 'Devin'},
-        {key: 'Dan'},
-        {key: 'Dominic'},
-        {key: 'Jackson'},
-        {key: 'James'},
-        {key: 'Joel'},
-        {key: 'John'},
-        {key: 'Jillian'},
-        {key: 'Jimmy'},
-        {key: 'Julie'},
+        {key: 'Transaction 1'},
+        {key: 'Transaction 2'},
+        {key: 'Transaction 3'},
+        {key: 'Transaction 4'},
+        {key: 'Transaction 5'},
+        {key: 'Transaction 6'},
+        {key: 'Transaction 7'},
+        {key: 'Transaction 8'},
+        {key: 'Transaction 9'},
+        {key: 'Transaction 10'},
         ]
 
+    const pieDummyData = [
+        {
+            value: 47,
+            color: '#009FFF',
+            gradientCenterColor: '#006DFF',
+            focused: true,
+        },
+        {value: 40, color: '#93FCF8', gradientCenterColor: '#3BE9DE'},
+        {value: 16, color: '#BDB2FA', gradientCenterColor: '#8F80F3'},
+        {value: 3, color: '#FFA5BA', gradientCenterColor: '#FF7F97'},
+        ];
+
   
-    // TODO :  Fetch transaction history data from db 
-    // TODO :  Fetch asset price for Ada (api)
-    // TODO :  Fetch currently owned asset list. (name, quantity)
-    // TODO ;  For each owned asset get 
-    // TODO :  Calculate the total portfolio value
+    // TODO:  Fetch transaction history data from db 
+    // TODO:  Fetch asset price for Ada (api)
+    // TODO:  Fetch currently owned asset list. (name, quantity)
+    // TODO:  For each owned asset get 
+    // TODO:  Calculate the total portfolio value
 
     // setAssetPriceData(priceDummyData)
     // setTransactionHistory(transactionData)
     // setUserDisplayName("Admin")
-  
+
+
+    // TODO: Each of the sections should roughly cover 1/3 of the height
     return (
-      <View
-        style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            width: '100%',
-            height: '100%',
-            margin: 0,
-            padding: 0,
-        }}>
-            <Text>The Ada payments platform</Text>
-            <Text style={textColorStyle}>Hello {userDisplayName} </Text>
-            <AssetPriceLineChart title={"Assets"} chartData={priceDummyData}/>
-            {/* <Text style={styles.highlight}>Hello {route.params.userKyc}</Text> */}
-            <FlatList
-                data={transactionData}
-                renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-            />
-       </View>
+    <ScrollView>
+        <View
+            style={{
+                backgroundColor: isDarkMode ? Colors.black : Colors.white,
+                width: '100%',
+                height: '100%',
+                margin: 0,
+                padding: 0,
+                flexDirection: 'column',
+            }}>
+                <Text>The Ada payments platform</Text>
+                <Text style={textColorStyle}>Hello {userDisplayName} </Text>
+                <AssetPriceLineChart title={"Assets"} chartData={priceDummyData}/>
+                <DonutGraphWithLegend pieData={pieDummyData} />
+                <Text style={styles.highlight}>Transactions</Text>
+                <FlatList
+                    data={transactionData}
+                    renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
+                />
+        </View>
+       </ScrollView>
       );
   }
 
 
-  const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     highlight: {
         fontWeight: '700',
     },

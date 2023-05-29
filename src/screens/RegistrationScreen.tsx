@@ -21,6 +21,11 @@ import {
     Header,
 } from 'react-native/Libraries/NewAppScreen';
 import { RNCamera } from 'react-native-camera'
+import {
+  getItem as getToken,
+  setItem as setToken,
+  removeItem as removeToken,
+} from '../data/storage/tokenStorage';
 
 import {createUser} from '../services/user-accounts'
 
@@ -141,34 +146,6 @@ export const RegisterFormKYC = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(false);
     const [data, setData] = useState<User>();
   
-    // const createUser = async (userData) => {
-    //   try {
-    //     const response = await fetch('https://mywebsite.com/endpoint/', {
-    //       method: 'POST',
-    //       headers: {
-    //         Accept: 'application/json',
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify({
-    //         userData
-    //       }),
-    //     });
-    //     if (!response.ok) {
-    //       throw new Error(`HTTP error: ${response.status}`);
-    //     }
-    //     // Expect a body with user db details (including a uuid)
-    //     // TODO: save uuid to local async storage
-    //     const json = await response.json();
-    //     setData(json.user);
-    //     return json;
-    //   } catch (error) {
-    //     console.error(error);
-    //   } finally {
-    //     setLoading(false);
-    //     console.log(data?.username)
-    //   }
-    // };
-  
   
     const [formKycData, setFormData] = useState({
       idNumber: "",
@@ -228,7 +205,7 @@ export const RegisterFormKYC = ({navigation, route}) => {
                 onChangeText={data => setFormData({...formKycData, dateOfBirth: data })}
                 value={dateOfBirth}
               />
-              <RNCamera style={styles.rnCamera} />
+              {/* <RNCamera style={styles.rnCamera} /> */}
               {isLoading && <ActivityIndicator/>}
               <Button
                 onPress={() => {
@@ -242,16 +219,19 @@ export const RegisterFormKYC = ({navigation, route}) => {
                       // dummy POST request
                       setTimeout(function() {
                       const userFormData = {...route.params.submittedFormData, ...formKycData}
-                      // setCollatedData(userFormData)
-                      // const userCreatePromise = createUser(userFormData)
-                      // userCreatePromise.then((data) => {
-                      //   console.log(data)
-                      //   setLoading(false)
-                      //   // TODO: Remove loading spinner
-                      //   // navigation.navigate('TransactionsScreen', {submittedFormData: userFormData})
-                      // });
+                      setCollatedData(userFormData)
+                      const userCreatePromise = createUser(userFormData)
+                      userCreatePromise.then((data) => {
+                        console.log(data)
+                        setLoading(false)
+                        // TODO: Remove loading spinner
+                        // navigation.navigate('TransactionsScreen', {submittedFormData: userFormData})
+                      });
                       console.log(userFormData)
                       setLoading(false)
+                      // You from user createPromise get the token from json object returned from d.b
+                      //TODO: Save userToken to async storage
+                      //TODO: Set flag for 'first time use' to false
                       navigation.navigate('HomeScreen', { screen: 'Transactions' })
                     }, 5000);
                     } else {

@@ -20,8 +20,8 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -35,11 +35,11 @@ import {
 
 // import * as SecureStore from 'expo-secure-store';
 
-import {RegisterFormBasic, RegisterFormKYC} from './src/screens/RegistrationScreen'
+import { RegisterFormBasic, RegisterFormKYC } from './src/screens/RegistrationScreen'
 import { LoginScreen } from './src/screens/LoginScreen';
-import {BuyAdaScreen} from './src/screens/BuyAdaScreen'
-import {TransactionsScreen} from './src/screens/TransactionsScreen'
-import {PaymentsScreen} from './src/screens/PaymentsScreen'
+import { BuyAdaScreen } from './src/screens/BuyAdaScreen'
+import { TransactionsScreen } from './src/screens/TransactionsScreen'
+import { PaymentsScreen } from './src/screens/PaymentsScreen'
 
 import {Home} from './Home'
 
@@ -156,7 +156,7 @@ function App(): JSX.Element {
     {
       isLoading: true,
       isSignout: false,
-      userToken: "def",
+      userToken: null,
     }
   );
 

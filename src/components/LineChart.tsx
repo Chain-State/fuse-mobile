@@ -30,8 +30,10 @@ function AssetPriceLineChart({title, chartData}) {
       </View>
       <LineChart
         data={chartData}
+        color={'#177AD5'}
         width={screenWidth}
-        height={220}
+        height={120}
+        hideYAxisText
       />
 
       {/* <View style={styles.legendContainer}>
