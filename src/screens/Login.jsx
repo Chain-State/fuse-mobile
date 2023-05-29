@@ -11,17 +11,11 @@ import {
 
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-type User = {
-  uid: string;
-  username: string;
-  registrationTime: string;
-};
-
 const LoginScreen = ({ navigation, route }) => {
   // const { signIn } = React.useContext(AuthContext);
 
   const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState<User>();
+  const [data, setData] = useState();
 
   const authorizeUser = async (userAuthCredentials) => {
     try {
