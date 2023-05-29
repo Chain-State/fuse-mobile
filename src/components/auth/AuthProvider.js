@@ -29,7 +29,7 @@ export const AuthProvider = props => {
     React.useEffect(() => {
         const initState = async () => {
             try {
-                const authToken = await.getToken();
+                const authToken = await getToken();
                 if (authToken != null) {
                     dispatch({ type: 'SIGN_IN', token: authToken });
                 } else {
