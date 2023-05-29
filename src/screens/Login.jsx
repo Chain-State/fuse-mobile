@@ -1,90 +1,29 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  TextInput,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { Button, SafeAreaView, StatusBar, TextInput, View } from 'react-native';
 
 const LoginScreen = ({ navigation, route }) => {
-  // const { signIn } = React.useContext(AuthContext);
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState();
-
-  const authorizeUser = async (userAuthCredentials) => {
-    try {
-      const response = await fetch('https://mywebsite.com/endpoint/', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userAuthCredentials,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`);
-      }
-      // Expect a body with user db details (including a uuid)
-      // TODO: save uuid to local async storage
-      const json = await response.json();
-      setData(json.user);
-      return json;
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-      console.log(data?.username);
-    }
-  };
-
-  const [authorizationCredentials, setAuthorizationCredentials] = useState({
-    passCode: '',
-    authorizationToken: '',
+  const [authCredentials, setAuthCredentials] = useState({
+    userName: '',
+    password: '',
   });
-
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const { passCode, authorizationToken } = authorizationCredentials;
-
-  const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <SafeAreaView>
       <StatusBar></StatusBar>
-            <View
-        style={{
-          width: '100%',
-          height: '100%',
-          margin: 0,
-          padding: 0,
-          justifyContent: 'center',
-          // alignItems: 'center',
-          // bottom: 0,
-        }}
-      >
+      <View>
         <TextInput
-          style={styles.input}
-          placeholder="Username"
-          onChangeText={(data) => setUsername(data)}
-          value={username}
+          placeholder="User Name"
+          onChangeText={(data) => setAuthCredentials(authCredentials.userName = data)}
+          value={authCredentials.userName}
         />
         <TextInput
-          style={styles.input}
           placeholder="Password"
           onChangeText={(data) =>
-            setAuthorizationCredentials({ ...authorizationCredentials, passCode: data })
+            setAuthCredentials(authCredentials.password = data)
           }
-          value={passCode}
-          secureTextEntry
+          value={authCredentials.password}
         />
         <Button
           onPress={() => {
@@ -93,7 +32,7 @@ const LoginScreen = ({ navigation, route }) => {
             // navigation.navigate('HomeProfile', {submittedFormData: userFormData})
             // TODO: Show loading spinner
             // TODO: properly check legit id number
-            if (passCode != null) {
+            if (passWord != null) {
               // TODO: Convert date string to timestamp
               // dummy POST request
               // const userCreatePromise = authorizeUser(authorizationCredentials)
@@ -102,7 +41,7 @@ const LoginScreen = ({ navigation, route }) => {
               //   // TODO: Remove loading spinner
               //   setLoading(false);
               // });
-              navigation.navigate('HomeScreen', { submittedFormData: passCode });
+              navigation.navigate('HomeScreen');
             } else {
               //TODO: Prompt user for correction
               console.log('Invalid Id number');
@@ -118,27 +57,8 @@ const LoginScreen = ({ navigation, route }) => {
           title="Register"
         />
       </View>
-      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };
 
 export default LoginScreen;
-
-const styles = StyleSheet.create({
-  highlight: {
-    fontWeight: '700',
-  },
-  input: {
-    height: 50,
-    margin: 20,
-    borderWidth: 1,
-    borderColor: Colors.lighter,
-    borderRadius: 10,
-    padding: 10,
-  },
-  submitButton: {
-    width: 50,
-    margin: 20,
-  },
-});
