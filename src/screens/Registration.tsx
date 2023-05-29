@@ -25,9 +25,9 @@ import {
   getItem as getToken,
   setItem as setToken,
   removeItem as removeToken,
-} from '../data/storage/tokenStorage';
+} from '../data/storage/TokenStorage';
 
-import {createUser} from '../services/user-accounts'
+import {createUser} from '../services/UserAccounts'
 
 
 

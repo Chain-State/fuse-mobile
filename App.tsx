@@ -35,11 +35,11 @@ import {
 
 // import * as SecureStore from 'expo-secure-store';
 
-import { RegisterFormBasic, RegisterFormKYC } from './src/screens/RegistrationScreen'
-import { LoginScreen } from './src/screens/LoginScreen';
-import { BuyAdaScreen } from './src/screens/BuyAdaScreen'
-import { TransactionsScreen } from './src/screens/TransactionsScreen'
-import { PaymentsScreen } from './src/screens/PaymentsScreen'
+import { RegisterFormBasic, RegisterFormKYC } from './src/screens/Registration'
+import { LoginScreen } from './src/screens/Login';
+import { BuyAdaScreen } from './src/screens/BuyAda'
+import { TransactionsScreen } from './src/screens/Transactions'
+import { PaymentsScreen } from './src/screens/Payments'
 
 import {Home} from './Home'
 
