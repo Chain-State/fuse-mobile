@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RegisterFormBasic, RegisterFormKYC } from './src/screens/Registration';
+import { SignUpForm, RegisterFormKYC } from './src/screens/SignUpForm';
 import LoginScreen from './src/screens/Login';
 import TabNavigator from './src/components/TabNavigation';
 
@@ -20,10 +20,10 @@ function App() {
                 }}
               />
               <Stack.Screen
-                name="Register"
-                component={RegisterFormBasic}
+                name="SignUpForm"
+                component={SignUpForm}
                 options={{
-                  title: 'Welcome',
+                  title: 'Create Account',
                 }}
               />
               <Stack.Screen

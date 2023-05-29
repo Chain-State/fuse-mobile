@@ -52,7 +52,7 @@ const LoginScreen = ({ navigation, route }) => {
         <View></View>
         <Button
           onPress={() => {
-            navigation.navigate('Register', { fromLoginData: 'Hello' });
+            navigation.navigate('SignUpForm', { fromLoginData: 'Hello' });
           }}
           title="Register"
         />
