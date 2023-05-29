@@ -5,25 +5,18 @@
  * @format
  */
 
-import React, {useState} from 'react';
+import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
-  Alert,
-  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   useColorScheme,
   View,
   ActivityIndicator,
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
   Colors,
@@ -41,12 +34,35 @@ import { BuyAdaScreen } from './src/screens/BuyAdaScreen'
 import { TransactionsScreen } from './src/screens/TransactionsScreen'
 import { PaymentsScreen } from './src/screens/PaymentsScreen'
 
-import {Home} from './Home'
-
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
+function Section({children, title}: SectionProps): JSX.Element {
+  const isDarkMode = useColorScheme() === 'dark';
+  return (
+    <View style={styles.sectionContainer}>
+      <Text
+        style={[
+          styles.sectionTitle,
+          {
+            color: isDarkMode ? Colors.white : Colors.black,
+          },
+        ]}>
+        {title}
+      </Text>
+      <Text
+        style={[
+          styles.sectionDescription,
+          {
+            color: isDarkMode ? Colors.light : Colors.dark,
+          },
+        ]}>
+        {children}
+      </Text>
+    </View>
+  );
+}
 
 const AuthContext = React.createContext();
 
@@ -273,7 +289,6 @@ function App(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
@@ -289,18 +304,6 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
-  },
-  input: {
-    height: 50,
-    margin: 20,
-    borderWidth: 1,
-    borderColor: Colors.lighter,
-    borderRadius: 10,
-    padding: 10,
-  },
-  submitButton: {
-    width: 50,
-
   },
 });
 
