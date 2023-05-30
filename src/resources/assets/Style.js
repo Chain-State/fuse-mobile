@@ -1,5 +1,10 @@
 import { StyleSheet } from "react-native";
 const Theme = StyleSheet.create({
+
+    fsContainer: {
+        backgroundColor: '#FFFFFF',
+    },
+
     fsColors: {
         primary: '#0288d1',
         secondary: '#8bc34a',
@@ -24,13 +29,6 @@ const Theme = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
     },
-
-    fsButton: {
-        marginTop: 20,
-        backgrondColor: '#8bc34a',
-    }
-
-
 });
 
 export default Theme;

@@ -10,6 +10,7 @@ import {
 import Theme from '../resources/assets/Style';
 
 import { createUser } from '../services/UserAccounts';
+import FsButton from '../components/Button';
 
 export const SignUpForm = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ export const SignUpForm = ({ navigation }) => {
   return (
     <SafeAreaView>
       <StatusBar />
-      <View>
+      <View style={Theme.fsContainer}>
         <TextInput
           style={Theme.fsInput}
           placeholder="First Name"
@@ -64,8 +65,7 @@ export const SignUpForm = ({ navigation }) => {
           onChangeText={(data) => setFormData({ ...formData, passwordConfirm: data })}
           value={passwordConfirm}
         />
-        <Button
-        style={[Theme.fsButton]}
+        <FsButton
           onPress={() => {
             // TODO: Proper form validation
             if (password === passwordConfirm) {
@@ -74,7 +74,7 @@ export const SignUpForm = ({ navigation }) => {
               console.log("Passwords don't match!!");
             }
           }}
-          title="Nexti"
+          title="Next"
         />
       </View>
     </SafeAreaView>
