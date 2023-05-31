@@ -6,7 +6,7 @@ const SignOut = ({ navigation }) => {
   const { signOut } = useAuthorization();
   function navigateAuth() {
     signOut();
-    navigation.navigate('Home');
+    navigation.navigate('HomeScreen');
   }
   return <Button title="Sign Out" onPress={navigateAuth} />;
 };
