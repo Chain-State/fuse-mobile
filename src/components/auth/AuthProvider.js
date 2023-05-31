@@ -1,16 +1,16 @@
 import * as React from 'react';
 import {
-  getItem as getToken,
-  setItem as setToken,
-  removeItem as removeToken,
-} from '../../data/storage/tokenStorage';
+    getItem as getToken,
+    setItem as setToken,
+    removeItem as removeToken,
+} from '../../data/storage/TokenStorage';
 
 
 const AuthContext = React.createContext({
     status: 'idle',
     authToken: null,
-    signIn: () => {},
-    signOut: () => {},
+    signIn: () => { },
+    signOut: () => { },
 });
 
 export const useAuthorization = () => {
@@ -21,7 +21,7 @@ export const useAuthorization = () => {
     return context;
 };
 
-export const AuthProvider = props =>{
+export const AuthProvider = props => {
     const [state, dispatch] = React.useReducer(reducer, {
         status: 'idle',
         authToken: null,
@@ -31,9 +31,9 @@ export const AuthProvider = props =>{
             try {
                 const authToken = await.getToken();
                 if (authToken != null) {
-                    dispatch({type: 'SIGN_IN', token: authToken});
+                    dispatch({ type: 'SIGN_IN', token: authToken });
                 } else {
-                    dispatch({type: 'SIGN_OUT'});
+                    dispatch({ type: 'SIGN_OUT' });
                 }
             } catch (e) {
                 console.log(e)
@@ -45,18 +45,18 @@ export const AuthProvider = props =>{
     const actions = React.useMemo(
         () => ({
             signIn: async token => {
-                dispatch({type: 'SIGN_IN', token});
+                dispatch({ type: 'SIGN_IN', token });
                 await setToken(token);
             },
             signOut: async () => {
-                dispatch({type: 'SIGN_OUT'});
+                dispatch({ type: 'SIGN_OUT' });
                 await removeToken();
             },
         }),
         [state, dispatch],
     );
     return (
-        <AuthContext.Provider value={{...state, ...actions}}>
+        <AuthContext.Provider value={{ ...state, ...actions }}>
             {props.children}
         </AuthContext.Provider>
     );

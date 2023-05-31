@@ -3,7 +3,7 @@ import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PinchGestureHandler, PinchGestureHandlerGestureEvent, TapGestureHandler } from 'react-native-gesture-handler';
 
-import { PermissionsPage } from './PermissionsPage';
+import { PermissionsPage } from './Permissions';
 import { MediaPage } from './MediaPage';
 import { CameraPage } from './CameraPage';
 
