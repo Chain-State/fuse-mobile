@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
+import type { PropsWithChildren } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -16,7 +16,10 @@ import {
   useColorScheme,
   View,
   ActivityIndicator,
+  TextInput,
+  Button,
 } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 
 import {
   Colors,
@@ -33,12 +36,15 @@ import { LoginScreen } from './src/screens/Login';
 import { BuyAdaScreen } from './src/screens/BuyAda'
 import { TransactionsScreen } from './src/screens/Transactions'
 import { PaymentsScreen } from './src/screens/Payments'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
-function Section({children, title}: SectionProps): JSX.Element {
+function Section({ children, title }: SectionProps): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
@@ -69,7 +75,7 @@ const AuthContext = React.createContext();
 // Navigation
 const Stack = createNativeStackNavigator();
 
-const HomeScreenHolder = ({navigation, route}) => {
+const HomeScreenHolder = ({ navigation, route }) => {
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -79,7 +85,7 @@ const HomeScreenHolder = ({navigation, route}) => {
 
   const Tab = createBottomTabNavigator();
 
-  const AppNavigationTabs = ({navigation, routes}) => {
+  const AppNavigationTabs = ({ navigation, routes }) => {
     return (
       <NavigationContainer
         independent={true}>
@@ -90,15 +96,15 @@ const HomeScreenHolder = ({navigation, route}) => {
             headerShown: false
           }}
         >
-          <Tab.Screen 
-            name="Transactions" 
+          <Tab.Screen
+            name="Transactions"
             component={TransactionsScreen}
             options={{
               tabBarIcon: ({ color, size }) => (
                 <MaterialCommunityIcons name="home" color={color} size={size} />
               ),
-            }} 
-            />
+            }}
+          />
           <Tab.Screen name="BuyAda" component={BuyAdaScreen} />
           <Tab.Screen name="Make Payments" component={PaymentsScreen} />
         </Tab.Navigator>
@@ -106,11 +112,11 @@ const HomeScreenHolder = ({navigation, route}) => {
     );
   }
   return (
-    <AppNavigationTabs navigation={navigation} routes={route}/>
+    <AppNavigationTabs navigation={navigation} routes={route} />
   )
 }
 
-const ProfileScreen = ({navigation, route}) => {
+const ProfileScreen = ({ navigation, route }) => {
   return <Text>This is {route.params.name}'s profile</Text>;
 };
 
@@ -227,64 +233,68 @@ function App(): JSX.Element {
   };
 
   return (
-      <NavigationContainer >
-        <AuthContext.Provider value={authContext}>
-          <Stack.Navigator>
+    <NavigationContainer >
+      <AuthContext.Provider value={authContext}>
+        <Stack.Navigator>
           {state.userToken == null ? (
             <>
-              <Stack.Screen
+              {/* <Stack.Screen
                 name="SignIn"
                 component={LoginScreen}
-                options={{title: 'Login',
-                        headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter},
-                        headerTitleStyle: {
-                          fontSize: 18,
-                          color: isDarkMode ? Colors.lighter : Colors.darker ,
-                        },
-                        }}
-              />
+                options={{
+                  title: 'Login',
+                  headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter },
+                  headerTitleStyle: {
+                    fontSize: 18,
+                    color: isDarkMode ? Colors.lighter : Colors.darker,
+                  },
+                }}
+              /> */}
               <Stack.Screen
                 name="Register"
                 component={RegisterFormBasic}
-                options={{title: 'Welcome',
-                        headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter},
-                        headerTitleStyle: {
-                          fontSize: 18,
-                          color: isDarkMode ? Colors.lighter : Colors.darker ,
-                        },
-                        }}
+                options={{
+                  title: 'Welcome',
+                  headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter },
+                  headerTitleStyle: {
+                    fontSize: 18,
+                    color: isDarkMode ? Colors.lighter : Colors.darker,
+                  },
+                }}
               />
               <Stack.Screen
                 name="KYCForm"
                 component={RegisterFormKYC}
-                options={{title: 'KYC Details',
-                        headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter},
-                        headerTitleStyle: {
-                          fontSize: 18,
-                          color: isDarkMode ? Colors.lighter : Colors.darker ,
-                        },
-                        }}
+                options={{
+                  title: 'KYC Details',
+                  headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter },
+                  headerTitleStyle: {
+                    fontSize: 18,
+                    color: isDarkMode ? Colors.lighter : Colors.darker,
+                  },
+                }}
               />
-              </>
-            ) : (
-              <>
-                <Stack.Screen 
-                  name="HomeScreen" 
-                  component={HomeScreenHolder} 
-                  options={{title: 'Fuse',
-                            headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter},
-                            headerTitleStyle: {
-                              fontSize: 18,
-                              color: isDarkMode ? Colors.lighter : Colors.darker ,
-                            },
-                          }}
-                />
-              </>
-            )
+            </>
+          ) : (
+            <>
+              <Stack.Screen
+                name="HomeScreen"
+                component={HomeScreenHolder}
+                options={{
+                  title: 'Fuse',
+                  headerStyle: { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter },
+                  headerTitleStyle: {
+                    fontSize: 18,
+                    color: isDarkMode ? Colors.lighter : Colors.darker,
+                  },
+                }}
+              />
+            </>
+          )
           }
-          </Stack.Navigator>
-        </AuthContext.Provider>
-      </NavigationContainer>
+        </Stack.Navigator>
+      </AuthContext.Provider>
+    </NavigationContainer>
   );
 }
 

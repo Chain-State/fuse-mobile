@@ -29,6 +29,12 @@ const Theme = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
     },
+    error: {
+        color: 'red',
+        alignSelf: 'center',
+        marginTop: -10,
+        marginBottom: -10,
+    }
 });
 
 export default Theme;

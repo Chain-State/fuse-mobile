@@ -124,6 +124,7 @@ export const RegisterFormKYC = ({ navigation, route }) => {
             // TODO: Show loading spinner
             // TODO: properly check legit id number
             if (idNumber != null) {
+              // TODO: Add Form validation
               // TODO: Convert date string to timestamp
               // dummy POST request
               setTimeout(function () {

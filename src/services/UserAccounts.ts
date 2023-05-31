@@ -2,28 +2,28 @@
 
 
 export const createUser = async (userData) => {
-    try {
-      const response = await fetch('https://mywebsite.com/endpoint/', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userData
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`);
-      }
-      // Expect a body with user db details (including a uuid)
-      const json = await response.json();
-      return json;
-    } catch (error) {
-      console.error(error);
-    } finally {
-      console.log("User registration successful!")
+  try {
+    const response = await fetch('34.30.199.63:3000/api/v1/register', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userData
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
     }
+    // Expect a body with user db details (including a uuid)
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    console.log("User registration successful!")
+  }
 };
 
 const authorizeUser = async (userAuthCredentials) => {

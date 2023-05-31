@@ -20,7 +20,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         letterSpacing: 0.75,
         color: '#FFFFFF'
-    }
+    },
+
+
 });
 
 export default styles;
