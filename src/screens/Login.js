@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {Text, View, StyleSheet, Button} from 'react-native';
-import {useAuthorization} from '../components/auth/AuthProvider';
+import { Text, View, StyleSheet, Button } from 'react-native';
+import { useAuthorization } from '../components/auth/AuthProvider';
 
-const SignOut = ({navigation}) => {
-  const {signOut} = useAuthorization();
+const SignOut = ({ navigation }) => {
+  const { signOut } = useAuthorization();
   function navigateAuth() {
     signOut();
     navigation.navigate('Home');
@@ -12,7 +12,7 @@ const SignOut = ({navigation}) => {
 };
 
 export default LoginScreen = props => {
-  const {status, authToken} = useAuthorization();
+  const { status, authToken } = useAuthorization();
   return (
     <View style={styles.container}>
       <Text style={styles.text}>status : {status}</Text>
