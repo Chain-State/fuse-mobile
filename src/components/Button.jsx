@@ -1,5 +1,5 @@
 import {View, Button, Stylesheet, TouchableOpacity, Text} from 'react-native';
-import styles from './Styles';
+import styles from './ButtonStyles';
 
 const FsButton = ({onPress, title}) => (
     <TouchableOpacity onPress={onPress} style={styles.appButtonContainer}>

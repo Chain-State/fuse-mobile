@@ -1,47 +1,37 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SignUpForm, RegisterFormKYC } from './src/screens/SignUpForm';
-import LoginScreen from './src/screens/Login';
-import TabNavigator from './src/components/TabNavigation';
-
-const Stack = createNativeStackNavigator();
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+// import { NavigationContainer } from '@react-navigation/native';
+import { WalletScreen } from './src/screens/Wallet';
+import { BuyAssetScreen } from './src/screens/BuyAsset';
+import { PaymentsScreen } from './src/screens/Payments';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { SCR_WALLET } from './src/constants/AppStrings';
 
 function App() {
+
+  const Tab = createBottomTabNavigator();
   return (
-    <NavigationContainer>
-        <Stack.Navigator initialRouteName='Login'>
-            <>
-              <Stack.Screen
-                name="Login"
-                component={LoginScreen}
-                options={{
-                  title: 'Login',
-                }}
-              />
-              <Stack.Screen
-                name="SignUpForm"
-                component={SignUpForm}
-                options={{
-                  title: 'Create Account',
-                }}
-              />
-              <Stack.Screen
-                name="KYCForm"
-                component={RegisterFormKYC}
-                options={{
-                  title: 'KYC Details',
-                }}
-              />
-            </>
-              <Stack.Screen
-                name="HomeScreen"
-                component={TabNavigator}
-                options={{
-                  title: 'Fuse',
-                }}
-              />
-        </Stack.Navigator>
+    <NavigationContainer independent={true}>
+      <Tab.Navigator
+        initialRouteName={SCR_WALLET}
+        screenOptions={{
+          tabBarActiveTintColor: '#e91e63',
+          headerShown: false,
+        }}
+      >
+        <Tab.Screen
+          name={SCR_WALLET}
+          component={WalletScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="home" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen name="BuyAda" component={BuyAssetScreen} />
+        <Tab.Screen name="Make Payments" component={PaymentsScreen} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }

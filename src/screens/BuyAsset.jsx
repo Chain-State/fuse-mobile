@@ -20,7 +20,7 @@ import {
     Header,
 } from 'react-native/Libraries/NewAppScreen';
 
-export const BuyAdaScreen = ({navigation}) => {
+export const BuyAssetScreen = ({navigation}) => {
 
     const [amountAda, setAmountAda] = useState(0);
     const [amountFiat, setAmountFiat] = useState(0);

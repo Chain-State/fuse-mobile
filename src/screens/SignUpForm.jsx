@@ -11,6 +11,7 @@ import Theme from '../resources/assets/Style';
 
 import { createUser } from '../services/UserAccounts';
 import FsButton from '../components/Button';
+import { SCR_KYC, SCR_WALLET } from '../constants/AppStrings';
 
 export const SignUpForm = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -69,12 +70,12 @@ export const SignUpForm = ({ navigation }) => {
           onPress={() => {
             // TODO: Proper form validation
             if (password === passwordConfirm) {
-              navigation.navigate('KYCForm', { submittedFormData: formData });
+              navigation.navigate(SCR_WALLET, { submittedFormData: formData });
             } else {
               console.log("Passwords don't match!!");
             }
           }}
-          title="Next"
+          title="Sign Up"
         />
       </View>
     </SafeAreaView>

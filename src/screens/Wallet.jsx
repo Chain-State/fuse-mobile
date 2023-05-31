@@ -1,25 +1,17 @@
 
 import React, {useState} from 'react';
-import type {PropsWithChildren} from 'react';
 import {
-  Alert,
-  Button,
   Dimensions,
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   useColorScheme,
   View,
-  ActivityIndicator,
   FlatList,
 } from 'react-native';
 
 import {
     Colors,
-    Header,
 } from 'react-native/Libraries/NewAppScreen';
 
 import AssetPriceLineChart from '../components/LineChart'
@@ -55,7 +47,7 @@ const screenHeight = Dimensions.get('window').height;
 //     );
 //   }
 
-export const TransactionsScreen = ({navigation, route}) => {
+export const WalletScreen = ({navigation, route}) => {
 
     const isDarkMode = useColorScheme() === 'dark';
 
