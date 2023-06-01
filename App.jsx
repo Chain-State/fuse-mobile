@@ -23,11 +23,11 @@ function App() {
            if(route.name == SCR_WALLET){
             iconName = focused ? 'wallet' : 'wallet-outline';
            } else if (route.name === SCR_BUY_ASSET) {
-            iconName = focused ? 'orbit-variant' : 'orbit-variant';
+            iconName = focused ? 'circle-multiple' : 'circle-multiple-outline';
            } else if (route.name === SCR_MAKE_PAYMENTS){
-            iconName = focused ? 'smart-card' : 'smart-card-outline';
+            iconName = focused ? 'credit-card' : 'credit-card-outline';
            } else if (route.name === SCR_SWAP_TOKENS){
-            iconName = focused ? 'smart-card' : 'smart-card-outline';
+            iconName = focused ? 'swap-horizontal' : 'swap-horizontal';
            } 
 
 
