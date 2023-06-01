@@ -34,8 +34,9 @@ const Theme = StyleSheet.create({
 
     fsFonts: {
         fontFamily: font,
-        regular: '',
-        heavy: '',
+        boldFont: {
+            fontFamily: fontBold,
+        }
     },
     fsTabNavigation: {
         tab: {
@@ -53,6 +54,18 @@ const Theme = StyleSheet.create({
         }
 
     },
+    fsList: {
+        item: {
+            fontFamily: font,
+            marginRight: 5,
+            padding: 2,
+            marginLeft: 5,
+            marginBottom: 5,
+            marginTop: 8,
+        }
+    },
+
+
 
     //components styling
     fsInput: {
@@ -68,7 +81,7 @@ const Theme = StyleSheet.create({
     fsCharts: {
         lineChart: {
             container: {
-                marginBottom: 20,
+                marginBottom: 5,
             },
             titleContainer: {
                 flex: 1,
@@ -76,7 +89,7 @@ const Theme = StyleSheet.create({
             },
             legendContainer: {
                 flexDirection: 'row',
-                marginBottom: 10,
+                marginBottom: 5,
                 justifyContent: 'center',
             },
         },
@@ -85,7 +98,6 @@ const Theme = StyleSheet.create({
             container: {
                 padding: 10,
                 backgroundColor: secondary_light,
-                flex: 1,
             },
             chart: {
                 margin: 15,
