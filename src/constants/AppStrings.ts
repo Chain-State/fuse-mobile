@@ -13,8 +13,9 @@ const SCR_KYC = 'KYC';
 const SCR_LOGIN= 'Login';
 const SCR_REGISTRATION = 'Registration';
 const SCR_WALLET = 'Wallet';
-const SCR_BUY_ASSET = 'BuyAsset';
-const SCR_MAKE_PAYMENTS = 'MakePayments';
+const SCR_BUY_ASSET = 'Buy';
+const SCR_MAKE_PAYMENTS = 'Payments';
+const SCR_SWAP_TOKENS = 'Swap'
 
 export {
     SCR_KYC,
@@ -23,4 +24,5 @@ export {
     SCR_LOGIN,
     SCR_BUY_ASSET,
     SCR_MAKE_PAYMENTS,
+    SCR_SWAP_TOKENS,
 }

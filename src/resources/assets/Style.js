@@ -15,7 +15,20 @@ const Theme = StyleSheet.create({
         regular: '',
         heavy: '',
     },
-    fsIcons: {
+    fsTabNavigation: {
+        tab: {
+            height: 60,
+            paddingBottom: 5,
+            paddingTop: 5,
+        },
+        icons: {
+            fontSize: 16,
+        },
+        labels: {
+            fontSize: 13,
+            fontFamily: 'Montserrat-Regular',
+            paddingBottom: 5,
+        }
 
     },
 

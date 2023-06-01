@@ -7,7 +7,7 @@ import { BuyAssetScreen } from './src/screens/BuyAsset';
 import { PaymentsScreen } from './src/screens/Payments';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { SCR_BUY_ASSET, SCR_MAKE_PAYMENTS, SCR_WALLET } from './src/constants/AppStrings';
+import { SCR_BUY_ASSET, SCR_MAKE_PAYMENTS, SCR_SWAP_TOKENS, SCR_WALLET } from './src/constants/AppStrings';
 import Theme from './src/resources/assets/Style';
 
 function App() {
@@ -23,19 +23,28 @@ function App() {
            if(route.name == SCR_WALLET){
             iconName = focused ? 'wallet' : 'wallet-outline';
            } else if (route.name === SCR_BUY_ASSET) {
-            iconName = focused ? 'transfer' : 'transfer-outline';
+            iconName = focused ? 'orbit-variant' : 'orbit-variant';
            } else if (route.name === SCR_MAKE_PAYMENTS){
             iconName = focused ? 'smart-card' : 'smart-card-outline';
+           } else if (route.name === SCR_SWAP_TOKENS){
+            iconName = focused ? 'smart-card' : 'smart-card-outline';
            } 
-          return <MaterialCommunityIcons name={iconName} size={28} color={color}/>;
+
+
+
+          return <MaterialCommunityIcons name={iconName} size={size} color={color}/>;
           },
           tabBarActiveTintColor: Theme.fsColors.secondary,
           tabBarInactiveTintColor: 'gray',
+          tabBarLabelStyle: Theme.fsTabNavigation.labels,
+          tabBarIconStyle: Theme.fsTabNavigation.icons,
+          tabBarStyle: Theme.fsTabNavigation.tab,
         })}
       >
         <Tab.Screen name={SCR_WALLET} component={WalletScreen}/>
-        <Tab.Screen name="BuyAsset" component={BuyAssetScreen} />
-        <Tab.Screen name="MakePayments" component={PaymentsScreen} />
+        <Tab.Screen name={SCR_BUY_ASSET} component={BuyAssetScreen} />
+        <Tab.Screen name={SCR_MAKE_PAYMENTS} component={PaymentsScreen} />
+        <Tab.Screen name={SCR_SWAP_TOKENS} component={PaymentsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
