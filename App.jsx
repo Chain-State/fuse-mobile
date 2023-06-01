@@ -36,7 +36,7 @@ function App() {
 
             return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: Theme.fsColors.secondary,
+          tabBarActiveTintColor: Theme.fsColors.primary,
           tabBarInactiveTintColor: 'gray',
           tabBarLabelStyle: Theme.fsTabNavigation.labels,
           tabBarIconStyle: Theme.fsTabNavigation.icons,

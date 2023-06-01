@@ -1,17 +1,39 @@
 import { StyleSheet } from "react-native";
+
+//colors
+const primary = '#8bc34a';
+const primary_dark = '#145300';
+const primary_light = '';
+
+const secondary = '#56B8CF';
+const secondary_dark = '#00697E';
+const secondary_light = '#E6F4F1';
+
+const primary_text = '#FFFFFF';
+const secondary_text = '#000000';
+
+export const pieColor1 = '#708653';
+export const pieColor2 = '#E7F6D1';
+export const pieColor3 = '#005165';
+export const pieColor4 = '#457F8D';
+//fonts 
+const font = 'Montserrat-Regular';
+const fontBold = 'Montserrat-Bold';
+
 const Theme = StyleSheet.create({
 
     fsContainer: {
         backgroundColor: '#FFFFFF',
+        fontFamily: font
     },
 
     fsColors: {
-        primary: '#0288d1',
-        secondary: '#8bc34a',
+        primary: primary,
+        secondary: secondary,
     },
 
     fsFonts: {
-        fontFamily: 'Montserrat-Regular',
+        fontFamily: font,
         regular: '',
         heavy: '',
     },
@@ -26,7 +48,7 @@ const Theme = StyleSheet.create({
         },
         labels: {
             fontSize: 13,
-            fontFamily: 'Montserrat-Regular',
+            fontFamily: font,
             paddingBottom: 5,
         }
 
@@ -42,6 +64,64 @@ const Theme = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
     },
+
+    fsCharts: {
+        lineChart: {
+            container: {
+                marginBottom: 20,
+            },
+            titleContainer: {
+                flex: 1,
+                alignItems: 'center',
+            },
+            legendContainer: {
+                flexDirection: 'row',
+                marginBottom: 10,
+                justifyContent: 'center',
+            },
+        },
+
+        fsDonutChart: {
+            container: {
+                padding: 10,
+                backgroundColor: secondary_light,
+                flex: 1,
+            },
+            chart: {
+                margin: 15,
+                padding: 20,
+                borderRadius: 15,
+                backgroundColor: primary,
+                pieColor1: pieColor1,
+                pieColor2: pieColor2,
+                pieColor3: pieColor3,
+                pieColor4: pieColor4,
+            },
+
+            legendContainer: {
+                flexDirection: 'row',
+                justifyContent: 'center',
+            },
+            legendRow: {
+                flexDirection: 'row',
+                alignItems: 'center',
+                width: 120,
+                marginRight: 20,
+            }
+        },
+
+        text: {
+            color: primary_text,
+            fontSize: 16,
+            fontFamily: fontBold,
+        },
+        regText: {
+            color: primary_text,
+            fontSize: 16,
+            fontFamily: font,
+        },
+
+    }
 });
 
 export default Theme;
