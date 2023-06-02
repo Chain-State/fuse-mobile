@@ -1,15 +1,15 @@
 
-
+import { URL } from '../constants/ApiStrings'
 
 export const createUser = async (userData) => {
   try {
-    const response = await fetch('34.30.199.63:3000/api/v1/register/', {
+    const response = await fetch('34.123.128.133:3000/api/v1/register/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: userData
+      body: JSON.stringify(userData)
     });
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
