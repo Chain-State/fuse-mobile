@@ -24,11 +24,16 @@ const Theme = StyleSheet.create({
     fsContainer: {
         backgroundColor: '#FFFFFF',
         fontFamily: font,
+        flex: 1,
+        justifyContent: 'flex-start',
+        padding: 5,
+        margin: 5,
     },
 
     fsColors: {
         primary: primary,
         secondary: secondary,
+        backgroundColor: '#FFFFFF',
     },
 
     fsFonts: {
