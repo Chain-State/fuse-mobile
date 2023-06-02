@@ -1,4 +1,5 @@
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Theme from '../../resources/assets/Style';
 
 const transactionDummyData = [
   {
@@ -97,4 +98,4 @@ const pieDummyData = [
   },
 ];
 
-export default { transactionDummyData, pieDummyData };
+export { transactionDummyData, pieDummyData };
