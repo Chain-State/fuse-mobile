@@ -22,7 +22,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { RNCamera } from 'react-native-camera'
 import { Formik } from 'formik';
-import DatePicker from 'react-native-date-picker'
+// import DatePicker from 'react-native-date-picker'
 
 import {
   getItem as getToken,
@@ -213,7 +213,7 @@ export const RegisterFormKYC = ({ navigation, route }) => {
     });
   }
 
-  const { idNumber, passPortNumber, dateOfBirth } = formKycData;
+  const { id, dob } = formKycData;
 
   const isDarkMode = useColorScheme() === 'dark';
 

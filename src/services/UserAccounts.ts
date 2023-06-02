@@ -3,15 +3,13 @@
 
 export const createUser = async (userData) => {
   try {
-    const response = await fetch('34.30.199.63:3000/api/v1/register', {
+    const response = await fetch('34.30.199.63:3000/api/v1/register/', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        userData
-      }),
+      body: userData
     });
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
