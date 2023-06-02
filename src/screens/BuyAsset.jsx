@@ -3,6 +3,7 @@ import { Button, TextInput, View } from 'react-native';
 import AssetPriceLineChart from '../components/LineChart';
 import lineChartData from '../data/dummy/LineChartDummyData';
 import Theme from '../resources/assets/Style';
+import FsButton from '../components/Button';
 
 export const BuyAssetScreen = ({ navigation }) => {
   const [amountAda, setAmountAda] = useState(0);
@@ -17,6 +18,7 @@ export const BuyAssetScreen = ({ navigation }) => {
         <AssetPriceLineChart chartData={lineChartData} />
         <View>
           <TextInput
+            style={Theme.fsInput}
             placeholder="Required Fiat Amount"
             editable={true}
             onChangeText={(data) => {
@@ -27,6 +29,7 @@ export const BuyAssetScreen = ({ navigation }) => {
             keyboardType="numeric"
           />
           <TextInput
+            style={Theme.fsInput}
             placeholder="Required Fiat Amount"
             editable={true}
             onChangeText={(data) => {
@@ -35,7 +38,7 @@ export const BuyAssetScreen = ({ navigation }) => {
             }}
             value={amountFiat.toString()}
           />
-          <Button
+          <FsButton
             onPress={() => {
               if (timeSinceLastPriceCheck > buyPriceDuration) {
               } else {
