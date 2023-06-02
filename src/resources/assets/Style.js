@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 //colors
 const primary = '#8bc34a';
@@ -16,15 +16,14 @@ export const pieColor1 = '#708653';
 export const pieColor2 = '#E7F6D1';
 export const pieColor3 = '#005165';
 export const pieColor4 = '#457F8D';
-//fonts 
+//fonts
 const font = 'Montserrat-Regular';
 const fontBold = 'Montserrat-Bold';
 
 const Theme = StyleSheet.create({
-
     fsContainer: {
         backgroundColor: '#FFFFFF',
-        fontFamily: font
+        fontFamily: font,
     },
 
     fsColors: {
@@ -36,7 +35,7 @@ const Theme = StyleSheet.create({
         fontFamily: font,
         boldFont: {
             fontFamily: fontBold,
-        }
+        },
     },
     fsTabNavigation: {
         tab: {
@@ -51,21 +50,24 @@ const Theme = StyleSheet.create({
             fontSize: 13,
             fontFamily: font,
             paddingBottom: 5,
-        }
-
+        },
     },
     fsList: {
-        item: {
+        row: {
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'flex-start',
+            justifyItems: 'start',
+        },
+        column: {
             fontFamily: font,
             marginRight: 5,
             padding: 2,
             marginLeft: 5,
             marginBottom: 5,
             marginTop: 8,
-        }
+        },
     },
-
-
 
     //components styling
     fsInput: {
@@ -119,7 +121,7 @@ const Theme = StyleSheet.create({
                 alignItems: 'center',
                 width: 120,
                 marginRight: 20,
-            }
+            },
         },
 
         text: {
@@ -132,8 +134,7 @@ const Theme = StyleSheet.create({
             fontSize: 16,
             fontFamily: font,
         },
-
-    }
+    },
 });
 
 export default Theme;
