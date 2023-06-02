@@ -1,6 +1,4 @@
 
-import { URL } from '../constants/ApiStrings'
-
 export const createUser = async (userData) => {
   try {
     const response = await fetch('34.123.128.133:3000/api/v1/register/', {
