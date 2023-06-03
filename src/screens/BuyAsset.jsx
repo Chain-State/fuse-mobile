@@ -4,6 +4,8 @@ import AssetPriceLineChart from '../components/LineChart';
 import lineChartData from '../data/dummy/LineChartDummyData';
 import Theme from '../resources/assets/Style';
 import FsButton from '../components/Button';
+import { Text } from 'react-native-svg';
+import { BTN_BUY_ADA, TX_ADA_AMOUNT, TX_FIAT_AMOUNT } from '../constants/AppStrings';
 
 export const BuyAssetScreen = ({ navigation }) => {
   const [amountAda, setAmountAda] = useState(0);
@@ -15,11 +17,11 @@ export const BuyAssetScreen = ({ navigation }) => {
   return (
     <>
       <View style={Theme.fsContainer}>
-        <AssetPriceLineChart chartData={lineChartData} />
+        <AssetPriceLineChart title="Current Ada Price" chartData={lineChartData} />
         <View>
           <TextInput
             style={Theme.fsInput}
-            placeholder="Required Fiat Amount"
+            placeholder={TX_ADA_AMOUNT}
             editable={true}
             onChangeText={(data) => {
               setAmountAda(parseInt(data));
@@ -30,13 +32,14 @@ export const BuyAssetScreen = ({ navigation }) => {
           />
           <TextInput
             style={Theme.fsInput}
-            placeholder="Required Fiat Amount"
+            placeholder={TX_FIAT_AMOUNT}
             editable={true}
             onChangeText={(data) => {
               setAmountFiat(parseInt(data));
               setAmountAda(amountAda / exchangeRate);
             }}
             value={amountFiat.toString()}
+            keyboardType="numeric"
           />
           <FsButton
             onPress={() => {
@@ -44,7 +47,7 @@ export const BuyAssetScreen = ({ navigation }) => {
               } else {
               }
             }}
-            title="Buy"
+            title={BTN_BUY_ADA}
           />
         </View>
       </View>
