@@ -81,7 +81,7 @@ const Theme = StyleSheet.create({
         margin: 20,
         borderWidth: 1,
         borderColor: '#90A4AE',
-        borderRadius: 5,
+        borderRadius: 10,
         padding: 10,
     },
 

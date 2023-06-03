@@ -2,33 +2,56 @@ import React, { useState } from 'react';
 import { TextInput, View, FlatList, Text } from 'react-native';
 import Theme from '../resources/assets/Style';
 import { PaymentsHistoryDummyData } from '../data/dummy/PaymentsHistoryData';
+import FsButton from '../components/Button';
+import { SelectList } from 'react-native-dropdown-select-list';
 
 export const PaymentsScreen = ({ navigation }) => {
-  const [amountAda, setAmountAda] = useState(0);
-  const [amountFiat, setAmountFiat] = useState(0);
-  const [exchangeRate, setExchangeRate] = useState(2);
+  const [amountAda, setAmountAda] = useState('');
+  const [amountFiat, setAmountFiat] = useState('');
+  const [exchangeRate, setExchangeRate] = useState('');
+  const [selected, setSelected] = useState('');
 
   return (
     <View style={{ ...Theme.fsContainer, justifyContent: 'flex-end' }}>
-      <TextInput
-        placeholder="Amount of Ada to Purchase"
-        onChangeText={(data) => {
-          setAmountAda(parseInt(data));
-          setAmountFiat(amountAda * exchangeRate);
+      <Text style={{ ...Theme.fsFonts.boldFont, marginLeft: 20 }}>Payment Method</Text>
+      <View
+        style={{
+          marginLeft: 20,
+          marginRight: 20,
+          marginBottom: 20,
+          marginTop: 10,
+          height: 50,
         }}
-        value={amountAda.toString()}
-        keyboardType="numeric"
-      />
+      >
+        <SelectList
+          setSelected={(val) => setSelected(val)}
+          fontFamily={Theme.fsFonts.fontFamily}
+          defaultOption={{ key: '2', value: 'Till Number' }}
+          data={[
+            { key: '1', value: 'PayBill' },
+            { key: '2', value: 'Till Number' },
+            { key: '3', value: 'Send Money' },
+          ]}
+          save="value"
+        />
+      </View>
+      <Text style={{ ...Theme.fsFonts.boldFont, marginLeft: 20 }}>Till Number</Text>
       <TextInput
-        placeholder="Required Fiat Amount"
-        editable={true}
-        onChangeText={(data) => {
-          setAmountFiat(parseInt(data));
-          setAmountAda(amountAda / exchangeRate);
-        }}
-        value={amountFiat.toString()}
+        style={{ ...Theme.fsInput, marginTop: 5 }}
+        placeholder="Enter Till Number"
+        onChangeText={(data) => setFormData({ ...formData, fname: data })}
+        value={amountFiat}
       />
-      <View style={{ padding: 20, height: 500 }}>
+
+      <Text style={{ ...Theme.fsFonts.boldFont, marginLeft: 20 }}>Amount To Send</Text>
+      <TextInput
+        style={{ ...Theme.fsInput, marginTop: 5 }}
+        placeholder="Enter Amount"
+        onChangeText={(data) => setFormData({ ...formData, fname: data })}
+        value={exchangeRate}
+      />
+      <FsButton title="Make Payment" />
+      <View style={{ padding: 20, height: 300 }}>
         <FlatList
           ListHeaderComponent={() => (
             <View>
