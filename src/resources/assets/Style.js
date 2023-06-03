@@ -62,9 +62,7 @@ const Theme = StyleSheet.create({
     fsList: {
         row: {
             flexDirection: 'row',
-            justifyContent: 'space-around',
-            alignItems: 'flex-start',
-            justifyItems: 'start',
+            justifyContent: 'space-between',
         },
         column: {
             fontFamily: font,
