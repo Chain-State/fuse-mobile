@@ -18,7 +18,7 @@ export const BuyAssetScreen = ({ navigation }) => {
     <>
       <View style={Theme.fsContainer}>
         <AssetPriceLineChart title="Current Ada Price" chartData={lineChartData} />
-        <View>
+        <View style={{ marginTop: 20 }}>
           <TextInput
             style={Theme.fsInput}
             placeholder={TX_ADA_AMOUNT}
@@ -27,7 +27,7 @@ export const BuyAssetScreen = ({ navigation }) => {
               setAmountAda(parseInt(data));
               setAmountFiat(amountAda * exchangeRate);
             }}
-            value={amountAda.toString()}
+            // value={amountAda.toString()}
             keyboardType="numeric"
           />
           <TextInput
@@ -38,7 +38,7 @@ export const BuyAssetScreen = ({ navigation }) => {
               setAmountFiat(parseInt(data));
               setAmountAda(amountAda / exchangeRate);
             }}
-            value={amountFiat.toString()}
+            // value={amountFiat.toString()}
             keyboardType="numeric"
           />
           <FsButton

@@ -19,6 +19,7 @@ export const pieColor4 = '#457F8D';
 //fonts
 const font = 'Montserrat-Regular';
 const fontBold = 'Montserrat-Bold';
+const semiBold = 'Montserrat-SemiBold';
 
 const Theme = StyleSheet.create({
     fsContainer: {
@@ -41,6 +42,7 @@ const Theme = StyleSheet.create({
         boldFont: {
             fontFamily: fontBold,
         },
+        semiBold: semiBold,
     },
     fsTabNavigation: {
         tab: {
