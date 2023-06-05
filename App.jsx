@@ -6,31 +6,47 @@ import { WalletScreen } from './src/screens/Wallet';
 import { BuyAssetScreen } from './src/screens/BuyAsset';
 import { PaymentsScreen } from './src/screens/Payments';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { SCR_WALLET } from './src/constants/AppStrings';
+
+import {
+  SCR_BUY_ASSET,
+  SCR_MAKE_PAYMENTS,
+  SCR_SWAP_TOKENS,
+  SCR_WALLET,
+} from './src/constants/AppStrings';
+import Theme from './src/resources/assets/Style';
 
 function App() {
-
   const Tab = createBottomTabNavigator();
   return (
     <NavigationContainer independent={true}>
       <Tab.Navigator
         initialRouteName={SCR_WALLET}
-        screenOptions={{
-          tabBarActiveTintColor: '#e91e63',
-          headerShown: false,
-        }}
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+            if (route.name == SCR_WALLET) {
+              iconName = focused ? 'wallet' : 'wallet-outline';
+            } else if (route.name === SCR_BUY_ASSET) {
+              iconName = focused ? 'circle-multiple' : 'circle-multiple-outline';
+            } else if (route.name === SCR_MAKE_PAYMENTS) {
+              iconName = focused ? 'credit-card' : 'credit-card-outline';
+            } else if (route.name === SCR_SWAP_TOKENS) {
+              iconName = focused ? 'swap-horizontal' : 'swap-horizontal';
+            }
+
+            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: Theme.fsColors.primary,
+          tabBarInactiveTintColor: 'gray',
+          tabBarLabelStyle: Theme.fsTabNavigation.labels,
+          tabBarIconStyle: Theme.fsTabNavigation.icons,
+          tabBarStyle: Theme.fsTabNavigation.tab,
+        })}
       >
-        <Tab.Screen
-          name={SCR_WALLET}
-          component={WalletScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="home" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen name="BuyAda" component={BuyAssetScreen} />
-        <Tab.Screen name="Make Payments" component={PaymentsScreen} />
+        <Tab.Screen name={SCR_WALLET} component={WalletScreen} />
+        <Tab.Screen name={SCR_BUY_ASSET} component={BuyAssetScreen} />
+        <Tab.Screen name={SCR_MAKE_PAYMENTS} component={PaymentsScreen} />
+        <Tab.Screen name={SCR_SWAP_TOKENS} component={PaymentsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
