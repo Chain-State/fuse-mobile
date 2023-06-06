@@ -16,15 +16,17 @@ import {
 import Theme from './src/resources/assets/Style';
 import { setItem, getItem } from './src/utils/KeysStorage';
 import { RegisterFormKYC, SignUpForm } from './src/screens/SignUp';
+import { ColorPropType } from 'react-native';
+import { CreateAccount } from './src/screens/CreateAccount';
 
 function App() {
-  const [firstUse, setFirstUse] = useState(true);
+  const [firstUse, setFirstUse] = useState(false);
 
   useEffect(() => {
     const checkUse = async () => {
       const returnUse = await getItem('isFirst');
       if (returnUse) {
-        setFirstUse(false);
+        setFirstUse(true);
       } else {
         await setItem('isFirst', 'NO');
       }
@@ -40,7 +42,7 @@ function App() {
   return (
     <>
       {firstUse ? (
-        <SignUpForm />
+        <CreateAccount />
       ) : (
         <NavigationContainer independent={true}>
           <Tab.Navigator
