@@ -75,10 +75,22 @@ const Theme = StyleSheet.create({
     },
 
     //components styling
+    fsLabel: {
+        fontFamily: semiBold,
+        padding: 2,
+        marginBottom: 5,
+        marginTop: 10,
+        marginLeft: 20,
+        fontSize: 14,
+    },
+
     fsInput: {
         fontFamily: 'Montserrat-Regular',
         height: 50,
-        margin: 20,
+        marginLeft: 15,
+        marginRight: 15,
+        marginBottom: 10,
+        marginTop: 5,
         borderWidth: 1,
         borderColor: '#90A4AE',
         borderRadius: 10,

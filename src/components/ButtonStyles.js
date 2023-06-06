@@ -16,9 +16,9 @@ const styles = StyleSheet.create({
     },
 
     appButtonText: {
-        fontFamily: Theme.fsFonts.boldFont.fontFamily,
+        fontFamily: Theme.fsFonts.semiBold,
         lineHeight: 21,
-        fontSize: 18,
+        fontSize: 16,
         letterSpacing: 0.75,
         color: '#FFFFFF'
     },

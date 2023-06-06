@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { SafeAreaView, TextInput, View } from 'react-native';
+import { SafeAreaView, TextInput, View, Text } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import Theme from '../resources/assets/Style';
 import FsButton from '../components/Button';
@@ -18,6 +18,7 @@ export const CreateAccount = ({ navigation }) => {
 
   return (
     <View style={{ ...Theme.fsContainer, justifyContent: 'center' }}>
+      <Text style={Theme.fsLabel}>Phone Number</Text>
       <PhoneInput
         ref={phoneInput}
         defaultValue=""
@@ -31,6 +32,7 @@ export const CreateAccount = ({ navigation }) => {
           ...Theme.fsInput,
           width: 350,
           padding: 2,
+          marginTop: 5,
         }}
         codeTextStyle={{ fontFamily: Theme.fsFonts.fontFamily }}
         textInputStyle={{ fontFamily: Theme.fsFonts.fontFamily }}
@@ -43,18 +45,21 @@ export const CreateAccount = ({ navigation }) => {
           fontFamily: Theme.fsFonts.fontFamily,
         }}
       />
+      <Text style={Theme.fsLabel}>Email Address</Text>
       <TextInput
         style={Theme.fsInput}
         placeholder="Email Address"
         onChangeText={(data) => setFormData({ ...formData, emailAddress: data })}
         value={emailAddress}
       />
+      <Text style={Theme.fsLabel}>Password</Text>
       <TextInput
         style={Theme.fsInput}
         placeholder="Password"
         onChangeText={(data) => setFormData({ ...formData, password: data })}
         value={password}
       />
+      <Text style={Theme.fsLabel}>Confirm Password</Text>
       <TextInput
         style={Theme.fsInput}
         placeholder="Repeat Password"
