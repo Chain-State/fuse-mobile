@@ -19,8 +19,6 @@ const styles = StyleSheet.create({
         fontFamily: Theme.fsFonts.semiBold,
         lineHeight: 21,
         fontSize: 16,
-        letterSpacing: 0.75,
-        color: '#FFFFFF'
     },
 
 
