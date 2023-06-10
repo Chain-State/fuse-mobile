@@ -22,6 +22,7 @@ const SERVER_ERROR = 500;
 const CLIENT_ERROR = 400;
 
 //routes
+const SCR_HOME = 'Home';
 const SCR_KYC = 'KYC';
 const SCR_LOGIN = 'Login';
 const SCR_REGISTRATION = 'Registration';
@@ -35,6 +36,7 @@ export {
     URI_REGISTER,
     CONTENT_TYPE,
     LB_ASSET_VALUES,
+    SCR_HOME,
     SCR_KYC,
     SCR_REGISTRATION,
     SCR_WALLET,

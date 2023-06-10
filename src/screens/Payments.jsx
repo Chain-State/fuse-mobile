@@ -5,7 +5,7 @@ import { PaymentsHistoryDummyData } from '../data/dummy/PaymentsHistoryData';
 import FsButton from '../components/Button';
 import { SelectList } from 'react-native-dropdown-select-list';
 
-export const PaymentsScreen = ({ navigation }) => {
+const PaymentsScreen = ({ navigation }) => {
   const [amountAda, setAmountAda] = useState('');
   const [amountFiat, setAmountFiat] = useState('');
   const [exchangeRate, setExchangeRate] = useState('');
@@ -92,3 +92,5 @@ export const PaymentsScreen = ({ navigation }) => {
     </View>
   );
 };
+
+export default PaymentsScreen;

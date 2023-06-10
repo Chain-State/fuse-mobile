@@ -19,10 +19,9 @@ const userAccount = {
   idNumber: '8943743783',
 };
 
-export const CreateAccount = ({ navigation }) => {
+function CreateAccountScreen({ navigation }) {
   const [account, setAccount] = useState(userAccount);
   const phoneInput = useRef(userAccount.phoneNumber);
-  const nav = navigation;
 
   return (
     <View style={{ ...Theme.fsContainer, justifyContent: 'center' }}>
@@ -80,11 +79,12 @@ export const CreateAccount = ({ navigation }) => {
             account.accountPassword === account.accountPasswordConfirm &&
             account.accountPassword.length >= 10
           ) {
-            const activeUser = await createUser(account);
+            // const activeUser = await createUser(account);
+            const activeUser = { tetr: 'dfg' };
             if (activeUser) {
               console.log(`user created with ${JSON.stringify(activeUser)}`);
+              navigation.navigate(SCR_WALLET, { submittedFormData: activeUser });
             }
-            navigation.navigate(SCR_WALLET, { submittedFormData: activeUser });
           } else {
             console.log("Passwords don't match!! or password too short");
           }
@@ -93,4 +93,6 @@ export const CreateAccount = ({ navigation }) => {
       />
     </View>
   );
-};
+}
+
+export default CreateAccountScreen;

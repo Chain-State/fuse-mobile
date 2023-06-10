@@ -7,7 +7,7 @@ import FsButton from '../components/Button';
 import { Text } from 'react-native-svg';
 import { BTN_BUY_ADA, TX_ADA_AMOUNT, TX_FIAT_AMOUNT } from '../constants/AppStrings';
 
-export const BuyAssetScreen = ({ navigation }) => {
+const BuyAssetScreen = ({ navigation }) => {
   const [amountAda, setAmountAda] = useState(0);
   const [amountFiat, setAmountFiat] = useState(0);
   const [exchangeRate, setExchangeRate] = useState(2);
@@ -54,3 +54,5 @@ export const BuyAssetScreen = ({ navigation }) => {
     </>
   );
 };
+
+export default BuyAssetScreen;
