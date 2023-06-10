@@ -1,5 +1,9 @@
+//server
+const APP_SERVER = 'https://fusebox1.xyz';
+const BASE_URI = '/api/v1';
+const URI_REGISTER = BASE_URI + '/register';
 //http headers 
-const CONTENT_TYPE = 'Content-Type';
+const CONTENT_TYPE = 'application/json';
 const AUTHORIZATION = 'Authorization';
 
 //labels
@@ -27,6 +31,9 @@ const SCR_MAKE_PAYMENTS = 'Payments';
 const SCR_SWAP_TOKENS = 'Swap'
 
 export {
+    APP_SERVER,
+    URI_REGISTER,
+    CONTENT_TYPE,
     LB_ASSET_VALUES,
     SCR_KYC,
     SCR_REGISTRATION,

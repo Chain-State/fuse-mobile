@@ -1,15 +1,14 @@
 
+import { APP_SERVER, CONTENT_TYPE, URI_REGISTER } from "../constants/AppStrings";
 export const createUser = async (userData) => {
-  const { emailAddress, phoneNumber, password, firstName, lastName, dateOfBirth, idNumber } = userData;
-  const SERVER = 'https://fusebox1.xyz';
   try {
-    const response = await fetch(`${SERVER}/api/v1/register`, {
+    const response = await fetch(`${APP_SERVER}${URI_REGISTER}`, {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        Accept: CONTENT_TYPE,
+        'Content-Type': CONTENT_TYPE,
       },
-      body: JSON.stringify({ emailAddress, phoneNumber, accountPassword: "QouwK19WtD_e0XI", firstName, lastName, dateOfBirth, idNumber }),
+      body: JSON.stringify(userData),
     });
     const json = await response.json();
     return json;
