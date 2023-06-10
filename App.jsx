@@ -20,7 +20,7 @@ import { ColorPropType } from 'react-native';
 import { CreateAccount } from './src/screens/CreateAccount';
 
 function App() {
-  const [firstUse, setFirstUse] = useState(false);
+  const [firstUse, setFirstUse] = useState(true);
 
   useEffect(() => {
     const checkUse = async () => {

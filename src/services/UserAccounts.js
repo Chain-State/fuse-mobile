@@ -1,24 +1,20 @@
 
 export const createUser = async (userData) => {
+  const { emailAddress, phoneNumber, password, firstName, lastName, dateOfBirth, idNumber } = userData;
+  const SERVER = 'https://fusebox1.xyz';
   try {
-    const response = await fetch('34.123.128.133:3000/api/v1/register/', {
+    const response = await fetch(`${SERVER}/api/v1/register`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(userData)
+      body: JSON.stringify({ emailAddress, phoneNumber, accountPassword: "QouwK19WtD_e0XI", firstName, lastName, dateOfBirth, idNumber }),
     });
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
-    }
-    // Expect a body with user db details (including a uuid)
     const json = await response.json();
     return json;
   } catch (error) {
-    console.error(error);
-  } finally {
-    console.log("User registration successful!")
+    console.error(`Create request failed because: ${error})`);
   }
 };
 

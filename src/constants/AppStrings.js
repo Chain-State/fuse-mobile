@@ -5,6 +5,7 @@ const AUTHORIZATION = 'Authorization';
 //labels
 const LB_ASSET_VALUES = 'My Assets';
 const BTN_BUY_ADA = 'Buy Ada';
+const BTN_CREAT_ACCOUNT = 'Create Account';
 
 //placeholders
 const TX_FIAT_AMOUNT = 'I Spend Amount(KES)';
@@ -37,4 +38,5 @@ export {
     TX_ADA_AMOUNT,
     TX_FIAT_AMOUNT,
     BTN_BUY_ADA,
+    BTN_CREAT_ACCOUNT,
 }
