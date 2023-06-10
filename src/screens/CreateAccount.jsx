@@ -14,8 +14,8 @@ const userAccount = {
   idNumber: '000000',
   phoneNumber: '245700000000',
   emailAddress: 'test@fuse.io',
-  password: 'testpass',
-  passwordConfirm: 'testpass',
+  accountPassword: 'testpass',
+  accountPasswordConfirm: 'testpass',
   idNumber: '8943743783',
 };
 
@@ -61,28 +61,32 @@ export const CreateAccount = ({ navigation }) => {
         onChangeText={(data) => setAccount({ ...account, emailAddress: data })}
       />
       <Text style={Theme.fsLabel}>Password</Text>
+      {/* TODO: Validate password length (min 10chars), otherwise CW backend will fail wallet creation with a 400 error */}
       <TextInput
         style={Theme.fsInput}
         placeholder="Password"
-        onChangeText={(data) => setAccount({ ...account, password: data })}
+        onChangeText={(data) => setAccount({ ...account, accountPassword: data })}
       />
       <Text style={Theme.fsLabel}>Confirm Password</Text>
       <TextInput
         style={Theme.fsInput}
-        placeholder="Repeat Password"
-        onChangeText={(data) => setAccount({ ...account, passwordConfirm: data })}
+        placeholder="Repeat accountPassword"
+        onChangeText={(data) => setAccount({ ...account, accountPasswordConfirm: data })}
       />
       <FsButton
         onPress={async () => {
           console.log(account);
-          if (account.password === account.passwordConfirm) {
+          if (
+            account.accountPassword === account.accountPasswordConfirm &&
+            account.accountPassword.length >= 10
+          ) {
             const activeUser = await createUser(account);
             if (activeUser) {
               console.log(`user created with ${JSON.stringify(activeUser)}`);
             }
             navigation.navigate(SCR_WALLET, { submittedFormData: activeUser });
           } else {
-            console.log("Passwords don't match!!");
+            console.log("Passwords don't match!! or password too short");
           }
         }}
         title={BTN_CREAT_ACCOUNT}
