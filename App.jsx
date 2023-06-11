@@ -9,12 +9,12 @@ import { SCR_HOME, SCR_REGISTRATION } from './src/constants/AppStrings';
 function App() {
   const [isNewInstall, setIsNewInstall] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  const APP_USED = '_FUSE_APP_Opened';
+  const APP_USED = 'FUSE_APP_Opened';
 
   useLayoutEffect(() => {
     const checkUse = async () => {
       const hasBeenUsed = await getItem(APP_USED);
-      if (!hasBeenUsed) {
+      if (hasBeenUsed == undefined) {
         await setItem(APP_USED, 'TRUE');
         setIsNewInstall(true);
         setIsLoading(false);

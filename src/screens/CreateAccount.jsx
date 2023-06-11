@@ -3,9 +3,10 @@ import { SafeAreaView, TextInput, View, Text } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import Theme from '../resources/assets/Style';
 import FsButton from '../components/Button';
-import { BTN_CREAT_ACCOUNT, SCR_WALLET } from '../constants/AppStrings';
+import { BTN_CREAT_ACCOUNT, SCR_HOME } from '../constants/AppStrings';
 import { Image } from 'react-native-svg';
 import { createUser } from '../services/UserAccounts';
+import { setItem } from '../utils/KeysStorage';
 
 const userAccount = {
   firstName: 'unverified',
@@ -79,11 +80,12 @@ function CreateAccountScreen({ navigation }) {
             account.accountPassword === account.accountPasswordConfirm &&
             account.accountPassword.length >= 10
           ) {
-            // const activeUser = await createUser(account);
-            const activeUser = { tetr: 'dfg' };
-            if (activeUser) {
-              console.log(`user created with ${JSON.stringify(activeUser)}`);
-              navigation.navigate(SCR_WALLET, { submittedFormData: activeUser });
+            const createdAccount = await createUser(account);
+            if (createdAccount) {
+              const { uuid, phoneNumber, emailAddress } = createdAccount;
+              await setItem('account', JSON.stringify({ uuid, phoneNumber, emailAddress }));
+              console.log(`user created with ${JSON.stringify(createdAccount)}`);
+              navigation.navigate(SCR_HOME, { createdAccount: createdAccount });
             }
           } else {
             console.log("Passwords don't match!! or password too short");
