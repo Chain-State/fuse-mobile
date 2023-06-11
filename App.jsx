@@ -41,7 +41,7 @@ function App() {
         {...{ initialRouteName: isNewInstall && !isLoading ? SCR_REGISTRATION : SCR_HOME }}
       >
         <Stack.Screen name={SCR_REGISTRATION} component={CreateAccountScreen} />
-        <Stack.Screen name={SCR_HOME} component={HomeScreen} />
+        <Stack.Screen name={SCR_HOME} component={HomeScreen} options={{ title: '' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
