@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, FlatList } from 'react-native';
 import { transactionDummyData, pieDummyData } from '../data/dummy/transactions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { URI_USER_ASSETS } from '../constants/AppStrings';
 
 import { DonutGraphWithLegend } from '../components/DonutChart';
 import Theme from '../resources/assets/Style';
@@ -33,15 +34,35 @@ export const WalletScreen = ({ navigation, route }) => {
     return JSON.parse(account).uuid;
   };
 
-  useEffect(async () => {
-    // const userUuid = (async () => {
-    //   await account();
-    // })();
-    setAssets(fetchAssets(await account()));
+  parseAssetForChart = (assets) => {
+    console.log(`assets=${assets}`);
+    let pieData = assets.map((item) => {
+      item = item;
+      item['value'] = item['quantity'];
+      delete item['quantity'];
+      return item;
+    });
+    console.log(`Assets parsed: ${JSON.stringify(pieData)}`);
+    return pieData;
+  };
+
+  useEffect(() => {
+    const fetchAssets = async (userUuid) => {
+      try {
+        const response = await fetch(`${URI_USER_ASSETS}/${userUuid}`);
+        const result = await response.json();
+        result.assets.total.push({ ...result.balance.total, asset_name: '' });
+        setAssets(parseAssetForChart(result.assets.total));
+      } catch (error) {
+        console.log(`Failed to fetch user assets: ${error}`);
+      }
+    };
+
+    fetchAssets('2f767661-495e-460d-a380-8d4cfa947906');
   }, []);
   return (
     <View flex={1}>
-      <DonutGraphWithLegend pieData={pieDummyData} />
+      <DonutGraphWithLegend pieData={assets} />
       <View style={{ padding: 20 }}>
         <FlatList
           ListHeaderComponent={() => (
