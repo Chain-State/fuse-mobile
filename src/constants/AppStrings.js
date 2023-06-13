@@ -2,9 +2,13 @@
 const APP_SERVER = 'https://fusebox1.xyz';
 const BASE_URI = '/api/v1';
 const URI_REGISTER = BASE_URI + '/register';
+const URI_USER_ASSETS = `${APP_SERVER}${BASE_URI}/wallet`;
 //http headers 
 const CONTENT_TYPE = 'application/json';
 const AUTHORIZATION = 'Authorization';
+
+//storage keys
+const ACCOUNT = 'account';
 
 //labels
 const LB_ASSET_VALUES = 'My Assets';
@@ -33,7 +37,9 @@ const SCR_SWAP_TOKENS = 'Swap'
 
 export {
     APP_SERVER,
+    ACCOUNT,
     URI_REGISTER,
+    URI_USER_ASSETS,
     CONTENT_TYPE,
     LB_ASSET_VALUES,
     SCR_HOME,
