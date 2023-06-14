@@ -17,7 +17,7 @@ import { ACCOUNT } from '../constants/AppStrings';
 
 export const WalletScreen = ({ navigation, route }) => {
   const [assets, setAssets] = useState([]);
-  const [userUuid, setUserUuid] = '';
+  const [userUuid, setUserUuid] = useState('');
 
   // const importData = async () => {
   //   try {
@@ -46,6 +46,19 @@ export const WalletScreen = ({ navigation, route }) => {
     setAssets(pieData);
   };
 
+  const getUserAccount = async () => {
+    let account = null;
+    try {
+      account = await getItem(ACCOUNT);
+      console.log(`--userUuid: ${account}`);
+      account = JSON.parse(account);
+      console.log(`--parsed userUuid: ${account['uuid']}`);
+    } catch (error) {
+      console.log(`Cannot get account: ${error} `);
+    }
+    setUserUuid(account.uuid);
+  };
+
   useEffect(() => {
     const fetchAssets = async (userUuid) => {
       try {
@@ -58,18 +71,7 @@ export const WalletScreen = ({ navigation, route }) => {
       }
     };
 
-    const getUserAccount = async () => {
-      let account = null;
-      try {
-        account = await getItem(ACCOUNT);
-      } catch (error) {
-        console.log(`Cannot get account: ${error} `);
-      }
-      setUserUuid(JSON.parse(account).uuid);
-    };
-
     getUserAccount();
-    console.log(`User Acc: ${userUuid}`);
     fetchAssets(userUuid);
 
     // fetchAssets('2f767661-495e-460d-a380-8d4cfa947906');
