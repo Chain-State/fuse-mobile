@@ -2,16 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, FlatList } from 'react-native';
 import { transactionDummyData, pieDummyData } from '../data/dummy/transactions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Theme, {
+  pieColor1,
+  pieColor2,
+  pieColor3,
+  pieColor4,
+  pieColor5,
+} from '../resources/assets/Style';
 import { URI_USER_ASSETS } from '../constants/AppStrings';
 
 import { DonutGraphWithLegend } from '../components/DonutChart';
-import Theme from '../resources/assets/Style';
 import { getItem } from '../utils/KeysStorage';
 import { ACCOUNT } from '../constants/AppStrings';
 
 export const WalletScreen = ({ navigation, route }) => {
   const [assets, setAssets] = useState([]);
-  const [legend, setLegend] = useState(new Map());
+  // const [legend, setLegend] = useState(new Map());
 
   const importData = async () => {
     try {
@@ -34,32 +40,20 @@ export const WalletScreen = ({ navigation, route }) => {
     return JSON.parse(account).uuid;
   };
 
-  parseAssetForChart = (assets) => {
-    console.log(`assets=${assets}`);
-    let pieData = assets.map((item) => {
+  const parseAssetForChart = (assets) => {
+    const colors = [pieColor1, pieColor2, pieColor3, pieColor4, pieColor5];
+    const value = assets.reduce(function (acc, curr) {
+      return acc + parseInt(curr.quantity);
+    }, 0);
+    let pieData = assets.map((item, index) => {
       item = item;
       item['value'] = item['quantity'];
       delete item['quantity'];
+      item['color'] = colors[index];
+      item['percentage'] = ((parseInt(item['value']) / value) * 100).toFixed(2);
       return item;
     });
-
-    //get total value of assets
-    const totalAssetsValue = pieData.reduce(function (acc, curr) {
-      return acc + parseInt(curr.value);
-    }, 0);
-
-    //create map of asset name and percentage of total
-    let assetsValueMap = new Map();
-    pieData.forEach((asset) => {
-      return assetsValueMap.set(
-        asset['asset_name'],
-        ((parseInt(asset['value']) / totalAssetsValue) * 100).toFixed(2)
-      );
-    });
-    console.log(`Map=${[...assetsValueMap.entries()]}`);
-
-    console.log(`Assets parsed: ${JSON.stringify(pieData)}`);
-    return { pieData, assetsValueMap };
+    setAssets(pieData);
   };
 
   useEffect(() => {
@@ -68,9 +62,7 @@ export const WalletScreen = ({ navigation, route }) => {
         const response = await fetch(`${URI_USER_ASSETS}/${userUuid}`);
         const result = await response.json();
         result.assets.total.push({ ...result.balance.total, asset_name: '' });
-        const { pieData, assetsValueMap } = parseAssetForChart(result.assets.total);
-        setAssets(pieData);
-        setLegend(assetsValueMap);
+        parseAssetForChart(result.assets.total);
       } catch (error) {
         console.log(`Failed to fetch user assets: ${error}`);
       }

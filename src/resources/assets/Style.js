@@ -16,6 +16,8 @@ export const pieColor1 = '#708653';
 export const pieColor2 = '#E7F6D1';
 export const pieColor3 = '#005165';
 export const pieColor4 = '#457F8D';
+export const pieColor5 = '#457F3D';
+
 //fonts
 const font = 'Montserrat-Regular';
 const fontBold = 'Montserrat-Bold';
@@ -138,12 +140,15 @@ const Theme = StyleSheet.create({
             legendContainer: {
                 flexDirection: 'row',
                 justifyContent: 'center',
+                flexWrap: 'wrap',
             },
-            legendRow: {
+            legendItem: {
                 flexDirection: 'row',
                 alignItems: 'center',
-                width: 120,
-                marginRight: 20,
+                width: 150,
+                marginRight: 5,
+                marginLeft: 5,
+                padding: 2,
             },
         },
 
