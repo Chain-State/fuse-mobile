@@ -44,17 +44,19 @@ export const WalletScreen = ({ navigation, route }) => {
     });
 
     //get total value of assets
-    const initial = 0;
-    const totalAssetsValue = assets.reduce((acc, val) => {
-      acc + parseInt(val['value']), initial;
-    });
-    console.log(`Sum of assets: ${totalAssetsValue}`);
+    const totalAssetsValue = pieData.reduce(function (acc, curr) {
+      return acc + parseInt(curr.value);
+    }, 0);
 
     //create map of asset name and percentage of total
     let assetsValueMap = new Map();
     pieData.forEach((asset) => {
-      assetsValueMap.set(asset['asset_name'], (parseInt(asset['value']) / totalAssetsValue) * 100);
+      return assetsValueMap.set(
+        asset['asset_name'],
+        ((parseInt(asset['value']) / totalAssetsValue) * 100).toFixed(2)
+      );
     });
+    console.log(`Map=${[...assetsValueMap.entries()]}`);
 
     console.log(`Assets parsed: ${JSON.stringify(pieData)}`);
     return { pieData, assetsValueMap };
@@ -69,7 +71,6 @@ export const WalletScreen = ({ navigation, route }) => {
         const { pieData, assetsValueMap } = parseAssetForChart(result.assets.total);
         setAssets(pieData);
         setLegend(assetsValueMap);
-        console.log(`Values: ${assetsValueMap}`);
       } catch (error) {
         console.log(`Failed to fetch user assets: ${error}`);
       }
