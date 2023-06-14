@@ -19,16 +19,22 @@ export const pieColor4 = '#457F8D';
 //fonts
 const font = 'Montserrat-Regular';
 const fontBold = 'Montserrat-Bold';
+const semiBold = 'Montserrat-SemiBold';
 
 const Theme = StyleSheet.create({
     fsContainer: {
         backgroundColor: '#FFFFFF',
         fontFamily: font,
+        flex: 1,
+        justifyContent: 'flex-start',
+        padding: 5,
+        margin: 5,
     },
 
     fsColors: {
         primary: primary,
         secondary: secondary,
+        backgroundColor: '#FFFFFF',
     },
 
     fsFonts: {
@@ -36,6 +42,7 @@ const Theme = StyleSheet.create({
         boldFont: {
             fontFamily: fontBold,
         },
+        semiBold: semiBold,
     },
     fsTabNavigation: {
         tab: {

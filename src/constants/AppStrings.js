@@ -4,6 +4,11 @@ const AUTHORIZATION = 'Authorization';
 
 //labels
 const LB_ASSET_VALUES = 'My Assets';
+const BTN_BUY_ADA = 'Buy Ada';
+
+//placeholders
+const TX_FIAT_AMOUNT = 'I Spend Amount(KES)';
+const TX_ADA_AMOUNT = 'I Get Amount (Ada)';
 
 //response codes
 const RESPONSE_OK = 200;
@@ -29,4 +34,7 @@ export {
     SCR_BUY_ASSET,
     SCR_MAKE_PAYMENTS,
     SCR_SWAP_TOKENS,
+    TX_ADA_AMOUNT,
+    TX_FIAT_AMOUNT,
+    BTN_BUY_ADA,
 }
