@@ -8,10 +8,9 @@ import { DonutGraphWithLegend } from '../components/DonutChart';
 import Theme from '../resources/assets/Style';
 import { getItem } from '../utils/KeysStorage';
 import { ACCOUNT } from '../constants/AppStrings';
-import { fetchAssets } from '../services/Transactions';
 
 export const WalletScreen = ({ navigation, route }) => {
-  const [assets, setAssets] = useState({});
+  const [assets, setAssets] = useState([]);
 
   const importData = async () => {
     try {
@@ -53,6 +52,7 @@ export const WalletScreen = ({ navigation, route }) => {
         const result = await response.json();
         result.assets.total.push({ ...result.balance.total, asset_name: '' });
         setAssets(parseAssetForChart(result.assets.total));
+        console.log(JSON.stringify(assets));
       } catch (error) {
         console.log(`Failed to fetch user assets: ${error}`);
       }

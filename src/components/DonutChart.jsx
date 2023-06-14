@@ -51,7 +51,7 @@ const renderLegendComponent = () => {
   );
 };
 
-export const DonutGraphWithLegend = (pieData) => {
+export const DonutGraphWithLegend = ({ pieData }) => {
   return (
     <View style={Theme.fsCharts.fsDonutChart.container}>
       <View style={Theme.fsCharts.fsDonutChart.chart}>
