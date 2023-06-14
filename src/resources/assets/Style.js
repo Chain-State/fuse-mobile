@@ -144,8 +144,9 @@ const Theme = StyleSheet.create({
             },
             legendItem: {
                 flexDirection: 'row',
-                alignItems: 'center',
                 width: 150,
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginRight: 5,
                 marginLeft: 5,
                 padding: 2,
