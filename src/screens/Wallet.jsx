@@ -46,16 +46,18 @@ export const WalletScreen = ({ navigation, route }) => {
     setAssets(pieData);
   };
 
-  const getUserAccount = async () => {
+  const setUserAccount = async () => {
     let account = null;
     try {
       account = await getItem(ACCOUNT);
       console.log(`--userUuid: ${account}`);
       account = JSON.parse(account);
       console.log(`--parsed userUuid: ${account['uuid']}`);
+      // setUserUuid('2f767661-495e-460d-a380-8d4cfa947906');
     } catch (error) {
       console.log(`Cannot get account: ${error} `);
     }
+    console.log(`acc--${account.uuid}`);
     setUserUuid(account.uuid);
   };
 
@@ -71,7 +73,7 @@ export const WalletScreen = ({ navigation, route }) => {
       }
     };
 
-    getUserAccount();
+    setUserAccount();
     fetchAssets(userUuid);
 
     // fetchAssets('2f767661-495e-460d-a380-8d4cfa947906');
