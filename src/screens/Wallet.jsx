@@ -17,30 +17,20 @@ import { ACCOUNT } from '../constants/AppStrings';
 
 export const WalletScreen = ({ navigation, route }) => {
   const [assets, setAssets] = useState([]);
-  // const [legend, setLegend] = useState(new Map());
+  const [userUuid, setUserUuid] = '';
 
-  const importData = async () => {
-    try {
-      const keys = await AsyncStorage.getAllKeys();
-      const result = await AsyncStorage.multiGet(keys);
+  // const importData = async () => {
+  //   try {
+  //     const keys = await AsyncStorage.getAllKeys();
+  //     const result = await AsyncStorage.multiGet(keys);
 
-      return result.map((req) => req);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     return result.map((req) => req);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const account = async () => {
-    let account = null;
-    try {
-      account = await getItem(ACCOUNT);
-    } catch (error) {
-      console.log(`Cannot get account: ${error} `);
-    }
-    return JSON.parse(account).uuid;
-  };
-
-  const parseAssetForChart = (assets) => {
+  const parseAssetForChart = async (assets) => {
     const colors = [pieColor1, pieColor2, pieColor3, pieColor4, pieColor5];
     const value = assets.reduce(function (acc, curr) {
       return acc + parseInt(curr.quantity);
@@ -68,7 +58,21 @@ export const WalletScreen = ({ navigation, route }) => {
       }
     };
 
-    fetchAssets('2f767661-495e-460d-a380-8d4cfa947906');
+    const getUserAccount = async () => {
+      let account = null;
+      try {
+        account = await getItem(ACCOUNT);
+      } catch (error) {
+        console.log(`Cannot get account: ${error} `);
+      }
+      setUserUuid(JSON.parse(account).uuid);
+    };
+
+    getUserAccount();
+    console.log(`User Acc: ${userUuid}`);
+    fetchAssets(userUuid);
+
+    // fetchAssets('2f767661-495e-460d-a380-8d4cfa947906');
   }, []);
   return (
     <View flex={1}>
