@@ -1,6 +1,6 @@
 import { PieChart } from 'react-native-gifted-charts';
 import { Text, View } from 'react-native';
-import Theme, {pieColor1, pieColor2, pieColor3, pieColor4} from '../resources/assets/Style';
+import Theme from '../resources/assets/Style';
 import { LB_ASSET_VALUES } from '../constants/AppStrings';
 
 const renderDot = (color) => {
@@ -17,39 +17,40 @@ const renderDot = (color) => {
   );
 };
 
-const renderLegendComponent = () => {
+const renderLegendComponent = (legend) => {
   return (
     <>
-      <View
-        style={Theme.fsCharts.fsDonutChart.legendContainer}
-      >
-        <View
-          style={Theme.fsCharts.fsDonutChart.legendRow}
-        >
-          {renderDot(pieColor1)}
-          <Text style={Theme.fsCharts.regText}>Ada: 47%</Text>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', width: 120 }}>
-          {renderDot(pieColor2)}
-          <Text style={Theme.fsCharts.regText}>AADA: 16%</Text>
-        </View>
-      </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            width: 120,
-            marginRight: 20,
-          }}
-        >
-          {renderDot(pieColor3)}
-          <Text style={Theme.fsCharts.regText}>MELD: 40%</Text>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', width: 120 }}>
-          {renderDot(pieColor4)}
-          <Text style={Theme.fsCharts.regText}>Fuse: 3%</Text>
-        </View>
+      <View style={Theme.fsCharts.fsDonutChart.legendContainer}>
+        {legend.map((element, index) => {
+          let assetName = null;
+          switch (element.asset_name) {
+            case '':
+              assetName = 'ADA';
+              break;
+            case '55534443':
+              assetName = 'USDC';
+              break;
+            case '744d454c44':
+              assetName = 'tMELD';
+              break;
+            case '744d494e':
+              assetName = 'tMIN';
+              break;
+            case '74575254':
+              assetName = 'tWRT';
+              break;
+            default:
+              assetName: 'xtoken';
+          }
+          return (
+            <View style={Theme.fsCharts.fsDonutChart.legendItem}>
+              {renderDot(element.color)}
+              <Text style={Theme.fsCharts.regText}>
+                {assetName}: {element.percentage == 0 ? 'No Assets' : `${element.percentage}%`}
+              </Text>
+            </View>
+          );
+        })}
       </View>
     </>
   );
@@ -70,12 +71,12 @@ export const DonutGraphWithLegend = ({ pieData }) => {
             innerCircleColor={Theme.primary_light}
             centerLabelComponent={() => {
               return (
-                <View/> //No focused section details
+                <View /> //No focused section details
               );
             }}
           />
         </View>
-        {renderLegendComponent()}
+        {renderLegendComponent(pieData)}
       </View>
     </View>
   );

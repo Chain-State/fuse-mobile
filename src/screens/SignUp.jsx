@@ -13,6 +13,34 @@ import { createUser } from '../services/UserAccounts';
 import FsButton from '../components/Button';
 import { SCR_KYC, SCR_WALLET } from '../constants/AppStrings';
 
+
+
+function onSubmitRegisterUser(userDetails) {
+  setLoading(true)
+  console.log(userDetails)
+  const postRequestObject = {
+    emailAddress: userDetails.email,
+    phoneNumber: userDetails.phone,
+    accountPassword: userDetails.confirmpassword,
+    firstName: userDetails.fname,
+    lastName: userDetails.sname,
+    dateOfBirth: userDetails.dob,
+    idNumber: userDetails.id,
+  }
+  console.log(postRequestObject)
+  const userCreatePromise = createUser(postRequestObject)
+  userCreatePromise.then((data) => {
+    console.log(data)
+    // TODO: Remove loading spinner
+    // navigation.navigate('TransactionsScreen', {submittedFormData: userFormData})
+    // You from user createPromise get the token from json object returned from d.b
+    //TODO: Save userToken to async storage
+    const parsedCreateUserResponse = JSON.parse(data)
+    const userUniqueToken = parsedCreateUserResponse[0].wallet.id
+    console.log(userUniqueToken)
+  });
+}
+
 export const SignUpForm = ({ navigation }) => {
   const [formData, setFormData] = useState({
     fname: '',
@@ -70,6 +98,7 @@ export const SignUpForm = ({ navigation }) => {
           onPress={() => {
             // TODO: Proper form validation
             if (password === passwordConfirm) {
+              onSubmitRegisterUser(formData)
               navigation.navigate(SCR_WALLET, { submittedFormData: formData });
             } else {
               console.log("Passwords don't match!!");
@@ -125,6 +154,7 @@ export const RegisterFormKYC = ({ navigation, route }) => {
             // TODO: Show loading spinner
             // TODO: properly check legit id number
             if (idNumber != null) {
+              // TODO: Add Form validation
               // TODO: Convert date string to timestamp
               // dummy POST request
               setTimeout(function () {

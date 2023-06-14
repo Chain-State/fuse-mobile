@@ -1,29 +1,20 @@
 
-
-
+import { APP_SERVER, CONTENT_TYPE, URI_REGISTER } from "../constants/AppStrings";
 export const createUser = async (userData) => {
-    try {
-      const response = await fetch('https://mywebsite.com/endpoint/', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userData
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`);
-      }
-      // Expect a body with user db details (including a uuid)
-      const json = await response.json();
-      return json;
-    } catch (error) {
-      console.error(error);
-    } finally {
-      console.log("User registration successful!")
-    }
+  try {
+    const response = await fetch(`${APP_SERVER}${URI_REGISTER}`, {
+      method: 'POST',
+      headers: {
+        Accept: CONTENT_TYPE,
+        'Content-Type': CONTENT_TYPE,
+      },
+      body: JSON.stringify(userData),
+    });
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error(`Create request failed because: ${error})`);
+  }
 };
 
 const authorizeUser = async (userAuthCredentials) => {

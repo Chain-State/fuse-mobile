@@ -1,0 +1,1 @@
+{"accountPassword": "Asd123*456", "dateOfBirth": "1234567", "emailAddress": "asdf@mail.com", "firstName": "asd", "idNumber": "1234456", "lastName": "hjk", "phoneNumber": "0712345678"}
