@@ -53,12 +53,12 @@ export const WalletScreen = ({ navigation, route }) => {
       console.log(`--userUuid: ${account}`);
       account = JSON.parse(account);
       console.log(`--parsed userUuid: ${account['uuid']}`);
+      setUserUuid(account.uuid);
       // setUserUuid('2f767661-495e-460d-a380-8d4cfa947906');
     } catch (error) {
       console.log(`Cannot get account: ${error} `);
     }
     console.log(`acc--${account.uuid}`);
-    setUserUuid(account.uuid);
   };
 
   useEffect(() => {
