@@ -11,6 +11,7 @@ import { ACCOUNT } from '../constants/AppStrings';
 
 export const WalletScreen = ({ navigation, route }) => {
   const [assets, setAssets] = useState([]);
+  const [legend, setLegend] = useState(new Map());
 
   const importData = async () => {
     try {
@@ -41,8 +42,22 @@ export const WalletScreen = ({ navigation, route }) => {
       delete item['quantity'];
       return item;
     });
+
+    //get total value of assets
+    const initial = 0;
+    const totalAssetsValue = assets.reduce((acc, val) => {
+      acc + parseInt(val['value']), initial;
+    });
+    console.log(`Sum of assets: ${totalAssetsValue}`);
+
+    //create map of asset name and percentage of total
+    let assetsValueMap = new Map();
+    pieData.forEach((asset) => {
+      assetsValueMap.set(asset['asset_name'], (parseInt(asset['value']) / totalAssetsValue) * 100);
+    });
+
     console.log(`Assets parsed: ${JSON.stringify(pieData)}`);
-    return pieData;
+    return { pieData, assetsValueMap };
   };
 
   useEffect(() => {
@@ -51,8 +66,10 @@ export const WalletScreen = ({ navigation, route }) => {
         const response = await fetch(`${URI_USER_ASSETS}/${userUuid}`);
         const result = await response.json();
         result.assets.total.push({ ...result.balance.total, asset_name: '' });
-        setAssets(parseAssetForChart(result.assets.total));
-        console.log(JSON.stringify(assets));
+        const { pieData, assetsValueMap } = parseAssetForChart(result.assets.total);
+        setAssets(pieData);
+        setLegend(assetsValueMap);
+        console.log(`Values: ${assetsValueMap}`);
       } catch (error) {
         console.log(`Failed to fetch user assets: ${error}`);
       }

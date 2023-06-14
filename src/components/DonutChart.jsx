@@ -17,7 +17,7 @@ const renderDot = (color) => {
   );
 };
 
-const renderLegendComponent = () => {
+const renderLegendComponent = (legendData) => {
   return (
     <>
       <View style={Theme.fsCharts.fsDonutChart.legendContainer}>
