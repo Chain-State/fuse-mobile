@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, TextInput, View } from 'react-native';
 import AssetPriceLineChart from '../components/LineChart';
 import lineChartData from '../data/dummy/LineChartDummyData';
@@ -16,14 +16,44 @@ import {
 const BuyAssetScreen = ({ navigation }) => {
   const [amountAda, setAmountAda] = useState(0);
   const [amountFiat, setAmountFiat] = useState(0);
-  const [exchangeRate, setExchangeRate] = useState(2);
-  const [timeSinceLastPriceCheck, setTimeSinceLastPriceCheck] = useState(0);
-  const [buyPriceDuration, setBuyPriceDuration] = useState(0);
+  const [priceHistory, setPriceHistory] = useState([]);
+
+  useEffect(() => {
+    //get ADA price history.Default 1 week
+    fetch(
+      'https://rest.coinapi.io/v1/exchangerate/ADA/USD/history?period_id=1DAY&time_start=2023-06-11T23:59:00.0000000Z&time_end=2023-06-15T23:59:00.0000000Z&display_name=day',
+      {
+        method: 'GET',
+        headers: {
+          'X-CoinAPI-Key': '7CC0179B-877B-4473-AD94-B0AB33921F18',
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(JSON.stringify(data));
+        const priceData = data.map((item) => {
+          item = item;
+          delete item.time_period_start;
+          delete item.time_period_end;
+          delete item.rate_low;
+          delete item.rate_high;
+          delete item.rate_open;
+          delete item.time_open;
+          delete item.time_close;
+          item['value'] = (item.rate_close * 142).toFixed(2);
+          return item;
+        });
+        console.log(`PriceData == ${JSON.stringify(priceData)}`);
+        setPriceHistory(priceData);
+      })
+      .catch((error) => console.log(`Price fetch failed: ${error}`));
+  });
 
   return (
     <>
       <View style={Theme.fsContainer}>
-        <AssetPriceLineChart title="Current ADA Price" chartData={lineChartData} />
+        {priceHistory && <AssetPriceLineChart title="Current ADA Price" chartData={priceHistory} />}
         <View style={{ marginTop: 50 }}>
           <Text style={Theme.fsLabel}>{LB_BUY_ADA_AMOUNT}</Text>
           <TextInput

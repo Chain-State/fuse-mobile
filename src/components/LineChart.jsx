@@ -16,19 +16,19 @@ function AssetPriceLineChart({ title, chartData }) {
             marginBottom: 10,
           }}
         >
-          ADA: KES 36.34
+          ADA: Ksh {chartData.at(chartData.length - 1)['value']}
         </Text>
         <LineChart
           data={chartData}
+          showFractionalValues={true}
           curved={true}
-          stepValue={5}
-          minValue={0}
-          noOfSections={7}
+          stepValue={1}
+          noOfSections={5}
           hideDataPoints={false}
           yAxisLabelPrefix="Ksh "
           xAxisLabelTextStyle={{ fontFamily: Theme.fsFonts.fontFamily, fontSize: 13 }}
           yAxisTextStyle={{ fontFamily: Theme.fsFonts.fontFamily, fontSize: 13 }}
-          thickness={1}
+          thickness={3}
           color={Theme.fsColors.secondary}
           showVerticalLines={false}
           rulesColor={Theme.fsColors.secondary}
@@ -36,21 +36,7 @@ function AssetPriceLineChart({ title, chartData }) {
           yAxisOffset={0}
           yAxisLabelWidth={50}
           yAxisIndicesHeight={20}
-          xAxisLabelTexts={[
-            'Mon',
-            'Tue',
-            'Wed',
-            'Thu',
-            'Fri',
-            'Sat',
-            'Sun',
-            'Mon',
-            'Tue',
-            'Wed',
-            'Thu',
-            'Fri',
-            'Sat',
-          ]}
+          xAxisLabelTexts={['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']}
           dataPointsColor={Theme.fsColors.secondary}
           yAxisColor={Theme.fsColors.backgroundColor}
           xAxisColor={Theme.fsColors.backgroundColor}
