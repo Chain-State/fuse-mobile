@@ -46,7 +46,9 @@ const renderLegendComponent = (legend) => {
             <View style={Theme.fsCharts.fsDonutChart.legendItem}>
               {renderDot(element.color)}
               <Text style={Theme.fsCharts.regText}>
-                {assetName}: {element.percentage == 0 ? 'No Assets' : `${element.percentage}%`}
+                {assetName}:{' '}
+                {/* {element.percentage == 0 ? 'No Assets' : `${element.value / 1000000}.00`} */}
+                {element.percentage == 0 ? 'No Assets' : `${element.percentage}%`}
               </Text>
             </View>
           );
