@@ -73,10 +73,10 @@ export const WalletScreen = ({ navigation, route }) => {
 
     setUserAccount();
     fetchAssets(userUuid);
-  });
+  }, []);
   return (
     <View flex={1}>
-      <DonutGraphWithLegend pieData={assets} />
+      {assets && <DonutGraphWithLegend pieData={assets} />}
       <View style={{ padding: 20 }}>
         <FlatList
           ListHeaderComponent={() => (
