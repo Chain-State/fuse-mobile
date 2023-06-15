@@ -19,16 +19,16 @@ export const WalletScreen = ({ navigation, route }) => {
   const [assets, setAssets] = useState([]);
   const [userUuid, setUserUuid] = useState('');
 
-  // const importData = async () => {
-  //   try {
-  //     const keys = await AsyncStorage.getAllKeys();
-  //     const result = await AsyncStorage.multiGet(keys);
+  const importData = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const result = await AsyncStorage.multiGet(keys);
 
-  //     return result.map((req) => req);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+      return result.map((req) => req);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const parseAssetForChart = async (assets) => {
     const colors = [pieColor1, pieColor2, pieColor3, pieColor4, pieColor5];
@@ -47,18 +47,16 @@ export const WalletScreen = ({ navigation, route }) => {
   };
 
   const setUserAccount = async () => {
+    importData();
     let account = null;
     try {
       account = await getItem(ACCOUNT);
-      console.log(`--userUuid: ${account}`);
-      account = JSON.parse(account);
-      console.log(`--parsed userUuid: ${account['uuid']}`);
-      setUserUuid(account.uuid);
+      let res = JSON.parse(account);
+      setUserUuid(res.uuid);
       // setUserUuid('2f767661-495e-460d-a380-8d4cfa947906');
     } catch (error) {
       console.log(`Cannot get account: ${error} `);
     }
-    console.log(`acc--${account.uuid}`);
   };
 
   useEffect(() => {
@@ -75,9 +73,7 @@ export const WalletScreen = ({ navigation, route }) => {
 
     setUserAccount();
     fetchAssets(userUuid);
-
-    // fetchAssets('2f767661-495e-460d-a380-8d4cfa947906');
-  }, []);
+  });
   return (
     <View flex={1}>
       <DonutGraphWithLegend pieData={assets} />
