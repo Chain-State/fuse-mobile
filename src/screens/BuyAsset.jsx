@@ -5,7 +5,13 @@ import lineChartData from '../data/dummy/LineChartDummyData';
 import Theme from '../resources/assets/Style';
 import FsButton from '../components/Button';
 import { Text } from 'react-native-svg';
-import { BTN_BUY_ADA, TX_ADA_AMOUNT, TX_FIAT_AMOUNT } from '../constants/AppStrings';
+import {
+  BTN_BUY_ADA,
+  LB_BUY_ADA_AMOUNT,
+  LB_BUY_SPEND_AMOUNT,
+  TX_ADA_AMOUNT,
+  TX_FIAT_AMOUNT,
+} from '../constants/AppStrings';
 
 const BuyAssetScreen = ({ navigation }) => {
   const [amountAda, setAmountAda] = useState(0);
@@ -17,8 +23,9 @@ const BuyAssetScreen = ({ navigation }) => {
   return (
     <>
       <View style={Theme.fsContainer}>
-        <AssetPriceLineChart title="Current Ada Price" chartData={lineChartData} />
-        <View style={{ marginTop: 20 }}>
+        <AssetPriceLineChart title="Current ADA Price" chartData={lineChartData} />
+        <View style={{ marginTop: 50 }}>
+          <Text style={Theme.fsLabel}>{LB_BUY_ADA_AMOUNT}</Text>
           <TextInput
             style={Theme.fsInput}
             placeholder={TX_ADA_AMOUNT}
@@ -30,6 +37,7 @@ const BuyAssetScreen = ({ navigation }) => {
             // value={amountAda.toString()}
             keyboardType="numeric"
           />
+          <Text style={Theme.fsLabel}>{LB_BUY_SPEND_AMOUNT}</Text>
           <TextInput
             style={Theme.fsInput}
             placeholder={TX_FIAT_AMOUNT}

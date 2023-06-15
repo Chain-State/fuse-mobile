@@ -12,12 +12,14 @@ const ACCOUNT = 'account';
 
 //labels
 const LB_ASSET_VALUES = 'My Assets';
-const BTN_BUY_ADA = 'Buy Ada';
+const LB_BUY_ADA_AMOUNT = 'Amount of ADA to Receive';
+const LB_BUY_SPEND_AMOUNT = 'Amount to Spend(KES)';
+const BTN_BUY_ADA = 'Buy ADA';
 const BTN_CREAT_ACCOUNT = 'Create Account';
 
 //placeholders
 const TX_FIAT_AMOUNT = 'I Spend Amount(KES)';
-const TX_ADA_AMOUNT = 'I Get Amount (Ada)';
+const TX_ADA_AMOUNT = 'I Get Amount (ADA)';
 
 //response codes
 const RESPONSE_OK = 200;
@@ -42,6 +44,8 @@ export {
     URI_USER_ASSETS,
     CONTENT_TYPE,
     LB_ASSET_VALUES,
+    LB_BUY_ADA_AMOUNT,
+    LB_BUY_SPEND_AMOUNT,
     SCR_HOME,
     SCR_KYC,
     SCR_REGISTRATION,
