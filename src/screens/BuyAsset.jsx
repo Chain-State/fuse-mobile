@@ -7,11 +7,14 @@ import Theme from '../resources/assets/Style';
 import FsButton from '../components/Button';
 import { Text } from 'react-native-svg';
 import {
+  APP_SERVER,
   BTN_BUY_ADA,
   LB_BUY_ADA_AMOUNT,
   LB_BUY_SPEND_AMOUNT,
+  SCR_HOME,
   TX_ADA_AMOUNT,
   TX_FIAT_AMOUNT,
+  URI_BUY_ASSET,
 } from '../constants/AppStrings';
 
 const BuyAssetScreen = ({ navigation }) => {
@@ -20,6 +23,7 @@ const BuyAssetScreen = ({ navigation }) => {
   const [priceHistory, setPriceHistory] = useState([]);
   const [exchangeRate, setExchangeRate] = useState(140);
   const [adaPrice, setAdaPrice] = useState(0.2564);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     //get ADA price history.Default 1 week
@@ -51,15 +55,15 @@ const BuyAssetScreen = ({ navigation }) => {
     //     setPriceHistory(priceData);
     //   })
     //   .catch((error) => console.log(`Price fetch failed: ${error}`));
-    fetch('https://openexchangerates.org/api/latest.json?app_id=46d02af8d01c44118f232980cbad46a8', {
-      method: 'GET',
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.rates['KES']);
-        setExchangeRate(data['KES']);
-      })
-      .catch((err) => console.log(`Fx rate fetch failed: ${err}`));
+    // fetch('https://openexchangerates.org/api/latest.json?app_id=46d02af8d01c44118f232980cbad46a8', {
+    //   method: 'GET',
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data.rates['KES']);
+    //     setExchangeRate(data['KES']);
+    //   })
+    //   .catch((err) => console.log(`Fx rate fetch failed: ${err}`));
   }, []);
 
   return (
@@ -101,7 +105,7 @@ const BuyAssetScreen = ({ navigation }) => {
                   prefix="Ksh "
                   precision={0}
                   delimiter=","
-                  // minValue={0}
+                  minValue={0}
                   onChangeValue={setAmountFiat}
                   keyboardType="numeric"
                   style={Theme.fsInput}
@@ -115,10 +119,26 @@ const BuyAssetScreen = ({ navigation }) => {
                   }}
                 />
                 <FsButton
-                  onPress={() => {
-                    if (timeSinceLastPriceCheck > buyPriceDuration) {
-                    } else {
-                    }
+                  onPress={(amountAda, amountFiat) => {
+                    console.log('Called function');
+                    // setIsProcessing(true);
+                    fetch(URI_BUY_ASSET, {
+                      method: 'POST',
+                      body: {
+                        userUuid: '240434dd-07e7-403c-9027-dec588e867c5',
+                        assetType: 'Ada',
+                        tokenQuantity: amountAda,
+                        paymentAmount: amountFiat,
+                      },
+                      headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                      },
+                    })
+                      .then((res) => res.json())
+                      .then((data) => data)
+                      .catch((err) => console.log(`Tx failed ${err}`));
+                    // navigation.navigate(SCR_HOME);
                   }}
                   title={BTN_BUY_ADA}
                 />

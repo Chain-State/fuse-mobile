@@ -3,6 +3,8 @@ const APP_SERVER = 'https://fusebox1.xyz';
 const BASE_URI = '/api/v1';
 const URI_REGISTER = BASE_URI + '/register';
 const URI_USER_ASSETS = `${APP_SERVER}${BASE_URI}/wallet`;
+const URI_BUY_ASSET = `${APP_SERVER}${BASE_URI}/transact/buy`;
+
 //http headers 
 const CONTENT_TYPE = 'application/json';
 const AUTHORIZATION = 'Authorization';
@@ -42,6 +44,7 @@ export {
     ACCOUNT,
     URI_REGISTER,
     URI_USER_ASSETS,
+    URI_BUY_ASSET,
     CONTENT_TYPE,
     LB_ASSET_VALUES,
     LB_BUY_ADA_AMOUNT,
