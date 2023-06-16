@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import FsButton from '../components/Button';
 import { Text, View, FlatList } from 'react-native';
 import { transactionDummyData, pieDummyData } from '../data/dummy/transactions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BTN_BUY_ADA, SCR_BUY_ASSET } from '../constants/AppStrings';
 import Theme, {
   pieColor1,
   pieColor2,
@@ -67,8 +69,8 @@ export const WalletScreen = ({ navigation, route }) => {
   const fetchAssets = async (userUuid) => {
     try {
       const response = await fetch(`${URI_USER_ASSETS}/${userUuid}`);
+      console.log(`Result: ${JSON.stringify(response)}`);
       const result = await response.json();
-      console.log(`Result: ${JSON.stringify(result)}`);
       if (result.error) {
         throw new Error(result.error);
       }
@@ -85,7 +87,39 @@ export const WalletScreen = ({ navigation, route }) => {
   }, [userUuid]);
   return (
     <View flex={1}>
-      {assets && <DonutGraphWithLegend pieData={assets} />}
+      {assets.length >= 1 ? (
+        <DonutGraphWithLegend pieData={assets} />
+      ) : (
+        <View style={Theme.fsCharts.fsDonutChart.container}>
+          <View
+            style={{
+              ...Theme.fsCharts.fsDonutChart.chart,
+              backgroundColor: 'lightgrey',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignContent: 'center',
+              alignItems: 'center',
+              height: 300,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: Theme.fsFonts.boldFont.fontFamily,
+                paddingRight: 10,
+              }}
+            >
+              No Assets in Wallet
+            </Text>
+            <FsButton
+              onPress={(amountAda, amountFiat) => {
+                console.log('Called function');
+                navigation.navigate(SCR_BUY_ASSET);
+              }}
+              title={BTN_BUY_ADA}
+            />
+          </View>
+        </View>
+      )}
       <View style={{ padding: 20 }}>
         <FlatList
           ListHeaderComponent={() => (
