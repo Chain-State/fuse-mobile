@@ -37,6 +37,7 @@ function HomeScreen() {
         tabBarIconStyle: Theme.fsTabNavigation.icons,
         tabBarStyle: Theme.fsTabNavigation.tab,
         headerShown: false,
+        tabBarHideOnKeyboard: true,
       })}
     >
       <Tab.Screen name={SCR_WALLET} component={WalletScreen} />
