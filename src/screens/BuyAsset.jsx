@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextInput, View, KeyboardAvoidingView, SafeAreaView } from 'react-native';
+import { Text, Button, TextInput, View, KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import AssetPriceLineChart from '../components/LineChart';
 import lineChartData from '../data/dummy/LineChartDummyData';
 import CurrencyInput from 'react-native-currency-input';
 import Theme from '../resources/assets/Style';
 import FsButton from '../components/Button';
-import { Text } from 'react-native-svg';
 import styles from '../components/ButtonStyles';
 import {
   APP_SERVER,
@@ -83,8 +82,8 @@ const BuyAssetScreen = ({ navigation }) => {
               <AssetPriceLineChart title="Current ADA Price" chartData={lineChartData} />
             )}
             {exchangeRate && (
-              <View style={{ marginTop: 50 }}>
-                <Text style={Theme.fsLabel}>{LB_BUY_ADA_AMOUNT}</Text>
+              <View style={{ marginTop: 10 }}>
+                <Text style={{ ...Theme.fsLabel, height: 20 }}>{LB_BUY_ADA_AMOUNT}</Text>
                 <TextInput
                   onChangeValue={setAmountAda}
                   style={Theme.fsInput}
@@ -107,7 +106,7 @@ const BuyAssetScreen = ({ navigation }) => {
                   }}
                   value={amountAda}
                 />
-                <Text style={Theme.fsLabel}>{LB_BUY_SPEND_AMOUNT}</Text>
+                <Text style={{ ...Theme.fsLabel, height: 20 }}>{LB_BUY_SPEND_AMOUNT}</Text>
                 <CurrencyInput
                   value={amountFiat}
                   prefix="Ksh "

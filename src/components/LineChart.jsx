@@ -6,7 +6,15 @@ import Theme, { pieColor2 } from '../resources/assets/Style';
 function AssetPriceLineChart({ title, chartData }) {
   return (
     <>
-      <View style={{ backgroundColor: pieColor2, margin: -10, padding: 10 }}>
+      <View
+        style={{
+          backgroundColor: pieColor2,
+          marginLeft: -10,
+          marginRight: -10,
+          padding: 10,
+          height: 330,
+        }}
+      >
         <Text
           style={{
             padding: 5,
