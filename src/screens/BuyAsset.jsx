@@ -68,6 +68,35 @@ const BuyAssetScreen = ({ navigation }) => {
       .catch((err) => console.log(`Fx rate fetch failed: ${err}`));
   };
 
+  const buyAda = (amountAda, amountFiat) => {
+    const details = {
+      userUuid: 'ea7b43d4-f50c-40ab-8de4-90cc4a2ecbdf',
+      assetType: 'Ada',
+      tokenQuantity: 6000000,
+      paymentAmount: 1,
+    };
+    console.log('Executing buy transaction...');
+    // setIsProcessing(true);
+    const response = fetch(URI_BUY_ASSET, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(details),
+    })
+      .then((res) => {
+        if (res.ok) {
+          res.json();
+        } else {
+          throw new Error(res.status);
+        }
+      })
+      .then((data) => data)
+      .catch((err) => console.log(`Tx failed ${err}`));
+    // navigation.navigate(SCR_HOME);
+  };
+
   useEffect(() => {
     // getTokenExRate();
     getLocalCurrencyRate();
@@ -127,27 +156,7 @@ const BuyAssetScreen = ({ navigation }) => {
                 />
                 <FsButton
                   style={{ ...styles.appButtonContainer }}
-                  onPress={(amountAda, amountFiat) => {
-                    console.log('Called function');
-                    // setIsProcessing(true);
-                    fetch(URI_BUY_ASSET, {
-                      method: 'POST',
-                      body: {
-                        userUuid: '240434dd-07e7-403c-9027-dec588e867c5',
-                        assetType: 'Ada',
-                        tokenQuantity: amountAda,
-                        paymentAmount: amountFiat,
-                      },
-                      headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                      },
-                    })
-                      .then((res) => res.json())
-                      .then((data) => data)
-                      .catch((err) => console.log(`Tx failed ${err}`));
-                    // navigation.navigate(SCR_HOME);
-                  }}
+                  onPress={buyAda}
                   title={BTN_BUY_ADA}
                 />
               </View>
