@@ -74,35 +74,40 @@ const BuyAssetScreen = ({ navigation }) => {
                 <Text style={Theme.fsLabel}>{LB_BUY_ADA_AMOUNT}</Text>
                 <TextInput
                   style={Theme.fsInput}
-                  placeholder={TX_ADA_AMOUNT}
+                  // placeholder={TX_ADA_AMOUNT}
                   editable={true}
                   onChangeText={(data) => {
                     console.log(`Data == ${data}`);
                     console.log(`adaPrice == ${adaPrice}`);
                     console.log(`Rate == ${exchangeRate}`);
                     console.log(`Result: ${parseFloat(data) * adaPrice * exchangeRate}`);
-                    setAmountAda(data);
-                    // setAmountFiat(data);
+                    const validatedInput = data.startsWith('0') || data == '0' ? '0' : data;
+                    setAmountAda(validatedInput);
                     setAmountFiat(
-                      (parseFloat(data) * adaPrice * exchangeRate).toFixed(2).toString()
+                      parseFloat(validatedInput * adaPrice * exchangeRate)
+                        .toFixed(2)
+                        .toString()
                     );
                   }}
                   value={amountAda}
-                  // keyboardType="numeric"
+                  keyboardType="numeric"
                 />
                 <Text style={Theme.fsLabel}>{LB_BUY_SPEND_AMOUNT}</Text>
                 <TextInput
                   style={Theme.fsInput}
-                  placeholder={TX_FIAT_AMOUNT}
+                  // placeholder={TX_FIAT_AMOUNT}
                   editable={true}
                   onChangeText={(data) => {
-                    setAmountFiat(data);
+                    const validatedInput = data.startsWith('0') || data == '0' ? '0' : data;
+                    setAmountFiat(validatedInput);
                     setAmountAda(
-                      (parseFloat(data) * adaPrice * exchangeRate).toFixed(2).toString()
+                      parseFloat(validatedInput / (adaPrice * exchangeRate))
+                        .toFixed(2)
+                        .toString()
                     );
                   }}
                   value={amountFiat}
-                  // keyboardType="numeric"
+                  keyboardType="numeric"
                 />
                 <FsButton
                   onPress={() => {

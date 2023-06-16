@@ -21,7 +21,7 @@ function AssetPriceLineChart({ title, chartData }) {
         <LineChart
           data={chartData}
           showFractionalValues={true}
-          curved={true}
+          // curved={true}
           stepValue={1}
           noOfSections={5}
           hideDataPoints={false}
