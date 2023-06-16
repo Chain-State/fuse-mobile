@@ -24,7 +24,7 @@ export const WalletScreen = ({ navigation, route }) => {
       const keys = await AsyncStorage.getAllKeys();
       const result = await AsyncStorage.multiGet(keys);
 
-      return result.map((req) => req);
+      return result.map((req) => console.log(req));
     } catch (error) {
       console.error(error);
     }
@@ -47,33 +47,35 @@ export const WalletScreen = ({ navigation, route }) => {
   };
 
   const setUserAccount = async () => {
-    importData();
     let account = null;
     try {
-      account = await getItem(ACCOUNT);
-      let res = JSON.parse(account);
-      setUserUuid(res.uuid);
-      // setUserUuid('2f767661-495e-460d-a380-8d4cfa947906');
+      account = await AsyncStorage.getItem(ACCOUNT);
+      if (account !== null) {
+        console.log(`User Key: ${JSON.parse(account)['uuid']}`);
+        setUserUuid(JSON.parse(account)['uuid']);
+      } else {
+        throw new Error('No account details found for user');
+      }
     } catch (error) {
-      console.log(`Cannot get account: ${error} `);
+      console.log(`Could not read user account details because: ${error} `);
+    }
+  };
+
+  const fetchAssets = async (userUuid) => {
+    try {
+      const response = await fetch(`${URI_USER_ASSETS}/${userUuid}`);
+      const result = await response.json();
+      result.assets.total.push({ ...result.balance.total, asset_name: '' });
+      parseAssetForChart(result.assets.total);
+    } catch (error) {
+      console.log(`Failed to fetch user assets: ${error}`);
     }
   };
 
   useEffect(() => {
-    const fetchAssets = async (userUuid) => {
-      try {
-        const response = await fetch(`${URI_USER_ASSETS}/${userUuid}`);
-        const result = await response.json();
-        result.assets.total.push({ ...result.balance.total, asset_name: '' });
-        parseAssetForChart(result.assets.total);
-      } catch (error) {
-        console.log(`Failed to fetch user assets: ${error}`);
-      }
-    };
-
     setUserAccount();
     fetchAssets(userUuid);
-  }, []);
+  }, [userUuid]);
   return (
     <View flex={1}>
       {assets && <DonutGraphWithLegend pieData={assets} />}
