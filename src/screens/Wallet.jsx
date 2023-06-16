@@ -31,6 +31,9 @@ export const WalletScreen = ({ navigation, route }) => {
   };
 
   const parseAssetForChart = async (assets) => {
+    if (assets.length == 0) {
+      return;
+    }
     const colors = [pieColor1, pieColor2, pieColor3, pieColor4, pieColor5];
     const value = assets.reduce(function (acc, curr) {
       return acc + parseInt(curr.quantity);
@@ -65,6 +68,10 @@ export const WalletScreen = ({ navigation, route }) => {
     try {
       const response = await fetch(`${URI_USER_ASSETS}/${userUuid}`);
       const result = await response.json();
+      console.log(`Result: ${JSON.stringify(result)}`);
+      if (result.error) {
+        throw new Error(result.error);
+      }
       result.assets.total.push({ ...result.balance.total, asset_name: '' });
       parseAssetForChart(result.assets.total);
     } catch (error) {
