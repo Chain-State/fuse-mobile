@@ -6,6 +6,7 @@ import CurrencyInput from 'react-native-currency-input';
 import Theme from '../resources/assets/Style';
 import FsButton from '../components/Button';
 import { Text } from 'react-native-svg';
+import styles from '../components/ButtonStyles';
 import {
   APP_SERVER,
   BTN_BUY_ADA,
@@ -119,6 +120,7 @@ const BuyAssetScreen = ({ navigation }) => {
                   }}
                 />
                 <FsButton
+                  style={{ ...styles.appButtonContainer }}
                   onPress={(amountAda, amountFiat) => {
                     console.log('Called function');
                     // setIsProcessing(true);

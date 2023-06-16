@@ -1,3 +1,4 @@
+import { Colors } from "react-native/Libraries/NewAppScreen";
 import Theme from "../resources/assets/Style";
 
 const { StyleSheet } = require("react-native");
@@ -12,13 +13,14 @@ const styles = StyleSheet.create({
         elevation: 5,
         backgroundColor: Theme.fsColors.primary,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
 
     appButtonText: {
         fontFamily: Theme.fsFonts.semiBold,
         lineHeight: 21,
         fontSize: 16,
+        color: 'white'
     },
 
 

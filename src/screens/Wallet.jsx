@@ -16,6 +16,7 @@ import { URI_USER_ASSETS } from '../constants/AppStrings';
 import { DonutGraphWithLegend } from '../components/DonutChart';
 import { getItem } from '../utils/KeysStorage';
 import { ACCOUNT } from '../constants/AppStrings';
+import styles from '../components/ButtonStyles';
 
 export const WalletScreen = ({ navigation, route }) => {
   const [assets, setAssets] = useState([]);
@@ -94,8 +95,8 @@ export const WalletScreen = ({ navigation, route }) => {
           <View
             style={{
               ...Theme.fsCharts.fsDonutChart.chart,
-              backgroundColor: 'lightgrey',
-              flexDirection: 'row',
+              backgroundColor: Theme.fsCharts.fsDonutChart.container.backgroundColor,
+              flexDirection: 'column',
               justifyContent: 'center',
               alignContent: 'center',
               alignItems: 'center',
@@ -106,11 +107,14 @@ export const WalletScreen = ({ navigation, route }) => {
               style={{
                 fontFamily: Theme.fsFonts.boldFont.fontFamily,
                 paddingRight: 10,
+                fontSize: 23,
+                paddingBottom: 20,
               }}
             >
               No Assets in Wallet
             </Text>
             <FsButton
+              style={{ ...styles.appButtonContainer, width: 200 }}
               onPress={(amountAda, amountFiat) => {
                 console.log('Called function');
                 navigation.navigate(SCR_BUY_ASSET);
