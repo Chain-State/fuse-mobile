@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, TextInput, View, KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import AssetPriceLineChart from '../components/LineChart';
 import lineChartData from '../data/dummy/LineChartDummyData';
+import CurrencyInput from 'react-native-currency-input';
 import Theme from '../resources/assets/Style';
 import FsButton from '../components/Button';
 import { Text } from 'react-native-svg';
@@ -73,41 +74,45 @@ const BuyAssetScreen = ({ navigation }) => {
               <View style={{ marginTop: 50 }}>
                 <Text style={Theme.fsLabel}>{LB_BUY_ADA_AMOUNT}</Text>
                 <TextInput
+                  onChangeValue={setAmountAda}
                   style={Theme.fsInput}
-                  // placeholder={TX_ADA_AMOUNT}
-                  editable={true}
+                  keyboardType="numeric"
+                  clearTextOnFocus={true}
+                  showSoftInputOnFocus
                   onChangeText={(data) => {
                     console.log(`Data == ${data}`);
                     console.log(`adaPrice == ${adaPrice}`);
                     console.log(`Rate == ${exchangeRate}`);
                     console.log(`Result: ${parseFloat(data) * adaPrice * exchangeRate}`);
                     const validatedInput = data.startsWith('0') || data == '0' ? '0' : data;
-                    setAmountAda(validatedInput);
                     setAmountFiat(
-                      parseFloat(validatedInput * adaPrice * exchangeRate)
+                      parseInt(
+                        (validatedInput == '' ? '0' : validatedInput) * adaPrice * exchangeRate
+                      )
                         .toFixed(2)
                         .toString()
                     );
                   }}
                   value={amountAda}
-                  keyboardType="numeric"
                 />
                 <Text style={Theme.fsLabel}>{LB_BUY_SPEND_AMOUNT}</Text>
-                <TextInput
+                <CurrencyInput
+                  value={amountFiat}
+                  prefix="Ksh "
+                  precision={0}
+                  delimiter=","
+                  // minValue={0}
+                  onChangeValue={setAmountFiat}
+                  keyboardType="numeric"
                   style={Theme.fsInput}
-                  // placeholder={TX_FIAT_AMOUNT}
-                  editable={true}
                   onChangeText={(data) => {
-                    const validatedInput = data.startsWith('0') || data == '0' ? '0' : data;
-                    setAmountFiat(validatedInput);
+                    // const validatedInput = data.startsWith('0') || data == '0' ? '0' : data;
                     setAmountAda(
-                      parseFloat(validatedInput / (adaPrice * exchangeRate))
+                      parseFloat((amountFiat == '' ? '0' : amountFiat) / (adaPrice * exchangeRate))
                         .toFixed(2)
                         .toString()
                     );
                   }}
-                  value={amountFiat}
-                  keyboardType="numeric"
                 />
                 <FsButton
                   onPress={() => {
