@@ -6,6 +6,8 @@ import CurrencyInput from 'react-native-currency-input';
 import Theme from '../resources/assets/Style';
 import FsButton from '../components/Button';
 import styles from '../components/ButtonStyles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ACCOUNT } from '../constants/AppStrings';
 import {
   APP_SERVER,
   BTN_BUY_ADA,
@@ -17,13 +19,14 @@ import {
   URI_BUY_ASSET,
 } from '../constants/AppStrings';
 
-const BuyAssetScreen = ({ navigation }) => {
+const BuyAssetScreen = ({ navigation, route }) => {
   const [amountAda, setAmountAda] = useState('');
   const [amountFiat, setAmountFiat] = useState('');
   const [priceHistory, setPriceHistory] = useState([]);
   const [exchangeRate, setExchangeRate] = useState(null);
   const [adaPrice, setAdaPrice] = useState(0.2564);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [account, setAccount] = useState({});
 
   const getTokenExRate = () => {
     fetch(
@@ -57,6 +60,7 @@ const BuyAssetScreen = ({ navigation }) => {
   };
 
   const getLocalCurrencyRate = () => {
+    console.log(`[BuyAsset]-Key: ${route.params.userAccount}`);
     fetch('https://openexchangerates.org/api/latest.json?app_id=46d02af8d01c44118f232980cbad46a8', {
       method: 'GET',
     })
@@ -68,11 +72,15 @@ const BuyAssetScreen = ({ navigation }) => {
       .catch((err) => console.log(`Fx rate fetch failed: ${err}`));
   };
 
-  const buyAda = (amountAda, amountFiat) => {
+  const buyAda = () => {
+    console.log(`Ada value: ${amountAda}`);
+    console.log(`Fiat value: ${amountFiat}`);
+    console.log(`Account: ${account}`);
     const details = {
-      userUuid: 'ea7b43d4-f50c-40ab-8de4-90cc4a2ecbdf',
+      // userUuid: 'ea7b43d4-f50c-40ab-8de4-90cc4a2ecbdf',
+      userUuid: account,
       assetType: 'Ada',
-      tokenQuantity: 6000000,
+      tokenQuantity: amountAda,
       paymentAmount: 1,
     };
     console.log('Executing buy transaction...');
@@ -97,9 +105,25 @@ const BuyAssetScreen = ({ navigation }) => {
     // navigation.navigate(SCR_HOME);
   };
 
+  const userAccount = async () => {
+    let account = null;
+    try {
+      account = await AsyncStorage.getItem(ACCOUNT);
+      if (account !== null) {
+        console.log(`(wallet read): User Key: ${JSON.parse(account)['uuid']}`);
+        setAccount(JSON.parse(account)['uuid']);
+      } else {
+        throw new Error('No account details found for user');
+      }
+    } catch (error) {
+      console.log(`Could not read user account details because: ${error} `);
+    }
+  };
+
   useEffect(() => {
-    getTokenExRate();
+    // getTokenExRate();
     getLocalCurrencyRate();
+    userAccount();
   }, []);
 
   return (

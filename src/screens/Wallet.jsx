@@ -45,7 +45,7 @@ export const WalletScreen = ({ navigation, route }) => {
     try {
       account = await AsyncStorage.getItem(ACCOUNT);
       if (account !== null) {
-        console.log(`User Key: ${JSON.parse(account)['uuid']}`);
+        console.log(`(wallet read): User Key: ${JSON.parse(account)['uuid']}`);
         setUserUuid(JSON.parse(account)['uuid']);
       } else {
         throw new Error('No account details found for user');
