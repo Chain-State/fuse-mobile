@@ -69,7 +69,7 @@ export const DonutGraphWithLegend = ({ pieData }) => {
             donut
             sectionAutoFocus
             radius={120}
-            innerRadius={50}
+            innerRadius={70}
             innerCircleColor={Theme.primary_light}
             centerLabelComponent={() => {
               const totalAdaValue = pieData.reduce(function (acc, curr) {

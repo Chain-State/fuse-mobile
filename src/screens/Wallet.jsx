@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import FsButton from '../components/Button';
 import { Text, View, FlatList } from 'react-native';
-import { transactionDummyData, pieDummyData } from '../data/dummy/transactions';
+import { transactionDummyData } from '../data/dummy/transactions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BTN_BUY_ADA, SCR_BUY_ASSET } from '../constants/AppStrings';
 import Theme, {
@@ -14,7 +14,6 @@ import Theme, {
 import { URI_USER_ASSETS } from '../constants/AppStrings';
 
 import { DonutGraphWithLegend } from '../components/DonutChart';
-import { getItem } from '../utils/KeysStorage';
 import { ACCOUNT } from '../constants/AppStrings';
 import styles from '../components/ButtonStyles';
 
@@ -22,18 +21,7 @@ export const WalletScreen = ({ navigation, route }) => {
   const [assets, setAssets] = useState([]);
   const [userUuid, setUserUuid] = useState('');
 
-  const importData = async () => {
-    try {
-      const keys = await AsyncStorage.getAllKeys();
-      const result = await AsyncStorage.multiGet(keys);
-
-      return result.map((req) => console.log(req));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const parseAssetForChart = async (assets) => {
+  const parseAssetsData = async (assets) => {
     if (assets.length == 0) {
       return;
     }
@@ -70,13 +58,12 @@ export const WalletScreen = ({ navigation, route }) => {
   const fetchAssets = async (userUuid) => {
     try {
       const response = await fetch(`${URI_USER_ASSETS}/${userUuid}`);
-      console.log(`Result: ${JSON.stringify(response)}`);
       const result = await response.json();
       if (result.error) {
         throw new Error(result.error);
       }
       result.assets.total.push({ ...result.balance.total, asset_name: '' });
-      parseAssetForChart(result.assets.total);
+      parseAssetsData(result.assets.total);
     } catch (error) {
       console.log(`Failed to fetch user assets: ${error}`);
     }
@@ -114,12 +101,12 @@ export const WalletScreen = ({ navigation, route }) => {
               No Assets in Wallet
             </Text>
             <FsButton
-              style={{ ...styles.appButtonContainer, width: 200 }}
+              style={{ ...styles.appButtonContainer, width: 300 }}
               onPress={(amountAda, amountFiat) => {
                 console.log('Called function');
                 navigation.navigate(SCR_BUY_ASSET);
               }}
-              title={BTN_BUY_ADA}
+              title={`${BTN_BUY_ADA} with M-Pesa`}
             />
           </View>
         </View>

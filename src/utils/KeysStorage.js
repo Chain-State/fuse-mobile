@@ -18,3 +18,14 @@ export const getItem = async (key) => {
         console.log(`Cannot get item from storage: ${error}`);
     }
 };
+
+export const importData = async () => {
+    try {
+        const keys = await AsyncStorage.getAllKeys();
+        const result = await AsyncStorage.multiGet(keys);
+
+        return result.map((req) => console.log(req));
+    } catch (error) {
+        console.error(error);
+    }
+};

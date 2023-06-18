@@ -98,9 +98,9 @@ const BuyAssetScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    // getTokenExRate();
+    getTokenExRate();
     getLocalCurrencyRate();
-  }, [exchangeRate]);
+  }, []);
 
   return (
     <>
@@ -110,57 +110,55 @@ const BuyAssetScreen = ({ navigation }) => {
             {priceHistory && (
               <AssetPriceLineChart title="Current ADA Price" chartData={lineChartData} />
             )}
-            {exchangeRate && (
-              <View style={{ marginTop: 10 }}>
-                <Text style={{ ...Theme.fsLabel, height: 20 }}>{LB_BUY_ADA_AMOUNT}</Text>
-                <TextInput
-                  onChangeValue={setAmountAda}
-                  style={Theme.fsInput}
-                  keyboardType="numeric"
-                  clearTextOnFocus={true}
-                  showSoftInputOnFocus
-                  onChangeText={(data) => {
-                    console.log(`Data == ${data}`);
-                    console.log(`adaPrice == ${adaPrice}`);
-                    console.log(`Rate == ${exchangeRate}`);
-                    console.log(`Result: ${parseFloat(data) * adaPrice * exchangeRate}`);
-                    const validatedInput = data.startsWith('0') || data == '0' ? '0' : data;
-                    setAmountFiat(
-                      parseInt(
-                        (validatedInput == '' ? '0' : validatedInput) * adaPrice * exchangeRate
-                      )
-                        .toFixed(2)
-                        .toString()
-                    );
-                  }}
-                  value={amountAda}
-                />
-                <Text style={{ ...Theme.fsLabel, height: 20 }}>{LB_BUY_SPEND_AMOUNT}</Text>
-                <CurrencyInput
-                  value={amountFiat}
-                  prefix="Ksh "
-                  precision={0}
-                  delimiter=","
-                  minValue={0}
-                  onChangeValue={setAmountFiat}
-                  keyboardType="numeric"
-                  style={Theme.fsInput}
-                  onChangeText={(data) => {
-                    // const validatedInput = data.startsWith('0') || data == '0' ? '0' : data;
-                    setAmountAda(
-                      parseFloat((amountFiat == '' ? '0' : amountFiat) / (adaPrice * exchangeRate))
-                        .toFixed(2)
-                        .toString()
-                    );
-                  }}
-                />
-                <FsButton
-                  style={{ ...styles.appButtonContainer }}
-                  onPress={buyAda}
-                  title={BTN_BUY_ADA}
-                />
-              </View>
-            )}
+            <View style={{ marginTop: 10 }}>
+              <Text style={{ ...Theme.fsLabel, height: 20 }}>{LB_BUY_ADA_AMOUNT}</Text>
+              <TextInput
+                onChangeValue={setAmountAda}
+                style={Theme.fsInput}
+                keyboardType="numeric"
+                clearTextOnFocus={true}
+                showSoftInputOnFocus
+                onChangeText={(data) => {
+                  console.log(`Data == ${data}`);
+                  console.log(`adaPrice == ${adaPrice}`);
+                  console.log(`Rate == ${exchangeRate}`);
+                  console.log(`Result: ${parseFloat(data) * adaPrice * exchangeRate}`);
+                  const validatedInput = data.startsWith('0') || data == '0' ? '0' : data;
+                  setAmountFiat(
+                    parseInt(
+                      (validatedInput == '' ? '0' : validatedInput) * adaPrice * exchangeRate
+                    )
+                      .toFixed(2)
+                      .toString()
+                  );
+                }}
+                value={amountAda}
+              />
+              <Text style={{ ...Theme.fsLabel, height: 20 }}>{LB_BUY_SPEND_AMOUNT}</Text>
+              <CurrencyInput
+                value={amountFiat}
+                prefix="Ksh "
+                precision={0}
+                delimiter=","
+                minValue={0}
+                onChangeValue={setAmountFiat}
+                keyboardType="numeric"
+                style={Theme.fsInput}
+                onChangeText={(data) => {
+                  // const validatedInput = data.startsWith('0') || data == '0' ? '0' : data;
+                  setAmountAda(
+                    parseFloat((amountFiat == '' ? '0' : amountFiat) / (adaPrice * exchangeRate))
+                      .toFixed(2)
+                      .toString()
+                  );
+                }}
+              />
+              <FsButton
+                style={{ ...styles.appButtonContainer }}
+                onPress={buyAda}
+                title={BTN_BUY_ADA}
+              />
+            </View>
           </View>
         </SafeAreaView>
       </KeyboardAvoidingView>
