@@ -14,8 +14,8 @@ const ACCOUNT = 'account';
 
 //labels
 const LB_ASSET_VALUES = 'My Assets';
-const LB_BUY_ADA_AMOUNT = 'Amount of ADA I Get';
-const LB_BUY_SPEND_AMOUNT = 'Amount to Spend in (KES)';
+const LB_BUY_ADA_AMOUNT = 'Amount of ADA To Buy';
+const LB_BUY_SPEND_AMOUNT = 'Amount of Ksh to Spend';
 const BTN_BUY_ADA = 'Buy ADA';
 const BTN_CREAT_ACCOUNT = 'Create Account';
 

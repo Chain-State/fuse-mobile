@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Button, TextInput, View, KeyboardAvoidingView, SafeAreaView } from 'react-native';
+import {
+  Text,
+  Button,
+  TextInput,
+  View,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import AssetPriceLineChart from '../components/LineChart';
 import lineChartData from '../data/dummy/LineChartDummyData';
 import CurrencyInput from 'react-native-currency-input';
@@ -77,7 +86,6 @@ const BuyAssetScreen = ({ navigation, route }) => {
     console.log(`Fiat value: ${amountFiat}`);
     console.log(`Account: ${account}`);
     const details = {
-      // userUuid: 'ea7b43d4-f50c-40ab-8de4-90cc4a2ecbdf',
       userUuid: account,
       assetType: 'Ada',
       tokenQuantity: amountAda,
@@ -134,55 +142,109 @@ const BuyAssetScreen = ({ navigation, route }) => {
             {priceHistory && (
               <AssetPriceLineChart title="Current ADA Price" chartData={lineChartData} />
             )}
-            <View style={{ marginTop: 10 }}>
-              <Text style={{ ...Theme.fsLabel, height: 20 }}>{LB_BUY_ADA_AMOUNT}</Text>
-              <TextInput
-                onChangeValue={setAmountAda}
-                style={Theme.fsInput}
-                keyboardType="numeric"
-                clearTextOnFocus={true}
-                showSoftInputOnFocus
-                onChangeText={(data) => {
-                  console.log(`Data == ${data}`);
-                  console.log(`adaPrice == ${adaPrice}`);
-                  console.log(`Rate == ${exchangeRate}`);
-                  console.log(`Result: ${parseFloat(data) * adaPrice * exchangeRate}`);
-                  const validatedInput = data.startsWith('0') || data == '0' ? '0' : data;
-                  setAmountFiat(
-                    parseInt(
-                      (validatedInput == '' ? '0' : validatedInput) * adaPrice * exchangeRate
-                    )
-                      .toFixed(2)
-                      .toString()
-                  );
-                }}
-                value={amountAda}
-              />
-              <Text style={{ ...Theme.fsLabel, height: 20 }}>{LB_BUY_SPEND_AMOUNT}</Text>
+            {isProcessing ? (
+              <View style={{ backfaceVisibility: 'visible' }}>
+                <Text>Completing transaction...</Text>
+                <ActivityIndicator
+                  size={100}
+                  style={{
+                    flexDirection: 'column',
+                    height: 300,
+                  }}
+                />
+              </View>
+            ) : (
+              <View style={{ marginTop: 10 }}>
+                <Text style={{ ...Theme.fsLabel, height: 20 }}>{LB_BUY_ADA_AMOUNT}</Text>
+                <TextInput
+                  value={amountAda}
+                  style={Theme.fsInput}
+                  keyboardType="numeric"
+                  maxLength={4}
+                  // showSoftInputOnFocus
+                  onChangeText={(data) => {
+                    console.log(`Data == ${data}`);
+                    console.log(`Result: ${parseFloat(data) * adaPrice * exchangeRate}`);
+                    if (data.startsWith('0') || data == '0') {
+                      console.log(`Data is == ${data}`);
+                      setAmountFiat('');
+                    } else {
+                      setAmountAda(data);
+                      setAmountFiat(
+                        parseInt(data * adaPrice * exchangeRate)
+                          .toFixed(2)
+                          .toString()
+                      );
+                    }
+                  }}
+                />
+                <TextInput
+                  value={amountFiat}
+                  style={Theme.fsInput}
+                  keyboardType="numeric"
+                  maxLength={5}
+                  // showSoftInputOnFocus
+                  onChangeText={(data) => {
+                    if (data.startsWith('0') || data == '0' || data == '') {
+                      setAmountAda('');
+                    } else {
+                      setAmountFiat(data);
+                      setAmountAda(
+                        parseInt((data / adaPrice) * exchangeRate)
+                          .toFixed(2)
+                          .toString()
+                      );
+                    }
+                  }}
+                />
+
+                {/* <Text style={{ ...Theme.fsLabel, height: 20 }}>{LB_BUY_SPEND_AMOUNT}</Text>
               <CurrencyInput
                 value={amountFiat}
                 prefix="Ksh "
                 precision={0}
                 delimiter=","
                 minValue={0}
-                onChangeValue={setAmountFiat}
                 keyboardType="numeric"
                 style={Theme.fsInput}
                 onChangeText={(data) => {
-                  // const validatedInput = data.startsWith('0') || data == '0' ? '0' : data;
-                  setAmountAda(
-                    parseFloat((amountFiat == '' ? '0' : amountFiat) / (adaPrice * exchangeRate))
-                      .toFixed(2)
-                      .toString()
-                  );
+                  if (data.startsWith('0') || data == '0' ) {
+                    setAmountAda('');
+                  } else {
+                    setAmountFiat(data);
+                    setAmountAda(
+                      parseInt((data / adaPrice) * exchangeRate)
+                        .toFixed(2)
+                        .toString()
+                    );
+                  }
                 }}
-              />
-              <FsButton
-                style={{ ...styles.appButtonContainer }}
-                onPress={buyAda}
-                title={BTN_BUY_ADA}
-              />
-            </View>
+              /> */}
+                <FsButton
+                  style={{ ...styles.appButtonContainer }}
+                  onPress={() => {
+                    Alert.alert(
+                      'Confirm Purchase',
+                      `Buy ${amountAda} ADA for Ksh ${amountFiat}?`,
+                      [
+                        { text: 'Cancel', onPress: Alert.alert('Cancelled Tx'), style: 'cancel' },
+                        { text: 'Confirm', onPress: Alert.alert('Cancelled Tx'), style: 'default' },
+                      ],
+                      {
+                        cancelable: true,
+                        onDismiss: () => Alert.alert('Closed alert!'),
+                        onPress: () => {
+                          setIsProcessing(true);
+                          // buyAda();
+                        },
+                      }
+                    );
+                    // buyAda();
+                  }}
+                  title={BTN_BUY_ADA}
+                />
+              </View>
+            )}
           </View>
         </SafeAreaView>
       </KeyboardAvoidingView>
