@@ -227,19 +227,25 @@ const BuyAssetScreen = ({ navigation, route }) => {
                       'Confirm Purchase',
                       `Buy ${amountAda} ADA for Ksh ${amountFiat}?`,
                       [
-                        { text: 'Cancel', onPress: Alert.alert('Cancelled Tx'), style: 'cancel' },
-                        { text: 'Confirm', onPress: Alert.alert('Cancelled Tx'), style: 'default' },
+                        {
+                          text: 'Cancel',
+                          onPress: Alert.alert('Cancelled Transaction'),
+                          style: 'cancel',
+                        },
+                        {
+                          text: 'Confirm',
+                          onPress: () => {
+                            setIsProcessing(true);
+                            // buyAda();
+                          },
+                          style: 'default',
+                        },
                       ],
                       {
                         cancelable: true,
                         onDismiss: () => Alert.alert('Closed alert!'),
-                        onPress: () => {
-                          setIsProcessing(true);
-                          // buyAda();
-                        },
                       }
                     );
-                    // buyAda();
                   }}
                   title={BTN_BUY_ADA}
                 />
