@@ -14,6 +14,7 @@ import FsButton from '../components/Button';
 import styles from '../components/ButtonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ACCOUNT, LOVE_LACE, URI_COINAPI, URI_OPENEXCHANGE } from '../constants/AppStrings';
+import { WaveIndicator } from 'react-native-indicators';
 import {
   BTN_BUY_ADA,
   LB_BUY_ADA_AMOUNT,
@@ -28,7 +29,7 @@ const BuyAssetScreen = ({ navigation, route }) => {
   const [priceHistory, setPriceHistory] = useState(null);
   const [exchangeRate, setExchangeRate] = useState(null);
   const [adaPrice, setAdaPrice] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(true);
   const [account, setAccount] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
 
@@ -127,7 +128,7 @@ const BuyAssetScreen = ({ navigation, route }) => {
     userAccount();
     getTokenExRate();
     getLocalCurrencyRate();
-  }, []);
+  }, [exchangeRate]);
 
   return (
     <>
@@ -162,15 +163,17 @@ const BuyAssetScreen = ({ navigation, route }) => {
               <AssetPriceLineChart title={adaPrice} chartData={priceHistory} />
             )}
             {isProcessing ? (
-              <View style={{}}>
-                <Text>Completing transaction...</Text>
-                <ActivityIndicator
-                  size={100}
+              <View style={{ marginTop: 200, flexDirection: 'column', alignItems: 'center' }}>
+                <WaveIndicator size={100} color={Theme.fsColors.primary} />
+                <Text
                   style={{
-                    flexDirection: 'column',
-                    height: 300,
+                    height: 40,
+                    fontFamily: Theme.fsFonts.fontFamily,
+                    marginTop: 50,
                   }}
-                />
+                >
+                  Processing transaction...
+                </Text>
               </View>
             ) : (
               <View style={{ marginTop: 10 }}>
@@ -181,7 +184,7 @@ const BuyAssetScreen = ({ navigation, route }) => {
                   keyboardType="numeric"
                   maxLength={4}
                   onChangeText={(data) => {
-                    console.log(`Tx fiat cost: ${parseFloat(data) * adaPrice * exchangeRate}`);
+                    console.log(`Tx fiat cost: ${parseFloat(data) * adaPrice}`);
                     if (data.startsWith('0') || data == '0') {
                       console.log(`Data is == ${data}`);
                       setAmountFiat('');
