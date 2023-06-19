@@ -1,54 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import {
   Text,
-  Button,
   TextInput,
   View,
   KeyboardAvoidingView,
   SafeAreaView,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import AssetPriceLineChart from '../components/LineChart';
-import lineChartData from '../data/dummy/LineChartDummyData';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import CurrencyInput from 'react-native-currency-input';
 import Theme from '../resources/assets/Style';
 import FsButton from '../components/Button';
 import styles from '../components/ButtonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ACCOUNT } from '../constants/AppStrings';
+import { ACCOUNT, LOVE_LACE, URI_COINAPI, URI_OPENEXCHANGE } from '../constants/AppStrings';
 import {
-  APP_SERVER,
   BTN_BUY_ADA,
   LB_BUY_ADA_AMOUNT,
   LB_BUY_SPEND_AMOUNT,
   SCR_HOME,
-  TX_ADA_AMOUNT,
-  TX_FIAT_AMOUNT,
   URI_BUY_ASSET,
 } from '../constants/AppStrings';
 
 const BuyAssetScreen = ({ navigation, route }) => {
-  const [amountAda, setAmountAda] = useState('');
-  const [amountFiat, setAmountFiat] = useState('');
+  const [amountAda, setAmountAda] = useState(null);
+  const [amountFiat, setAmountFiat] = useState(null);
   const [priceHistory, setPriceHistory] = useState(null);
   const [exchangeRate, setExchangeRate] = useState(null);
-  const [adaPrice, setAdaPrice] = useState(0.2564);
+  const [adaPrice, setAdaPrice] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [account, setAccount] = useState({});
+  const [account, setAccount] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
 
   const getTokenExRate = () => {
-    fetch(
-      'https://rest.coinapi.io/v1/exchangerate/ADA/USD/history?period_id=1DAY&time_start=2023-06-09T23:59:00.0000000Z&time_end=2023-06-19T23:59:00.0000000Z&display_name=day&limit=20',
-      {
-        method: 'GET',
-        headers: {
-          'X-CoinAPI-Key': '7CC0179B-877B-4473-AD94-B0AB33921F18',
-        },
-      }
-    )
+    fetch(URI_COINAPI, {
+      method: 'GET',
+      headers: {
+        'X-CoinAPI-Key': '7CC0179B-877B-4473-AD94-B0AB33921F18',
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         const priceData = data.map((item) => {
@@ -60,19 +50,18 @@ const BuyAssetScreen = ({ navigation, route }) => {
           delete item.rate_open;
           delete item.time_open;
           delete item.time_close;
-          item['value'] = (item.rate_close * 142).toFixed(2);
+          item['value'] = (item.rate_close * exchangeRate).toFixed(2);
           return item;
         });
         setPriceHistory(priceData);
-        setAdaPrice(priceData.at(priceData.length - 2)['value']);
         console.log(`Fetched price data: ${JSON.stringify(priceData)}`);
+        setAdaPrice(priceData.at(priceData.length - 2)['value']);
       })
-      .catch((error) => console.log(`Price history fetch failed: ${error}`));
+      .catch((error) => console.log(`Price data fetch failed: ${error}`));
   };
 
   const getLocalCurrencyRate = () => {
-    console.log(`[BuyAsset]-Key: ${route.params.userAccount}`);
-    fetch('https://openexchangerates.org/api/latest.json?app_id=46d02af8d01c44118f232980cbad46a8', {
+    fetch(URI_OPENEXCHANGE, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -90,12 +79,11 @@ const BuyAssetScreen = ({ navigation, route }) => {
     const details = {
       userUuid: account,
       assetType: 'Ada',
-      tokenQuantity: amountAda,
+      tokenQuantity: (parseFloat(amountAda) * LOVE_LACE).toString(),
       paymentAmount: 1,
     };
     console.log('Executing buy transaction...');
-    // setIsProcessing(true);
-    const response = fetch(URI_BUY_ASSET, {
+    fetch(URI_BUY_ASSET, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -103,16 +91,21 @@ const BuyAssetScreen = ({ navigation, route }) => {
       },
       body: JSON.stringify(details),
     })
-      .then((res) => {
-        if (res.ok) {
-          res.json();
+      .then((response) => {
+        if (response.ok) {
+          response.json();
         } else {
-          throw new Error(res.status);
+          throw new Error(response.status);
         }
       })
-      .then((data) => data)
+      .then((data) => {
+        if (data) {
+          console.log(`Mpesa Reply: ${JSON.stringify(res)}`);
+          setIsProcessing(false);
+          navigation.navigate(SCR_HOME);
+        }
+      })
       .catch((err) => console.log(`Tx failed ${err}`));
-    navigation.navigate(SCR_HOME);
   };
 
   const userAccount = async () => {
@@ -131,9 +124,9 @@ const BuyAssetScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
+    userAccount();
     getTokenExRate();
     getLocalCurrencyRate();
-    userAccount();
   }, []);
 
   return (
@@ -160,14 +153,16 @@ const BuyAssetScreen = ({ navigation, route }) => {
               }}
               onConfirmPressed={() => {
                 setShowAlert(false);
+                setIsProcessing(true);
                 buyAda();
               }}
             />
-            {priceHistory == null ? null : (
+            {console.log(`PriceHistory at render: ${priceHistory}`) &&
+            priceHistory == null ? null : (
               <AssetPriceLineChart title={adaPrice} chartData={priceHistory} />
             )}
             {isProcessing ? (
-              <View style={{ backfaceVisibility: 'visible' }}>
+              <View style={{}}>
                 <Text>Completing transaction...</Text>
                 <ActivityIndicator
                   size={100}
@@ -186,21 +181,21 @@ const BuyAssetScreen = ({ navigation, route }) => {
                   keyboardType="numeric"
                   maxLength={4}
                   onChangeText={(data) => {
-                    console.log(`Data == ${data}`);
-                    console.log(`Result: ${parseFloat(data) * adaPrice * exchangeRate}`);
+                    console.log(`Tx fiat cost: ${parseFloat(data) * adaPrice * exchangeRate}`);
                     if (data.startsWith('0') || data == '0') {
                       console.log(`Data is == ${data}`);
                       setAmountFiat('');
                     } else {
                       setAmountAda(data);
                       setAmountFiat(
-                        parseInt(data * adaPrice * exchangeRate)
+                        parseInt(data * adaPrice)
                           .toFixed(2)
                           .toString()
                       );
                     }
                   }}
                 />
+                <Text style={{ ...Theme.fsLabel, height: 20 }}>{LB_BUY_SPEND_AMOUNT}</Text>
                 <TextInput
                   value={amountFiat}
                   style={Theme.fsInput}

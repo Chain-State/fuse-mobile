@@ -5,6 +5,14 @@ const URI_REGISTER = BASE_URI + '/register';
 const URI_USER_ASSETS = `${APP_SERVER}${BASE_URI}/wallet`;
 const URI_BUY_ASSET = `${APP_SERVER}${BASE_URI}/transact/buy`;
 
+//Cardano units
+const LOVE_LACE = 1000000;
+
+
+//APIs
+const URI_COINAPI = 'https://rest.coinapi.io/v1/exchangerate/ADA/USD/history?period_id=1DAY&time_start=2023-06-09T23:59:00.0000000Z&time_end=2023-06-19T23:59:00.0000000Z&display_name=day&limit=20';
+const URI_OPENEXCHANGE = 'https://openexchangerates.org/api/latest.json?app_id=46d02af8d01c44118f232980cbad46a8';
+
 //http headers 
 const CONTENT_TYPE = 'application/json';
 const AUTHORIZATION = 'Authorization';
@@ -45,6 +53,8 @@ export {
     URI_REGISTER,
     URI_USER_ASSETS,
     URI_BUY_ASSET,
+    URI_COINAPI,
+    URI_OPENEXCHANGE,
     CONTENT_TYPE,
     LB_ASSET_VALUES,
     LB_BUY_ADA_AMOUNT,
@@ -61,4 +71,5 @@ export {
     TX_FIAT_AMOUNT,
     BTN_BUY_ADA,
     BTN_CREAT_ACCOUNT,
+    LOVE_LACE,
 }
