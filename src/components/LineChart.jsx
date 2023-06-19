@@ -24,7 +24,7 @@ function AssetPriceLineChart({ title, chartData }) {
             marginBottom: 10,
           }}
         >
-          {/* ADA: Ksh {chartData.at(chartData.length - 1)['value']} */}
+          ADA: Ksh {chartData.at(chartData.length - 1)['value']}
         </Text>
         <LineChart
           data={chartData}

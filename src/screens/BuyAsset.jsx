@@ -131,7 +131,7 @@ const BuyAssetScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    // getTokenExRate();
+    getTokenExRate();
     getLocalCurrencyRate();
     userAccount();
   }, []);
@@ -164,7 +164,7 @@ const BuyAssetScreen = ({ navigation, route }) => {
               }}
             />
             {priceHistory && (
-              <AssetPriceLineChart title="Current ADA Price" chartData={lineChartData} />
+              <AssetPriceLineChart title="Current ADA Price" chartData={priceHistory} />
             )}
             {isProcessing ? (
               <View style={{ backfaceVisibility: 'visible' }}>
