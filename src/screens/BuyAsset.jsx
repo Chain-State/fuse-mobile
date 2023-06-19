@@ -32,7 +32,7 @@ import {
 const BuyAssetScreen = ({ navigation, route }) => {
   const [amountAda, setAmountAda] = useState('');
   const [amountFiat, setAmountFiat] = useState('');
-  const [priceHistory, setPriceHistory] = useState([]);
+  const [priceHistory, setPriceHistory] = useState(null);
   const [exchangeRate, setExchangeRate] = useState(null);
   const [adaPrice, setAdaPrice] = useState(0.2564);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -41,7 +41,7 @@ const BuyAssetScreen = ({ navigation, route }) => {
 
   const getTokenExRate = () => {
     fetch(
-      'https://rest.coinapi.io/v1/exchangerate/ADA/USD/history?period_id=1DAY&time_start=2023-06-11T23:59:00.0000000Z&time_end=2023-06-15T23:59:00.0000000Z&display_name=day',
+      'https://rest.coinapi.io/v1/exchangerate/ADA/USD/history?period_id=1DAY&time_start=2023-06-09T23:59:00.0000000Z&time_end=2023-06-19T23:59:00.0000000Z&display_name=day&limit=20',
       {
         method: 'GET',
         headers: {
@@ -51,7 +51,6 @@ const BuyAssetScreen = ({ navigation, route }) => {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(JSON.stringify(data));
         const priceData = data.map((item) => {
           item = item;
           delete item.time_period_start;
@@ -64,10 +63,11 @@ const BuyAssetScreen = ({ navigation, route }) => {
           item['value'] = (item.rate_close * 142).toFixed(2);
           return item;
         });
-        console.log(`PriceData == ${JSON.stringify(priceData)}`);
         setPriceHistory(priceData);
+        setAdaPrice(priceData.at(priceData.length - 2)['value']);
+        console.log(`Fetched price data: ${JSON.stringify(priceData)}`);
       })
-      .catch((error) => console.log(`Price fetch failed: ${error}`));
+      .catch((error) => console.log(`Price history fetch failed: ${error}`));
   };
 
   const getLocalCurrencyRate = () => {
@@ -112,7 +112,7 @@ const BuyAssetScreen = ({ navigation, route }) => {
       })
       .then((data) => data)
       .catch((err) => console.log(`Tx failed ${err}`));
-    // navigation.navigate(SCR_HOME);
+    navigation.navigate(SCR_HOME);
   };
 
   const userAccount = async () => {
@@ -163,8 +163,8 @@ const BuyAssetScreen = ({ navigation, route }) => {
                 buyAda();
               }}
             />
-            {priceHistory && (
-              <AssetPriceLineChart title="Current ADA Price" chartData={priceHistory} />
+            {priceHistory == null ? null : (
+              <AssetPriceLineChart title={adaPrice} chartData={priceHistory} />
             )}
             {isProcessing ? (
               <View style={{ backfaceVisibility: 'visible' }}>
