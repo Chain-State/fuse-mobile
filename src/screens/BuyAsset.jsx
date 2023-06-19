@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import AssetPriceLineChart from '../components/LineChart';
 import lineChartData from '../data/dummy/LineChartDummyData';
+import AwesomeAlert from 'react-native-awesome-alerts';
 import CurrencyInput from 'react-native-currency-input';
 import Theme from '../resources/assets/Style';
 import FsButton from '../components/Button';
@@ -36,6 +37,7 @@ const BuyAssetScreen = ({ navigation, route }) => {
   const [adaPrice, setAdaPrice] = useState(0.2564);
   const [isProcessing, setIsProcessing] = useState(false);
   const [account, setAccount] = useState({});
+  const [showAlert, setShowAlert] = useState(false);
 
   const getTokenExRate = () => {
     fetch(
@@ -139,6 +141,28 @@ const BuyAssetScreen = ({ navigation, route }) => {
       <KeyboardAvoidingView enabled={true} behavior="padding">
         <SafeAreaView>
           <View style={Theme.fsContainer}>
+            <AwesomeAlert
+              show={showAlert}
+              modalProps={{ amountAda, amountFiat }}
+              showProgress={false}
+              title="Confirm Transaction"
+              message="Buy ADA for Ksh "
+              closeOnTouchOutside={false}
+              closeOnHardwareBackPress={false}
+              showCancelButton={true}
+              showConfirmButton={true}
+              cancelText="Cancel"
+              confirmText="Continue"
+              confirmButtonColor="#8bc34a"
+              alertContainerStyle={{ fontFamily: Theme.fsFonts.fontFamily }}
+              onCancelPressed={() => {
+                setShowAlert(false);
+              }}
+              onConfirmPressed={() => {
+                setShowAlert(false);
+                buyAda();
+              }}
+            />
             {priceHistory && (
               <AssetPriceLineChart title="Current ADA Price" chartData={lineChartData} />
             )}
@@ -161,7 +185,6 @@ const BuyAssetScreen = ({ navigation, route }) => {
                   style={Theme.fsInput}
                   keyboardType="numeric"
                   maxLength={4}
-                  // showSoftInputOnFocus
                   onChangeText={(data) => {
                     console.log(`Data == ${data}`);
                     console.log(`Result: ${parseFloat(data) * adaPrice * exchangeRate}`);
@@ -223,29 +246,7 @@ const BuyAssetScreen = ({ navigation, route }) => {
                 <FsButton
                   style={{ ...styles.appButtonContainer }}
                   onPress={() => {
-                    Alert.alert(
-                      'Confirm Purchase',
-                      `Buy ${amountAda} ADA for Ksh ${amountFiat}?`,
-                      [
-                        {
-                          text: 'Cancel',
-                          onPress: Alert.alert('Cancelled Transaction'),
-                          style: 'cancel',
-                        },
-                        {
-                          text: 'Confirm',
-                          onPress: () => {
-                            setIsProcessing(true);
-                            // buyAda();
-                          },
-                          style: 'default',
-                        },
-                      ],
-                      {
-                        cancelable: true,
-                        onDismiss: () => Alert.alert('Closed alert!'),
-                      }
-                    );
+                    setShowAlert(true);
                   }}
                   title={BTN_BUY_ADA}
                 />
