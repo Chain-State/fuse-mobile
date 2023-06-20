@@ -43,7 +43,7 @@ const renderLegendComponent = (legend) => {
               assetName: 'xtoken';
           }
           return (
-            <View style={Theme.fsCharts.fsDonutChart.legendItem}>
+            <View style={Theme.fsCharts.fsDonutChart.legendItem} key={index}>
               {renderDot(element.color)}
               <Text style={Theme.fsCharts.regText}>
                 {assetName}:{' '}
