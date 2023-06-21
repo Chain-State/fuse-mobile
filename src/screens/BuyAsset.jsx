@@ -13,7 +13,14 @@ import Theme from '../resources/assets/Style';
 import FsButton from '../components/Button';
 import styles from '../components/ButtonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ACCOUNT, LOVE_LACE, URI_COINAPI, URI_OPENEXCHANGE } from '../constants/AppStrings';
+import {
+  ACCOUNT,
+  LOVE_LACE,
+  SCR_WALLET,
+  URI_COINAPI,
+  URI_OPENEXCHANGE,
+  URI_TX_CONFIRM,
+} from '../constants/AppStrings';
 import { WaveIndicator } from 'react-native-indicators';
 import {
   BTN_BUY_ADA,
@@ -29,9 +36,12 @@ const BuyAssetScreen = ({ navigation, route }) => {
   const [priceHistory, setPriceHistory] = useState(null);
   const [exchangeRate, setExchangeRate] = useState(null);
   const [adaPrice, setAdaPrice] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [account, setAccount] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+
+  let merchantRequestId = null;
+  let txData = null;
 
   const getTokenExRate = () => {
     fetch(URI_COINAPI, {
@@ -74,9 +84,6 @@ const BuyAssetScreen = ({ navigation, route }) => {
   };
 
   const buyAda = () => {
-    console.log(`Ada value: ${amountAda}`);
-    console.log(`Fiat value: ${amountFiat}`);
-    console.log(`Account: ${account}`);
     const details = {
       userUuid: account,
       assetType: 'Ada',
@@ -94,19 +101,62 @@ const BuyAssetScreen = ({ navigation, route }) => {
     })
       .then((response) => {
         if (response.ok) {
-          response.json();
+          return response.json();
         } else {
           throw new Error(response.status);
         }
       })
       .then((data) => {
         if (data) {
-          console.log(`Mpesa Reply: ${JSON.stringify(res)}`);
-          setIsProcessing(false);
-          navigation.navigate(SCR_HOME);
+          console.log(`Data from tx response: ${JSON.stringify(data)}`);
+          //check if MPESA tx was logged to database
+          merchantRequestId = data.data.txStatus.MerchantRequestID;
+          txData = { account: account, requestId: merchantRequestId };
+          return txData;
         }
       })
-      .catch((err) => console.log(`Tx failed ${err}`));
+      .then((data) => {
+        checkTransactionComplete().then((response) => {
+          if (response !== null) {
+            setIsProcessing(false);
+            navigation.navigate(SCR_WALLET);
+          }
+        });
+      })
+      .catch((err) => console.log(`Tx failed ${err}`))
+      .finally(() => {
+        setIsProcessing(false);
+      });
+  };
+
+  const checkTransactionComplete = async () => {
+    let data = null;
+    //make api request to check if transaction for this account is logged.
+    //return the payment object
+    const txDetails = {
+      account: account,
+      requestId: merchantRequestId,
+    };
+    console.log(`Checking confirmation with ${JSON.stringify(txData)}`);
+    try {
+      const result = await fetch(URI_TX_CONFIRM, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(txDetails),
+      });
+      data = await result.json();
+      if (data.length > 0) {
+        console.log(`Confirmation data returned is: ${JSON.stringify(data)}`);
+        return data;
+      } else {
+        setTimeout(checkTransactionComplete, 2000);
+      }
+    } catch (error) {
+      console.log(`Failed transaction confirm: ${error}`);
+    }
   };
 
   const userAccount = async () => {
@@ -130,6 +180,7 @@ const BuyAssetScreen = ({ navigation, route }) => {
     getLocalCurrencyRate();
   }, [exchangeRate]);
 
+  let transactionMessage = `Buy ${amountAda} ADA for Ksh. ${amountFiat}?`;
   return (
     <>
       <KeyboardAvoidingView enabled={true} behavior="padding">
@@ -140,7 +191,8 @@ const BuyAssetScreen = ({ navigation, route }) => {
               modalProps={{ amountAda, amountFiat }}
               showProgress={false}
               title="Confirm Transaction"
-              message="Buy ADA for Ksh "
+              message={transactionMessage}
+              // message="Buy ADA for Ksh. Complete MPESA trasaction next "
               closeOnTouchOutside={false}
               closeOnHardwareBackPress={false}
               showCancelButton={true}
