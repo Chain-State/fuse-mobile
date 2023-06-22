@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import FsButton from '../components/Button';
 import { Text, View, FlatList } from 'react-native';
-import { transactionDummyData, pieDummyData } from '../data/dummy/transactions';
+import { transactionDummyData } from '../data/dummy/transactions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BTN_BUY_ADA, SCR_BUY_ASSET } from '../constants/AppStrings';
 import Theme, {
   pieColor1,
   pieColor2,
@@ -12,25 +14,24 @@ import Theme, {
 import { URI_USER_ASSETS } from '../constants/AppStrings';
 
 import { DonutGraphWithLegend } from '../components/DonutChart';
-import { getItem } from '../utils/KeysStorage';
 import { ACCOUNT } from '../constants/AppStrings';
+import ContentLoader, { Instagram } from 'react-content-loader';
+import styles from '../components/ButtonStyles';
 
 export const WalletScreen = ({ navigation, route }) => {
   const [assets, setAssets] = useState([]);
   const [userUuid, setUserUuid] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const InstagramLoader = () => {
+    <View>
+      <Instagram backgroundColor="green" />;
+    </View>;
+  };
 
-  // const importData = async () => {
-  //   try {
-  //     const keys = await AsyncStorage.getAllKeys();
-  //     const result = await AsyncStorage.multiGet(keys);
-
-  //     return result.map((req) => req);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  const parseAssetForChart = async (assets) => {
+  const parseAssetsData = async (assets) => {
+    if (assets.length == 0) {
+      return;
+    }
     const colors = [pieColor1, pieColor2, pieColor3, pieColor4, pieColor5];
     const value = assets.reduce(function (acc, curr) {
       return acc + parseInt(curr.quantity);
@@ -48,57 +49,104 @@ export const WalletScreen = ({ navigation, route }) => {
 
   const setUserAccount = async () => {
     let account = null;
+    setIsLoading(true);
     try {
-      account = await getItem(ACCOUNT);
-      console.log(`--userUuid: ${account}`);
-      account = JSON.parse(account);
-      console.log(`--parsed userUuid: ${account['uuid']}`);
-      setUserUuid(account.uuid);
-      // setUserUuid('2f767661-495e-460d-a380-8d4cfa947906');
+      account = await AsyncStorage.getItem(ACCOUNT);
+      if (account !== null) {
+        console.log(`(wallet read): User Key: ${JSON.parse(account)['uuid']}`);
+        setUserUuid(JSON.parse(account)['uuid']);
+      } else {
+        throw new Error('No account details found for user');
+      }
     } catch (error) {
-      console.log(`Cannot get account: ${error} `);
+      console.log(`Could not read user account details because: ${error} `);
+    } finally {
     }
-    console.log(`acc--${account.uuid}`);
+  };
+
+  const fetchAssets = async (userUuid) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${URI_USER_ASSETS}/${userUuid}`);
+      const result = await response.json();
+      if (result.error) {
+        throw new Error(result.error);
+      }
+      result.assets.total.push({ ...result.balance.total, asset_name: '' });
+      parseAssetsData(result.assets.total);
+    } catch (error) {
+      console.log(`Failed to fetch user assets: ${error}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
-    const fetchAssets = async (userUuid) => {
-      try {
-        const response = await fetch(`${URI_USER_ASSETS}/${userUuid}`);
-        const result = await response.json();
-        result.assets.total.push({ ...result.balance.total, asset_name: '' });
-        parseAssetForChart(result.assets.total);
-      } catch (error) {
-        console.log(`Failed to fetch user assets: ${error}`);
-      }
-    };
-
     setUserAccount();
     fetchAssets(userUuid);
-
-    // fetchAssets('2f767661-495e-460d-a380-8d4cfa947906');
-  }, []);
+  }, [userUuid]);
   return (
     <View flex={1}>
-      <DonutGraphWithLegend pieData={assets} />
-      <View style={{ padding: 20 }}>
-        <FlatList
-          ListHeaderComponent={() => (
-            <Text style={Theme.fsFonts.boldFont}>Transaction History</Text>
-          )}
-          showsVerticalScrollIndicator={true}
-          scrollEnabled={true}
-          data={transactionDummyData}
-          renderItem={({ item }) => (
-            <View style={Theme.fsList.row}>
-              <Text style={Theme.fsList.column}>{item.date}</Text>
-              <Text style={Theme.fsList.column}>{item.type}</Text>
-              <Text style={Theme.fsList.column}>{item.amount}</Text>
-              <Text style={Theme.fsList.column}>{item.status}</Text>
+      {isLoading ? (
+        InstagramLoader()
+      ) : (
+        <>
+          {assets.length >= 1 ? (
+            <DonutGraphWithLegend pieData={assets} />
+          ) : (
+            <View style={Theme.fsCharts.fsDonutChart.container}>
+              <View
+                style={{
+                  ...Theme.fsCharts.fsDonutChart.chart,
+                  backgroundColor: Theme.fsCharts.fsDonutChart.container.backgroundColor,
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  alignItems: 'center',
+                  height: 300,
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: Theme.fsFonts.boldFont.fontFamily,
+                    paddingRight: 10,
+                    fontSize: 23,
+                    paddingBottom: 20,
+                  }}
+                >
+                  No Assets in Wallet
+                </Text>
+                <FsButton
+                  style={{ ...styles.appButtonContainer, width: 300 }}
+                  onPress={(amountAda, amountFiat) => {
+                    console.log('Called function');
+                    navigation.navigate(SCR_BUY_ASSET);
+                  }}
+                  title={`${BTN_BUY_ADA} with M-Pesa`}
+                />
+              </View>
             </View>
           )}
-        />
-      </View>
+          <View style={{ padding: 20 }}>
+            <FlatList
+              ListHeaderComponent={() => (
+                <Text style={Theme.fsFonts.boldFont}>Transaction History</Text>
+              )}
+              showsVerticalScrollIndicator={true}
+              scrollEnabled={true}
+              data={transactionDummyData}
+              renderItem={({ item }) => (
+                <View style={Theme.fsList.row}>
+                  <Text style={Theme.fsList.column}>{item.date}</Text>
+                  <Text style={Theme.fsList.column}>{item.type}</Text>
+                  <Text style={Theme.fsList.column}>{item.amount}</Text>
+                  <Text style={Theme.fsList.column}>{item.status}</Text>
+                </View>
+              )}
+            />
+          </View>
+        </>
+      )}
     </View>
   );
 };

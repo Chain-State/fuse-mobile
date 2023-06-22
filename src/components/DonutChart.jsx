@@ -43,10 +43,12 @@ const renderLegendComponent = (legend) => {
               assetName: 'xtoken';
           }
           return (
-            <View style={Theme.fsCharts.fsDonutChart.legendItem}>
+            <View style={Theme.fsCharts.fsDonutChart.legendItem} key={index}>
               {renderDot(element.color)}
               <Text style={Theme.fsCharts.regText}>
-                {assetName}: {element.percentage == 0 ? 'No Assets' : `${element.percentage}%`}
+                {assetName}:{' '}
+                {/* {element.percentage == 0 ? 'No Assets' : `${element.value / 1000000}.00`} */}
+                {element.percentage == 0 ? 'No Assets' : `${element.percentage}%`}
               </Text>
             </View>
           );
@@ -66,12 +68,18 @@ export const DonutGraphWithLegend = ({ pieData }) => {
             data={pieData}
             donut
             sectionAutoFocus
-            radius={90}
-            innerRadius={50}
+            radius={120}
+            innerRadius={70}
             innerCircleColor={Theme.primary_light}
             centerLabelComponent={() => {
+              const totalAdaValue = pieData.reduce(function (acc, curr) {
+                return acc + (parseInt(curr.value) / 1000000) * 140;
+              }, 0);
+
               return (
-                <View /> //No focused section details
+                <Text
+                  style={{ ...Theme.fsCharts.text, color: Theme.fsColors.primary, padding: 5 }}
+                >{`Ksh ${totalAdaValue}.00`}</Text> //No focused section details
               );
             }}
           />

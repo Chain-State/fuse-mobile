@@ -4,6 +4,7 @@ import Theme from '../resources/assets/Style';
 import { PaymentsHistoryDummyData } from '../data/dummy/PaymentsHistoryData';
 import FsButton from '../components/Button';
 import { SelectList } from 'react-native-dropdown-select-list';
+import styles from '../components/ButtonStyles';
 
 const PaymentsScreen = ({ navigation }) => {
   const [amountAda, setAmountAda] = useState('');
@@ -50,7 +51,7 @@ const PaymentsScreen = ({ navigation }) => {
         onChangeText={(data) => setFormData({ ...formData, fname: data })}
         value={exchangeRate}
       />
-      <FsButton title="Make Payment" />
+      <FsButton style={{ ...styles.appButtonContainer }} title="Make Payment" />
       <View style={{ padding: 20, height: 300 }}>
         <FlatList
           ListHeaderComponent={() => (
@@ -76,7 +77,6 @@ const PaymentsScreen = ({ navigation }) => {
               </View>
             </View>
           )}
-          showsVerticalScrollIndicator={true}
           scrollEnabled={true}
           data={PaymentsHistoryDummyData}
           renderItem={({ item }) => (

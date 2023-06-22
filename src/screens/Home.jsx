@@ -10,8 +10,32 @@ import BuyAssetScreen from './BuyAsset';
 import PaymentsScreen from './Payments';
 import Theme from '../resources/assets/Style';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useEffect, useState } from 'react';
+import { ACCOUNT } from '../constants/AppStrings';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function HomeScreen() {
+  const [account, setAccount] = useState('');
+
+  useEffect(() => {
+    userAccount();
+  }, [account]);
+
+  const userAccount = async () => {
+    let account = null;
+    try {
+      account = await AsyncStorage.getItem(ACCOUNT);
+      if (account !== null) {
+        console.log(`User Key in TabNav: ${JSON.parse(account)['uuid']}`);
+        setAccount(JSON.parse(account)['uuid']);
+      } else {
+        throw new Error('No account details found for user');
+      }
+    } catch (error) {
+      console.log(`Could not read user account details because: ${error} `);
+    }
+  };
+
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator
@@ -37,12 +61,29 @@ function HomeScreen() {
         tabBarIconStyle: Theme.fsTabNavigation.icons,
         tabBarStyle: Theme.fsTabNavigation.tab,
         headerShown: false,
+        tabBarHideOnKeyboard: true,
       })}
     >
-      <Tab.Screen name={SCR_WALLET} component={WalletScreen} />
-      <Tab.Screen name={SCR_BUY_ASSET} component={BuyAssetScreen} />
-      <Tab.Screen name={SCR_MAKE_PAYMENTS} component={PaymentsScreen} />
-      <Tab.Screen name={SCR_SWAP_TOKENS} component={PaymentsScreen} />
+      <Tab.Screen
+        name={SCR_WALLET}
+        component={WalletScreen}
+        initialParams={{ userAccount: account }}
+      />
+      <Tab.Screen
+        name={SCR_BUY_ASSET}
+        component={BuyAssetScreen}
+        initialParams={{ userAccount: account }}
+      />
+      <Tab.Screen
+        name={SCR_MAKE_PAYMENTS}
+        component={PaymentsScreen}
+        initialParams={{ userAccount: account }}
+      />
+      <Tab.Screen
+        name={SCR_SWAP_TOKENS}
+        component={PaymentsScreen}
+        initialParams={{ userAccount: account }}
+      />
     </Tab.Navigator>
   );
 }
