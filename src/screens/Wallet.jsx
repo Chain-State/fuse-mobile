@@ -56,14 +56,15 @@ export const WalletScreen = ({ navigation, route }) => {
     try {
       account = await AsyncStorage.getItem(ACCOUNT);
       if (account !== null) {
-        console.log(`(wallet read): User Key: ${JSON.parse(account)['uuid']}`);
+        console.log(`Account set to use key: ${JSON.parse(account)['uuid']}`);
         setUserUuid(JSON.parse(account)['uuid']);
       } else {
-        throw new Error('No account details found for user');
+        throw new Error('No account key could be found for user');
       }
     } catch (error) {
       console.log(`Could not read user account details because: ${error} `);
     } finally {
+      setIsLoading(false);
     }
   };
 
@@ -85,6 +86,7 @@ export const WalletScreen = ({ navigation, route }) => {
   };
 
   const fetchTransactions = async (userUuid) => {
+    setIsLoading(true);
     try {
       const res = await fetch(`${URI_TX_LIST}/${userUuid}`);
       const transactions = await res.json();
@@ -92,6 +94,8 @@ export const WalletScreen = ({ navigation, route }) => {
       setTransactions(transactions);
     } catch (err) {
       console.log(`Transactions fetching failed: ${err}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -100,9 +104,10 @@ export const WalletScreen = ({ navigation, route }) => {
     fetchAssets(userUuid);
     fetchTransactions(userUuid);
   }, [userUuid]);
+
   return (
     <View flex={1}>
-      {isLoading || transactions.length == 0 ? (
+      {isLoading ? (
         InstagramLoader()
       ) : (
         <>
@@ -142,35 +147,39 @@ export const WalletScreen = ({ navigation, route }) => {
               </View>
             </View>
           )}
-          <View style={{ padding: 20 }}>
-            <FlatList
-              ListHeaderComponent={() => (
-                <Text style={Theme.fsFonts.boldFont}>Recent Transactions</Text>
-              )}
-              showsVerticalScrollIndicator={true}
-              scrollEnabled={true}
-              data={transactions}
-              renderItem={({ item }) => {
-                if (item.paymentConfirmation !== undefined) {
-                  console.log(`Filtered items: ${JSON.stringify(item)}`);
-                  <View style={Theme.fsList.row}>
-                    <Text style={Theme.fsList.column}>{item.createdAt || ''}</Text>
-                    <Text style={Theme.fsList.column}>Bought {item.assetType}</Text>
-                    <Text style={Theme.fsList.column}>{item.paymentAmount}</Text>
-                    <Text style={Theme.fsList.column}>
-                      {item.paymentConfirmation.Body.stkCallback.resultCode == 0 ? (
-                        <MaterialCommunityIcons name="check-bold" size={15} color="green" />
-                      ) : (
-                        <MaterialCommunityIcons name="close" size={15} color="red" />
-                      )}
-                    </Text>
-                  </View>;
-                } else {
-                  <Text>fdskldskdsl</Text>;
-                }
-              }}
-            />
-          </View>
+          {transactions.length >= 1 ? (
+            <View style={{ padding: 20 }}>
+              <FlatList
+                ListHeaderComponent={() => (
+                  <Text style={Theme.fsFonts.boldFont}>Recent Transactions</Text>
+                )}
+                showsVerticalScrollIndicator={true}
+                scrollEnabled={true}
+                data={transactions}
+                renderItem={({ item }) => {
+                  if (item.paymentConfirmation !== undefined) {
+                    console.log(`Filtered items: ${JSON.stringify(item)}`);
+                    <View style={Theme.fsList.row}>
+                      <Text style={Theme.fsList.column}>{item.createdAt || ''}</Text>
+                      <Text style={Theme.fsList.column}>Bought {item.assetType}</Text>
+                      <Text style={Theme.fsList.column}>{item.paymentAmount}</Text>
+                      <Text style={Theme.fsList.column}>
+                        {item.paymentConfirmation.Body.stkCallback.resultCode == 0 ? (
+                          <MaterialCommunityIcons name="check-bold" size={15} color="green" />
+                        ) : (
+                          <MaterialCommunityIcons name="close" size={15} color="red" />
+                        )}
+                      </Text>
+                    </View>;
+                  }
+                }}
+              />
+            </View>
+          ) : (
+            <View>
+              <Text>No transactions</Text>
+            </View>
+          )}
         </>
       )}
     </View>
