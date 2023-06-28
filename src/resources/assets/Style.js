@@ -98,6 +98,21 @@ const Theme = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
     },
+
+    fsSelectList: {
+        margin: 5,
+        marginLeft: 15,
+        marginRight: 0,
+        borderRightWidth: 0,
+        borderColor: '#90A4AE',
+        borderBottomRightRadius: 0,
+        borderTopEndRadius: 0,
+        padding: 10,
+        width: 150,
+        height: 50,
+
+    },
+
     error: {
         color: 'red',
         alignSelf: 'center',

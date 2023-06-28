@@ -16,8 +16,6 @@ const SwapScreen = ({ navigation }) => {
     <View style={{ ...Theme.fsContainer }}>
       <View
         style={{
-          marginLeft: 20,
-          marginRight: 20,
           marginBottom: 20,
           marginTop: 10,
         }}
@@ -25,58 +23,68 @@ const SwapScreen = ({ navigation }) => {
         <Text style={{ ...Theme.fsFonts.boldFont, marginVertical: 10, marginHorizontal: 15 }}>
           Swap From
         </Text>
-        <SelectList
-          setSelected={(val) => setSelected(val)}
-          fontFamily={Theme.fsFonts.fontFamily}
-          defaultOption={{ key: '5', value: 'ADA' }}
-          data={[
-            { key: '1', value: 'AADA' },
-            { key: '2', value: 'MIN' },
-            { key: '3', value: 'WMT' },
-            { key: '4', value: 'GENIUS' },
-            { key: '5', value: 'ADA' },
-          ]}
-          save="value"
-          boxStyles={{ margin: 5, marginRight: 15, marginLeft: 15 }}
-          dropdownItemStyles={{ icon: '' }}
-        />
+        <View style={{ flexDirection: 'row' }}>
+          <SelectList
+            setSelected={(val) => setSelected(val)}
+            fontFamily={Theme.fsFonts.fontFamily}
+            defaultOption={{ key: '5', value: 'ADA' }}
+            data={[
+              { key: '1', value: 'AADA' },
+              { key: '2', value: 'MIN' },
+              { key: '3', value: 'WMT' },
+              { key: '4', value: 'GENIUS' },
+              { key: '5', value: 'ADA' },
+            ]}
+            save="value"
+            boxStyles={Theme.fsSelectList}
+            dropdownItemStyles={{ icon: '' }}
+          />
+          <TextInput
+            style={{
+              ...Theme.fsInput,
+              marginLeft: 0,
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              flexGrow: 1,
+            }}
+            placeholder="Amount"
+            onChangeText={(data) => setSwapPair({ ...swapPair, baseTokenAmountmount: data })}
+            value={swapPair.baseTokenAmount}
+            keyboardType="numeric"
+          />
+        </View>
         <Text style={{ ...Theme.fsFonts.boldFont, marginVertical: 10, marginHorizontal: 15 }}>
-          Amount
+          Swap To
         </Text>
-        <TextInput
-          style={{ ...Theme.fsInput }}
-          placeholder=""
-          onChangeText={(data) => setSwapPair({ ...swapPair, baseTokenAmountmount: data })}
-          value={swapPair.baseTokenAmount}
-          keyboardType="numeric"
-        />
-        <Text style={{ ...Theme.fsFonts.boldFont, marginVertical: 10, marginHorizontal: 15 }}>
-          Swap From
-        </Text>
-        <SelectList
-          setSelected={(val) => setSelected(val)}
-          fontFamily={Theme.fsFonts.fontFamily}
-          defaultOption={{ key: '2', value: 'ADA' }}
-          data={[
-            { key: '1', value: 'AADA' },
-            { key: '2', value: 'MIN' },
-            { key: '3', value: 'WMT' },
-            { key: '4', value: 'GENIUS' },
-          ]}
-          save="value"
-          boxStyles={{ margin: 5, marginRight: 15, marginLeft: 15 }}
-          dropdownItemStyles={{ icon: '' }}
-        />
-        <Text style={{ ...Theme.fsFonts.boldFont, marginVertical: 10, marginHorizontal: 15 }}>
-          Amount
-        </Text>
-        <TextInput
-          style={{ ...Theme.fsInput }}
-          placeholder=""
-          onChangeText={(data) => setSwapPair({ ...swapPair, targetTokenAmount: data })}
-          value={swapPair.targetTokenAmount}
-          keyboardType="numeric"
-        />
+        <View style={{ flexDirection: 'row' }}>
+          <SelectList
+            setSelected={(val) => setSelected(val)}
+            fontFamily={Theme.fsFonts.fontFamily}
+            defaultOption={{ key: '2', value: 'ADA' }}
+            data={[
+              { key: '1', value: 'AADA' },
+              { key: '2', value: 'MIN' },
+              { key: '3', value: 'WMT' },
+              { key: '4', value: 'GENIUS' },
+            ]}
+            save="value"
+            boxStyles={Theme.fsSelectList}
+            dropdownItemStyles={{ icon: '' }}
+          />
+          <TextInput
+            style={{
+              ...Theme.fsInput,
+              marginLeft: 0,
+              flexGrow: 1,
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+            }}
+            placeholder="Amount"
+            onChangeText={(data) => setSwapPair({ ...swapPair, targetTokenAmount: data })}
+            value={swapPair.targetTokenAmount}
+            keyboardType="numeric"
+          />
+        </View>
 
         <FsButton style={{ ...styles.appButtonContainer }} title="Swap" />
         <View style={{ padding: 20, height: 300 }}>
