@@ -5,6 +5,7 @@ import { PaymentsHistoryDummyData } from '../data/dummy/PaymentsHistoryData';
 import FsButton from '../components/Button';
 import { SelectList } from 'react-native-dropdown-select-list';
 import styles from '../components/ButtonStyles';
+import { Card } from '@rneui/themed';
 
 let swap = { baseToken: '', baseTokenAmount: 0, targetToken: '', targetTokenAmount: 0 };
 
@@ -85,6 +86,16 @@ const SwapScreen = ({ navigation }) => {
             keyboardType="numeric"
           />
         </View>
+        <Card
+          containerStyle={{ borderRadius: 5 }}
+          wrapperStyle={{ fontFamily: Theme.fsFonts.fontFamily }}
+        >
+          <Card.Title>
+            <Text style={{ fontFamily: Theme.fsFonts.boldFont.fontFamily }}>Swap Details</Text>
+          </Card.Title>
+          <Card.Divider></Card.Divider>
+          <Text style={{ fontFamily: Theme.fsFonts.fontFamily }}>Some info on the swap</Text>
+        </Card>
 
         <FsButton style={{ ...styles.appButtonContainer }} title="Swap" />
         <View style={{ padding: 20, height: 300 }}>

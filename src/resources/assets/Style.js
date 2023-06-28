@@ -28,7 +28,6 @@ const Theme = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         fontFamily: font,
         flex: 1,
-        // alignItems: 'flex-end',
         padding: 5,
         margin: 5,
     },
