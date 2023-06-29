@@ -7,13 +7,13 @@ import {
 } from '../constants/AppStrings';
 import { WalletScreen } from './Wallet';
 import BuyAssetScreen from './BuyAsset';
-import PaymentsScreen from './Swap';
+import PaymentsScreen from './Payments';
+import SwapScreen from './Swap';
 import Theme from '../resources/assets/Style';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useEffect, useState } from 'react';
 import { ACCOUNT } from '../constants/AppStrings';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import SwapScreen from './Swap';
 
 function HomeScreen() {
   const [account, setAccount] = useState('');
