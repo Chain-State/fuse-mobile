@@ -12,6 +12,8 @@ const secondary_light = '#E6F4F1';
 const primary_text = '#FFFFFF';
 const secondary_text = '#000000';
 
+const inactive_color = '#95B0B7';
+
 export const pieColor1 = '#708653';
 export const pieColor2 = '#E7F6D1';
 export const pieColor3 = '#005165';
@@ -36,6 +38,7 @@ const Theme = StyleSheet.create({
         primary: primary,
         secondary: secondary,
         backgroundColor: '#FFFFFF',
+        inactive: inactive_color,
     },
 
     fsFonts: {

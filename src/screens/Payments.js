@@ -5,6 +5,7 @@ import { PaymentsHistoryDummyData } from '../data/dummy/PaymentsHistoryData';
 import FsButton from '../components/Button';
 import { SelectList } from 'react-native-dropdown-select-list';
 import styles from '../components/ButtonStyles';
+import NoDataPlaceHolder from '../components/NoDataPlaceHolder';
 
 const PaymentsScreen = ({ navigation }) => {
     const [amountAda, setAmountAda] = useState('');
@@ -16,7 +17,7 @@ const PaymentsScreen = ({ navigation }) => {
         <View style={{ ...Theme.fsContainer }}>
             <View
                 style={{
-                    margintop: 20,
+                    marginTop: 20,
                     marginBottom: 10,
                 }}
             >
@@ -51,7 +52,12 @@ const PaymentsScreen = ({ navigation }) => {
                 />
                 <FsButton style={{ ...styles.appButtonContainer }} title="Make Payment" />
                 <View style={{ padding: 20, height: 300 }}>
-                    <FlatList
+                    <View>
+                        <Text style={{ ...Theme.fsFonts.boldFont, marginBottom: 15 }}>
+                            Recent Payment Transactions
+                        </Text>
+                    </View>
+                    {/* <FlatList
                         ListHeaderComponent={() => (
                             <View>
                                 <View>
@@ -86,7 +92,8 @@ const PaymentsScreen = ({ navigation }) => {
                                 <Text style={Theme.fsList.column}>{item.status}</Text>
                             </View>
                         )}
-                    />
+                    /> */}
+                    <NoDataPlaceHolder />
                 </View>
             </View>
         </View>

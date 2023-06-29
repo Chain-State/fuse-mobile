@@ -7,6 +7,7 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import styles from '../components/ButtonStyles';
 import { Card } from '@rneui/themed';
 import { SwapPairs } from '../data/dummy/SwapPairsData';
+import NoDataPlaceHolder from '../components/NoDataPlaceHolder';
 
 let swap = { baseToken: '', baseTokenAmount: 0, targetToken: '', targetTokenAmount: 0 };
 
@@ -95,7 +96,13 @@ const SwapScreen = ({ navigation }) => {
 
         <FsButton style={{ ...styles.appButtonContainer }} title="Swap" />
         <View style={{ padding: 20, height: 300 }}>
-          <FlatList
+          <View>
+            <Text style={{ ...Theme.fsFonts.boldFont, marginBottom: 15 }}>
+              Recent Swap Transactions
+            </Text>
+          </View>
+
+          {/* <FlatList
             ListHeaderComponent={() => (
               <View>
                 <View>
@@ -127,7 +134,8 @@ const SwapScreen = ({ navigation }) => {
                 <Text style={Theme.fsList.column}>{item.status}</Text>
               </View>
             )}
-          />
+          /> */}
+          <NoDataPlaceHolder />
         </View>
       </View>
     </View>
