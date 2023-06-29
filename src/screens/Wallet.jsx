@@ -3,7 +3,7 @@ import FsButton from '../components/Button';
 import { Text, View, FlatList } from 'react-native';
 import { transactionDummyData } from '../data/dummy/transactions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BTN_BUY_ADA, SCR_BUY_ASSET } from '../constants/AppStrings';
+import { BTN_BUY_ADA, SCR_BUY_ASSET, URI_TX_LIST } from '../constants/AppStrings';
 import Theme, {
   pieColor1,
   pieColor2,
@@ -17,11 +17,14 @@ import { DonutGraphWithLegend } from '../components/DonutChart';
 import { ACCOUNT } from '../constants/AppStrings';
 import ContentLoader, { Instagram } from 'react-content-loader';
 import styles from '../components/ButtonStyles';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export const WalletScreen = ({ navigation, route }) => {
   const [assets, setAssets] = useState([]);
   const [userUuid, setUserUuid] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [transactions, setTransactions] = useState([]);
+
   const InstagramLoader = () => {
     <View>
       <Instagram backgroundColor="green" />;
@@ -53,14 +56,15 @@ export const WalletScreen = ({ navigation, route }) => {
     try {
       account = await AsyncStorage.getItem(ACCOUNT);
       if (account !== null) {
-        console.log(`(wallet read): User Key: ${JSON.parse(account)['uuid']}`);
+        console.log(`Account set to use key: ${JSON.parse(account)['uuid']}`);
         setUserUuid(JSON.parse(account)['uuid']);
       } else {
-        throw new Error('No account details found for user');
+        throw new Error('No account key could be found for user');
       }
     } catch (error) {
       console.log(`Could not read user account details because: ${error} `);
     } finally {
+      setIsLoading(false);
     }
   };
 
@@ -81,10 +85,26 @@ export const WalletScreen = ({ navigation, route }) => {
     }
   };
 
+  const fetchTransactions = async (userUuid) => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${URI_TX_LIST}/${userUuid}`);
+      const transactions = await res.json();
+      // console.log(`Transactions = ${JSON.stringify(transactions)}`);
+      setTransactions(transactions);
+    } catch (err) {
+      console.log(`Transactions fetching failed: ${err}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     setUserAccount();
     fetchAssets(userUuid);
+    fetchTransactions(userUuid);
   }, [userUuid]);
+
   return (
     <View flex={1}>
       {isLoading ? (
@@ -127,24 +147,39 @@ export const WalletScreen = ({ navigation, route }) => {
               </View>
             </View>
           )}
-          <View style={{ padding: 20 }}>
-            <FlatList
-              ListHeaderComponent={() => (
-                <Text style={Theme.fsFonts.boldFont}>Transaction History</Text>
-              )}
-              showsVerticalScrollIndicator={true}
-              scrollEnabled={true}
-              data={transactionDummyData}
-              renderItem={({ item }) => (
-                <View style={Theme.fsList.row}>
-                  <Text style={Theme.fsList.column}>{item.date}</Text>
-                  <Text style={Theme.fsList.column}>{item.type}</Text>
-                  <Text style={Theme.fsList.column}>{item.amount}</Text>
-                  <Text style={Theme.fsList.column}>{item.status}</Text>
-                </View>
-              )}
-            />
-          </View>
+          {transactions.length >= 1 ? (
+            <View style={{ padding: 20 }}>
+              <FlatList
+                ListHeaderComponent={() => (
+                  <Text style={Theme.fsFonts.boldFont}>Recent Transactions</Text>
+                )}
+                showsVerticalScrollIndicator={true}
+                scrollEnabled={true}
+                data={transactions}
+                renderItem={({ item }) => {
+                  if (item.paymentConfirmation !== undefined) {
+                    console.log(`Filtered items: ${JSON.stringify(item)}`);
+                    <View style={Theme.fsList.row}>
+                      <Text style={Theme.fsList.column}>{item.createdAt || ''}</Text>
+                      <Text style={Theme.fsList.column}>Bought {item.assetType}</Text>
+                      <Text style={Theme.fsList.column}>{item.paymentAmount}</Text>
+                      <Text style={Theme.fsList.column}>
+                        {item.paymentConfirmation.Body.stkCallback.resultCode == 0 ? (
+                          <MaterialCommunityIcons name="check-bold" size={15} color="green" />
+                        ) : (
+                          <MaterialCommunityIcons name="close" size={15} color="red" />
+                        )}
+                      </Text>
+                    </View>;
+                  }
+                }}
+              />
+            </View>
+          ) : (
+            <View>
+              <Text>No transactions</Text>
+            </View>
+          )}
         </>
       )}
     </View>

@@ -5,6 +5,7 @@ const URI_REGISTER = BASE_URI + '/register';
 const URI_USER_ASSETS = `${APP_SERVER}${BASE_URI}/wallet`;
 const URI_BUY_ASSET = `${APP_SERVER}${BASE_URI}/transact/buy`;
 const URI_TX_CONFIRM = `${APP_SERVER}${BASE_URI}/transact/checkPaymentComplete`;
+const URI_TX_LIST = `${APP_SERVER}${BASE_URI}/wallet/transactions`;
 
 //Cardano units
 const LOVE_LACE = 1000000;
@@ -57,6 +58,7 @@ export {
     URI_COINAPI,
     URI_OPENEXCHANGE,
     URI_TX_CONFIRM,
+    URI_TX_LIST,
     CONTENT_TYPE,
     LB_ASSET_VALUES,
     LB_BUY_ADA_AMOUNT,
