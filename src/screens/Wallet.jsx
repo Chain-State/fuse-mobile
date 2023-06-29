@@ -18,6 +18,7 @@ import { ACCOUNT } from '../constants/AppStrings';
 import ContentLoader, { Instagram } from 'react-content-loader';
 import styles from '../components/ButtonStyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import NoDataPlaceHolder from '../components/NoDataPlaceHolder';
 
 export const WalletScreen = ({ navigation, route }) => {
   const [assets, setAssets] = useState([]);
@@ -176,9 +177,7 @@ export const WalletScreen = ({ navigation, route }) => {
               />
             </View>
           ) : (
-            <View>
-              <Text>No transactions</Text>
-            </View>
+            <NoDataPlaceHolder />
           )}
         </>
       )}
