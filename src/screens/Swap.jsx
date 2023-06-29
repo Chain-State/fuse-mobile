@@ -6,6 +6,7 @@ import FsButton from '../components/Button';
 import { SelectList } from 'react-native-dropdown-select-list';
 import styles from '../components/ButtonStyles';
 import { Card } from '@rneui/themed';
+import { SwapPairs } from '../data/dummy/SwapPairsData';
 
 let swap = { baseToken: '', baseTokenAmount: 0, targetToken: '', targetTokenAmount: 0 };
 
@@ -28,14 +29,10 @@ const SwapScreen = ({ navigation }) => {
           <SelectList
             setSelected={(val) => setSelected(val)}
             fontFamily={Theme.fsFonts.fontFamily}
-            defaultOption={{ key: '5', value: 'ADA' }}
-            data={[
-              { key: '1', value: 'AADA' },
-              { key: '2', value: 'MIN' },
-              { key: '3', value: 'WMT' },
-              { key: '4', value: 'GENIUS' },
-              { key: '5', value: 'ADA' },
-            ]}
+            defaultOption={{ key: '0', value: SwapPairs[0] }}
+            data={SwapPairs.map((item, index) => {
+              return { key: index, value: item };
+            })}
             save="value"
             boxStyles={Theme.fsSelectList}
             dropdownItemStyles={{ icon: '' }}
@@ -61,13 +58,10 @@ const SwapScreen = ({ navigation }) => {
           <SelectList
             setSelected={(val) => setSelected(val)}
             fontFamily={Theme.fsFonts.fontFamily}
-            defaultOption={{ key: '2', value: 'ADA' }}
-            data={[
-              { key: '1', value: 'AADA' },
-              { key: '2', value: 'MIN' },
-              { key: '3', value: 'WMT' },
-              { key: '4', value: 'GENIUS' },
-            ]}
+            defaultOption={{ key: '3', value: SwapPairs[3] }}
+            data={SwapPairs.map((item, index) => {
+              return { key: index, value: item };
+            })}
             save="value"
             boxStyles={Theme.fsSelectList}
             dropdownItemStyles={{ icon: '' }}
@@ -94,7 +88,9 @@ const SwapScreen = ({ navigation }) => {
             <Text style={{ fontFamily: Theme.fsFonts.boldFont.fontFamily }}>Swap Details</Text>
           </Card.Title>
           <Card.Divider></Card.Divider>
-          <Text style={{ fontFamily: Theme.fsFonts.fontFamily }}>Some info on the swap</Text>
+          <Text style={{ fontFamily: Theme.fsFonts.fontFamily }}>Platform Fees: </Text>
+          <Text style={{ fontFamily: Theme.fsFonts.fontFamily }}>Expected Tokens: </Text>
+          <Text style={{ fontFamily: Theme.fsFonts.fontFamily }}>Percentage Slippage: </Text>
         </Card>
 
         <FsButton style={{ ...styles.appButtonContainer }} title="Swap" />
@@ -103,9 +99,7 @@ const SwapScreen = ({ navigation }) => {
             ListHeaderComponent={() => (
               <View>
                 <View>
-                  <Text style={{ ...Theme.fsFonts.boldFont, marginBottom: 15 }}>
-                    Transaction History
-                  </Text>
+                  <Text style={{ ...Theme.fsFonts.boldFont, marginBottom: 15 }}>Swap History</Text>
                 </View>
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={{ ...Theme.fsFonts.boldFont, marginRight: 5, marginLeft: 5 }}>
